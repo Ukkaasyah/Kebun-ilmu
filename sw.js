@@ -7,7 +7,7 @@ self.addEventListener('fetch', e => {
   const u = new URL(e.request.url);
   if (e.request.method !== 'GET' || u.origin !== location.origin) return;
   if (e.request.headers.has('range')) return; // audio diputar langsung dari server
-  const heavy = /\/(buku|audio|icons)\//.test(u.pathname);
+  const heavy = /\/(buku|audio|icons|fonts)\//.test(u.pathname);
   if (heavy) {
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone())); return res; })));
   } else {
