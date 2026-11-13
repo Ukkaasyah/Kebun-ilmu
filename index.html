@@ -516,6 +516,28 @@ button.back b { font-size: 26px; line-height: 1; margin-top: -3px; }
 .x.quit b { font-size: 16px; }
 .jk-grid button { font-size: 19px; padding: 18px 8px; }
 .pin button.back { background: var(--card); border: 2px solid var(--line); box-shadow: none; }
+
+/* v9 panduan pasang */
+.inst-hero { display: flex; align-items: center; gap: 14px; }
+.inst-hero img { border-radius: 18px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+.isteps { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 10px; }
+.ist { display: grid; grid-template-columns: 30px 42px 1fr; align-items: center; gap: 10px; background: var(--bg); border-radius: 16px; padding: 10px 12px; }
+.ist-n { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 14px; }
+.ist-ic { width: 42px; height: 42px; border-radius: 12px; background: #fff; border: 1px solid var(--line); display: grid; place-items: center; font-size: 20px; color: #2B7BEF; }
+.ist-t { font-weight: 700; line-height: 1.4; font-size: 15.5px; }
+.inst-note { background: #FFF6DE; border: 2px solid #FFD677; border-radius: 16px; padding: 12px 14px; font-weight: 700; font-size: 14.5px; margin: 0; }
+.inst-more summary { font-weight: 900; cursor: pointer; padding: 8px 2px; color: var(--ink-2); }
+.inst-more .lcard { margin-top: 10px; }
+.btn.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); box-shadow: none; }
+.inst-banner { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; background: #EAF2FF; border: 2px solid #B9D3FB; border-radius: 22px; padding: 14px 16px; color: var(--ink); }
+.inst-banner .ib-ic { font-size: 28px; }
+.inst-banner .ib-t { flex: 1; display: grid; gap: 2px; }
+.inst-banner b { font-family: var(--display); font-size: 19px; }
+.inst-banner small { color: var(--ink-2); font-weight: 700; font-size: 13px; }
+.inst-banner .dk-go { color: #2B7BEF; font-size: 28px; font-weight: 800; }
+.setup-top > * { position: relative; z-index: 1; }
+.setup-top::after { top: 150px; right: -30px; width: 70px; height: 70px; opacity: .55; }
+.setup-top::before { opacity: .55; }
 </style>
 </head>
 <body>
@@ -1100,7 +1122,63 @@ const MOD = Object.fromEntries(MODS.map(m => [m.id, m]));
 function topicsOf(m, L) { const t = m.topics && m.topics(L); return t && t.length ? t : Array.from({ length: 5 }, () => null); }
 
 /* ================= VIEWS ================= */
-let view = { name: FIRST_RUN ? 'setup' : 'home' };
+/* ---------- Pasang sebagai aplikasi ---------- */
+const UA = navigator.userAgent || '';
+const IS_STANDALONE = (() => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } })();
+const IS_IOS = /iPad|iPhone|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+const IS_IPAD = /iPad/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+const IS_ANDROID = /Android/i.test(UA);
+const IN_APP = /FBAN|FBAV|Instagram|Line\/|WhatsApp|TikTok|Twitter|Telegram/i.test(UA) || (IS_ANDROID && /; wv\)/.test(UA));
+const CAN_INSTALL_PAGE = (/^https:/.test(location.protocol) || location.hostname === 'localhost') && !/claude/.test(location.hostname);
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (view.name === 'install' || view.name === 'home') render(); });
+window.addEventListener('appinstalled', () => { installEvt = null; S.installed = true; save(); toast('Kebun Ilmu terpasang. Buka dari layar utama.'); });
+const SVG_SHARE = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const SVG_PLUS = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const SVG_DOTS = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>';
+const step = (n, ic, html) => `<li class="ist"><span class="ist-n">${n}</span><span class="ist-ic">${ic}</span><span class="ist-t">${html}</span></li>`;
+function installSteps(kind) {
+  if (kind === 'ios') return `<ol class="isteps">
+    ${IN_APP ? step(1, '🧭', 'Kalau link ini terbuka di dalam WhatsApp atau Instagram, buka dulu di <b>Safari</b> (ketuk menu, lalu <b>Buka di Safari</b>).') : ''}
+    ${step(IN_APP ? 2 : 1, SVG_SHARE, `Ketuk tombol <b>Bagikan</b> di Safari${IS_IPAD ? ' (kanan atas layar)' : ' (bawah layar)'}.`)}
+    ${step(IN_APP ? 3 : 2, SVG_PLUS, 'Geser ke bawah, pilih <b>Tambahkan ke Layar Utama</b>.')}
+    ${step(IN_APP ? 4 : 3, '✅', 'Ketuk <b>Tambah</b>. Ikon Kebun Ilmu muncul di layar utama.')}</ol>`;
+  if (kind === 'android') return `<ol class="isteps">
+    ${IN_APP ? step(1, '🧭', 'Kalau link ini terbuka di dalam WhatsApp atau Instagram, buka dulu di <b>Chrome</b> (ketuk menu, lalu <b>Buka di Chrome</b>).') : ''}
+    ${step(IN_APP ? 2 : 1, SVG_DOTS, 'Di Chrome, ketuk <b>menu titik tiga</b> di kanan atas.')}
+    ${step(IN_APP ? 3 : 2, SVG_PLUS, 'Pilih <b>Tambahkan ke layar utama</b> atau <b>Instal aplikasi</b>.')}
+    ${step(IN_APP ? 4 : 3, '✅', 'Ketuk <b>Instal</b> atau <b>Tambahkan</b>. Ikon Kebun Ilmu muncul di layar utama.')}</ol>`;
+  return `<ol class="isteps">
+    ${step(1, '💻', 'Di Chrome atau Edge, klik ikon <b>pasang</b> di ujung kanan kolom alamat.')}
+    ${step(2, '✅', 'Klik <b>Instal</b>. Kebun Ilmu terbuka di jendela sendiri.')}</ol>`;
+}
+function renderInstall() {
+  const kind = IS_IOS ? 'ios' : IS_ANDROID ? 'android' : 'pc';
+  const label = { ios: IS_IPAD ? 'iPad' : 'iPhone', android: 'HP Android', pc: 'komputer' }[kind];
+  const others = ['ios', 'android', 'pc'].filter(k => k !== kind);
+  const nm = { ios: 'iPhone / iPad (Safari)', android: 'Android (Chrome)', pc: 'Komputer (Chrome / Edge)' };
+  app.innerHTML = `<header class="top setup-top">
+    ${view.fromHome ? '<button class="back" id="back" style="margin-bottom:12px"><b aria-hidden="true">‹</b> Kembali</button>' : ''}
+    <div class="inst-hero"><img src="icons/icon-192.png" alt="" width="72" height="72" onerror="this.style.display='none'"><div><div class="brand-name">Kebun Ilmu</div><div class="ar" style="font-size:20px;opacity:.85">بُسْتَانُ الْعِلْمِ</div></div></div>
+    <h1 class="setup-h">Pasang Kebun Ilmu di ${label}</h1>
+    <p class="setup-p">Supaya terbuka seperti aplikasi: ada ikonnya di layar utama, tampil penuh tanpa bilah browser, dan tetap bisa dipakai saat sinyal lemah. Gratis, tanpa daftar akun.</p>
+  </header>
+  <div class="setup">
+    ${installEvt ? `<button class="btn primary" id="doInstall">📲 Pasang sekarang</button><p class="hint" style="text-align:center;margin:-6px 0 0">Atau ikuti langkah di bawah.</p>` : ''}
+    <div class="lcard"><h3>Langkah di ${label}</h3>${installSteps(kind)}</div>
+    ${IS_IOS ? '<p class="inst-note">Penting di iPhone/iPad: isi nama anak <b>setelah</b> membuka Kebun Ilmu dari ikon di layar utama, karena data di Safari dan di ikon tersimpan terpisah.</p>' : ''}
+    <details class="inst-more"><summary>Pakai perangkat lain?</summary>${others.map(k => `<div class="lcard"><h3>${nm[k]}</h3>${installSteps(k)}</div>`).join('')}</details>
+    <button class="btn ${installEvt ? 'ghost' : 'primary'}" id="skipInstall">${view.fromHome ? 'Selesai' : 'Nanti saja, langsung main ›'}</button>
+  </div>`;
+  if ($('#back')) $('#back').onclick = () => go({ name: 'home' });
+  if ($('#doInstall')) $('#doInstall').onclick = async () => { try { installEvt.prompt(); const r = await installEvt.userChoice; installEvt = null; if (r && r.outcome === 'accepted') toast('Sedang dipasang…'); render(); } catch (e) { render(); } };
+  $('#skipInstall').onclick = () => { try { localStorage.setItem('kebun-ilmu-install-seen', '1'); } catch (e) {} go({ name: view.fromHome ? 'home' : (needsSetup() ? 'setup' : 'home') }); };
+}
+const needsSetup = () => S.profiles.length === 1 && S.profiles[0].name === 'Ananda' && !S.profiles[0].usia;
+const installSeen = () => { try { return localStorage.getItem('kebun-ilmu-install-seen') === '1'; } catch (e) { return true; } };
+const showInstallFirst = CAN_INSTALL_PAGE && !IS_STANDALONE && !installSeen();
+
+let view = { name: showInstallFirst ? 'install' : FIRST_RUN ? 'setup' : 'home' };
 function go(v) { stopClip(); view = v; sheet.className = ''; sheet.innerHTML = ''; render(); window.scrollTo(0, 0); }
 function glyphHtml(m) {
   if (m.glyph === 'dots') return `<div class="glyph"><div class="dots4"><i style="background:#E53935"></i><i style="background:#FDD835"></i><i style="background:#1E6FE0"></i><i style="background:#8E24AA"></i></div></div>`;
@@ -1139,6 +1217,7 @@ function renderHome() {
       <button class="mod wide lib" id="libBtn" style="--c:#FFFFFF;--cd:#DCE1F2"><div class="glyph">📚</div><div class="mod-body"><h3>Perpustakaan</h3><div class="meta">${Object.keys(BUKU).length} buku: bahasa Arab, nahwu sharaf, tajwid, dan fikih</div></div></button>
     </div>
   </section>
+  ${CAN_INSTALL_PAGE && !IS_STANDALONE ? `<section class="section"><button class="inst-banner" id="instBtn"><span class="ib-ic">📲</span><span class="ib-t"><b>Pasang di layar utama</b><small>Supaya Kebun Ilmu terbuka seperti aplikasi</small></span><span class="dk-go">›</span></button></section>` : ''}
   <section class="section">${dukungCard()}</section>
   <footer class="home-foot"><button id="aboutFoot">Dibuat oleh <b>Ukkaasyah Abdurrahman</b><br><span>Pengajar di Pondok Pesantren Luqmanul Hakim Marelan</span></button></footer>`;
   app.querySelectorAll('.lv').forEach(b => b.onclick = () => { p.level = +b.dataset.l; save(); render(); });
@@ -1146,6 +1225,7 @@ function renderHome() {
   $('#parentBtn').onclick = () => go({ name: 'pin', buf: '' });
   $('#libBtn').onclick = () => go({ name: 'library' });
   if ($('#fsBtn')) $('#fsBtn').onclick = toggleFs;
+  if ($('#instBtn')) $('#instBtn').onclick = () => go({ name: 'install', fromHome: true });
   $('#aboutBtn').onclick = $('#aboutFoot').onclick = () => go({ name: 'about' });
   $('#whoBtn').onclick = () => {
     if (S.profiles.length < 2) { go({ name: 'setup', add: true }); return; }
@@ -1782,6 +1862,7 @@ function renderParent() {
 function render() {
   if (view.name === 'home') renderHome();
   else if (view.name === 'setup') renderSetup();
+  else if (view.name === 'install') renderInstall();
   else if (view.name === 'mod') renderMod();
   else if (view.name === 'play') renderPlay();
   else if (view.name === 'pin') renderPin();
