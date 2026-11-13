@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kebun Ilmu</title>
+<meta name="theme-color" content="#1B2154">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kebun Ilmu">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* Arah desain: papan main malam-biru dengan kartu modul berwarna tegas; rapi, berani, tidak kekanak-kanakan berlebihan. */
+:root {
+  --ink: #1B2154;
+  --ink-2: #545B8C;
+  --bg: #EDF0FA;
+  --card: #FFFFFF;
+  --line: #DCE1F2;
+  --sun: #FFB81F;
+  --coral: #FF6150;
+  --sky: #2B7BEF;
+  --violet: #6F55F2;
+  --pink: #EC4B8C;
+  --orange: #FF8A2A;
+  --navy: #2C347A;
+  --ok: #2B7BEF;
+  --ok-bg: #E4EEFF;
+  --no: #FF6150;
+  --no-bg: #FFE9E6;
+  --display: 'Baloo 2', 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --arab: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  background-image: radial-gradient(rgba(27,33,84,.06) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45;
+}
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.ar { font-family: var(--arab); direction: rtl; unicode-bidi: isolate; }
+#app { max-width: 560px; margin: 0 auto; min-height: 100%; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; text-wrap: balance; }
+
+/* ---------- Top / home ---------- */
+.top {
+  position: relative; overflow: hidden; color: #fff;
+  background: var(--ink); border-radius: 0 0 30px 30px;
+  padding: calc(18px + env(safe-area-inset-top)) 20px 22px;
+}
+.top::before, .top::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; }
+.top::before { width: 190px; height: 190px; right: -60px; top: -70px; background: var(--sun); opacity: .95; }
+.top::after { width: 90px; height: 90px; right: 92px; top: 58px; background: var(--coral); opacity: .9; }
+.top > * { position: relative; z-index: 1; }
+.brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand-name { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: .2px; display: flex; align-items: baseline; gap: 8px; }
+.brand-name .ar { font-size: 18px; font-weight: 700; opacity: .8; }
+.icon-btn { width: 42px; height: 42px; border-radius: 14px; background: rgba(255,255,255,.14); display: grid; place-items: center; font-size: 20px; }
+.hello { margin-top: 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.hello small { display: block; font-weight: 700; opacity: .75; font-size: 14px; }
+.hello .who { font-family: var(--display); font-weight: 800; font-size: 30px; display: flex; align-items: center; gap: 8px; text-align: left; }
+.hello .who span.chev { font-size: 16px; opacity: .6; }
+.cups { background: #fff; color: var(--ink); border-radius: 18px; padding: 8px 14px; font-family: var(--display); font-weight: 800; font-size: 22px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 0 rgba(0,0,0,.18); font-variant-numeric: tabular-nums; }
+
+.section { padding: 18px 16px 0; }
+.section-h { display: flex; justify-content: space-between; align-items: baseline; margin: 0 4px 10px; }
+.section-h h2 { font-size: 20px; }
+.section-h small { color: var(--ink-2); font-weight: 700; }
+
+.levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background: var(--card); padding: 6px; border-radius: 20px; border: 1px solid var(--line); }
+.lv { border-radius: 15px; padding: 8px 2px 7px; text-align: center; color: var(--ink-2); }
+.lv b { display: block; font-family: var(--display); font-size: 22px; line-height: 1; color: var(--ink); }
+.lv span { font-size: 10.5px; font-weight: 800; line-height: 1.15; display: block; margin-top: 3px; }
+.lv[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: 0 3px 0 #0d1238; }
+.lv[aria-pressed="true"] b { color: var(--sun); }
+.lv:disabled { opacity: .45; cursor: not-allowed; }
+.lv-note { margin: 8px 6px 0; font-size: 13.5px; color: var(--ink-2); font-weight: 700; }
+
+.mods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mod {
+  position: relative; overflow: hidden; text-align: left; color: #fff;
+  border-radius: 24px; padding: 14px 14px 13px; min-height: 152px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+  background: var(--c); box-shadow: 0 5px 0 var(--cd);
+  transition: transform .12s ease;
+}
+.mod:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--cd); }
+.mod::after { content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%; right: -42px; bottom: -48px; background: rgba(255,255,255,.13); }
+.mod.wide { grid-column: 1 / -1; min-height: 120px; flex-direction: row; align-items: center; }
+.glyph { width: 54px; height: 54px; border-radius: 17px; background: rgba(255,255,255,.2); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 22px; flex: none; }
+.glyph.ar { font-family: var(--arab); font-size: 26px; font-weight: 700; padding-top: 4px; }
+.dots4 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.dots4 i { width: 14px; height: 14px; border-radius: 50%; display: block; border: 2px solid rgba(255,255,255,.9); }
+.mod h3 { font-size: 20px; }
+.mod .sub { font-family: var(--arab); font-size: 17px; opacity: .9; direction: rtl; text-align: left; margin-top: 1px; }
+.mod .meta { font-size: 12.5px; font-weight: 800; opacity: .9; margin-top: 4px; }
+.mod.dark { color: var(--ink); }
+.mod.dark .glyph { background: rgba(27,33,84,.12); }
+.mod.dark::after { background: rgba(255,255,255,.25); }
+
+/* ---------- Module page ---------- */
+.band { color: #fff; background: var(--c); border-radius: 0 0 30px 30px; padding: calc(14px + env(safe-area-inset-top)) 16px 18px; position: relative; overflow: hidden; }
+.band.dark { color: var(--ink); }
+.band::after { content: ''; position: absolute; width: 170px; height: 170px; border-radius: 50%; right: -50px; top: -60px; background: rgba(255,255,255,.16); }
+.band > * { position: relative; z-index: 1; }
+.band-row { display: flex; align-items: center; gap: 12px; }
+.back { width: 42px; height: 42px; border-radius: 14px; background: rgba(255,255,255,.22); font-size: 22px; display: grid; place-items: center; font-weight: 900; }
+.band h1 { font-size: 28px; }
+.band .ar { font-size: 20px; opacity: .9; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 99px; background: rgba(255,255,255,.22); font-weight: 800; font-size: 13px; margin-top: 10px; }
+
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 5px; margin: 16px 16px 0; }
+.tabs.three { grid-template-columns: repeat(3, 1fr); margin: 0 0 12px; }
+.tab { padding: 10px; border-radius: 13px; font-weight: 900; color: var(--ink-2); font-size: 15px; }
+.tab[aria-selected="true"] { background: var(--ink); color: #fff; }
+.tabs.three .tab { font-size: 13px; padding: 9px 4px; }
+
+/* challenge path */
+.path { position: relative; padding: 18px 16px 6px; display: flex; flex-direction: column; gap: 4px; }
+.node-row { display: flex; }
+.node-row:nth-child(odd) { justify-content: flex-start; padding-left: 14%; }
+.node-row:nth-child(even) { justify-content: flex-end; padding-right: 14%; }
+.node { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 128px; }
+.node .disc {
+  width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c); color: #fff; font-family: var(--display); font-weight: 800; font-size: 32px;
+  box-shadow: 0 6px 0 var(--cd), inset 0 -6px 0 rgba(0,0,0,.08);
+}
+.node.done .disc { background: var(--sun); color: var(--ink); box-shadow: 0 6px 0 #C98A00; }
+.node.lock .disc { background: #CBD1E6; box-shadow: 0 6px 0 #A9B0CB; color: #fff; font-size: 26px; }
+.node .lbl { font-weight: 900; font-size: 14px; }
+.node .st { font-size: 15px; letter-spacing: 1px; color: #C9CFE3; }
+.node .st b { color: var(--sun); font-weight: 400; }
+.node:not(.lock):active .disc { transform: translateY(4px); box-shadow: 0 2px 0 var(--cd); }
+
+/* learn cards */
+.learn { padding: 16px; display: grid; gap: 12px; }
+.lcard { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; }
+.lcard h3 { font-size: 19px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.lcard h3 .ar { font-size: 20px; color: var(--ink-2); font-weight: 700; }
+.lcard p { margin: 8px 0 0; color: #343B6E; }
+.ex { display: grid; gap: 8px; margin-top: 12px; }
+.ex-row { display: flex; align-items: center; gap: 12px; background: var(--bg); border-radius: 14px; padding: 8px 12px; }
+.ex-row .ar { font-size: 26px; min-width: 96px; text-align: center; line-height: 1.5; }
+.ex-row span { font-size: 14px; font-weight: 700; color: #343B6E; }
+.wgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.wcard { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 12px; text-align: center; display: grid; gap: 2px; }
+.wcard .em { font-size: 34px; line-height: 1.2; }
+.wcard .ar { font-size: 28px; line-height: 1.5; }
+.wcard .lt { font-size: 13px; color: var(--ink-2); font-weight: 700; font-style: italic; }
+.wcard .id { font-weight: 800; }
+.alpha { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.alpha button { aspect-ratio: 1; border-radius: 16px; background: var(--card); border: 1px solid var(--line); font-family: var(--display); font-weight: 800; font-size: 26px; box-shadow: 0 3px 0 var(--line); }
+.alpha button small { display: block; font-size: 14px; color: var(--ink-2); margin-top: -8px; }
+.swgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+.sw { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 10px; text-align: center; }
+.sw i { display: block; height: 52px; border-radius: 12px; border: 1px solid rgba(0,0,0,.12); margin-bottom: 6px; }
+.sw b { display: block; font-size: 14px; }
+.sw .ar { font-size: 20px; display: block; }
+.times { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.times button { width: 44px; height: 44px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); font-weight: 900; }
+.times button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.ttable { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; }
+.ttable div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; }
+.doa { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; }
+.doa-h { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.doa-h b { font-family: var(--display); font-size: 18px; }
+.doa-h .kali { background: var(--ink); color: var(--sun); border-radius: 99px; padding: 2px 10px; font-weight: 900; font-size: 13px; white-space: nowrap; }
+.doa .ar { font-size: 27px; line-height: 1.9; margin: 10px 0 6px; text-align: right; }
+.doa p { margin: 0; color: #343B6E; font-size: 14.5px; }
+.say { width: 38px; height: 38px; border-radius: 12px; background: var(--bg); font-size: 18px; flex: none; }
+
+/* ---------- Play ---------- */
+.play { min-height: 100%; display: flex; flex-direction: column; padding: calc(12px + env(safe-area-inset-top)) 16px 20px; gap: 14px; }
+.playbar { display: flex; align-items: center; gap: 10px; }
+.x { width: 40px; height: 40px; border-radius: 13px; background: var(--card); border: 1px solid var(--line); font-weight: 900; font-size: 18px; flex: none; }
+.prog { flex: 1; display: flex; gap: 4px; }
+.prog i { flex: 1; height: 12px; border-radius: 99px; background: #D5DBEE; }
+.prog i.ok { background: var(--sky); }
+.prog i.no { background: var(--coral); }
+.prog i.now { background: var(--ink); }
+.pcups { font-family: var(--display); font-weight: 800; font-size: 19px; display: flex; gap: 4px; align-items: center; font-variant-numeric: tabular-nums; }
+.qcard { background: var(--card); border-radius: 28px; border: 1px solid var(--line); padding: 20px 16px 22px; text-align: center; box-shadow: 0 6px 0 var(--line); position: relative; }
+.qlabel { font-weight: 900; color: var(--ink-2); font-size: 15px; letter-spacing: .2px; }
+.qtext { font-family: var(--display); font-weight: 700; font-size: 23px; margin-top: 6px; text-wrap: balance; line-height: 1.25; }
+.qemoji { font-size: 76px; line-height: 1.15; margin-top: 4px; }
+.qemoji.row { font-size: 40px; letter-spacing: 2px; line-height: 1.35; word-break: break-word; }
+.qar { font-family: var(--arab); direction: rtl; font-size: 40px; line-height: 1.75; margin-top: 4px; }
+.qar.long { font-size: 28px; line-height: 1.95; }
+.qar mark { background: #FFE6A3; color: inherit; border-radius: 8px; padding: 0 6px; }
+.qsub { color: var(--ink-2); font-weight: 800; font-style: italic; }
+.qbig { font-family: var(--display); font-weight: 800; font-size: 46px; line-height: 1.1; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.blank { display: inline-block; min-width: 64px; border-bottom: 4px dashed var(--sky); color: var(--sky); margin: 0 4px; line-height: 1; }
+.swatch-big { width: 120px; height: 120px; border-radius: 30px; margin: 10px auto 0; border: 1px solid rgba(0,0,0,.15); box-shadow: inset 0 -8px 0 rgba(0,0,0,.08); }
+.mix { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; font-family: var(--display); font-weight: 800; font-size: 34px; }
+.mix i { width: 74px; height: 74px; border-radius: 22px; display: block; border: 1px solid rgba(0,0,0,.15); }
+.speak { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 14px; background: var(--ok-bg); font-size: 20px; }
+
+.answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.answers.one { grid-template-columns: 1fr; }
+.opt {
+  background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 14px 10px; min-height: 66px;
+  font-weight: 900; font-size: 18px; box-shadow: 0 4px 0 var(--line); line-height: 1.25;
+  transition: transform .08s ease;
+}
+.opt:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.opt.ar { font-family: var(--arab); font-weight: 700; font-size: 27px; padding: 8px 10px; line-height: 1.7; }
+.opt.ar.long { font-size: 21px; }
+.opt .osub { display: block; font-family: var(--body); font-size: 13px; color: var(--ink-2); font-style: italic; direction: ltr; font-weight: 700; }
+.opt.emo { font-size: 46px; padding: 10px; }
+.opt.big { font-family: var(--display); font-size: 30px; font-weight: 800; }
+.opt.letter { font-family: var(--display); font-size: 38px; font-weight: 800; }
+.opt.swatch { min-height: 92px; border-width: 3px; }
+.opt.right { border-color: var(--ok); background: var(--ok-bg); box-shadow: 0 4px 0 var(--ok); }
+.opt.wrong { border-color: var(--no); background: var(--no-bg); box-shadow: 0 4px 0 var(--no); animation: shake .35s; }
+.opt.swatch.right { box-shadow: 0 0 0 4px var(--ok-bg), 0 4px 0 var(--ok); }
+.opt.swatch.wrong { box-shadow: 0 0 0 4px var(--no-bg), 0 4px 0 var(--no); }
+.opt:disabled { cursor: default; }
+.tf { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tfb { border-radius: 24px; padding: 18px 10px; font-family: var(--display); font-weight: 800; font-size: 24px; color: #fff; display: grid; gap: 2px; justify-items: center; }
+.tfb span { font-size: 38px; line-height: 1; }
+.tfb.yes { background: var(--sky); box-shadow: 0 6px 0 #1757B5; }
+.tfb.nope { background: var(--coral); box-shadow: 0 6px 0 #C93A2C; }
+.tfb:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.tfb.dim { opacity: .35; }
+
+.boxes { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+.box { width: 46px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 30px; background: var(--bg); border: 2px solid var(--line); }
+.box.blank-b { background: #fff; border: 3px dashed var(--sky); color: var(--sky); }
+.box.filled { border-style: solid; background: var(--ok-bg); }
+.box.okb { background: var(--ok-bg); border: 3px solid var(--ok); color: var(--ink); }
+.box.nob { background: var(--no-bg); border: 3px solid var(--no); color: var(--ink); }
+.pool { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.tile { width: 58px; height: 62px; border-radius: 18px; background: var(--card); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); font-family: var(--display); font-weight: 800; font-size: 30px; }
+.tile:disabled { opacity: .25; box-shadow: none; transform: translateY(4px); }
+.undo { margin: 4px auto 0; display: block; font-weight: 900; color: var(--ink-2); padding: 8px 14px; }
+.box-small .box { width: 38px; height: 48px; font-size: 25px; }
+
+/* feedback sheet */
+#sheet { position: fixed; inset: 0; pointer-events: none; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
+#sheet.on { pointer-events: auto; background: rgba(27,33,84,.28); }
+.fb { width: 100%; max-width: 560px; border-radius: 30px 30px 0 0; padding: 22px 20px calc(20px + env(safe-area-inset-bottom)); text-align: center; animation: up .22s ease-out; }
+.fb.ok { background: #fff; border-top: 6px solid var(--sky); }
+.fb.no { background: #fff; border-top: 6px solid var(--coral); }
+.fb-icons { display: flex; justify-content: center; gap: 14px; font-size: 64px; line-height: 1; height: 72px; }
+.fb-icons span { display: inline-block; animation: pop .5s cubic-bezier(.3,1.6,.5,1) both; }
+.fb-icons span + span { animation-delay: .1s; }
+.fb-t { font-family: var(--display); font-weight: 800; font-size: 28px; margin-top: 8px; }
+.fb.ok .fb-t { color: var(--sky); }
+.fb.no .fb-t { color: var(--coral); }
+.fb-s { font-weight: 800; color: var(--ink-2); margin-top: 2px; }
+.fb-ans { margin: 10px auto 0; display: inline-block; background: var(--ok-bg); border-radius: 16px; padding: 8px 16px; font-weight: 900; font-size: 20px; }
+.fb-ans.ar { font-family: var(--arab); font-size: 28px; line-height: 1.7; }
+.fb-ans i.swc { display: inline-block; width: 26px; height: 26px; border-radius: 8px; vertical-align: middle; margin-right: 6px; border: 1px solid rgba(0,0,0,.15); }
+.btn { display: block; width: 100%; border-radius: 20px; padding: 15px; font-family: var(--display); font-weight: 800; font-size: 21px; margin-top: 16px; }
+.btn.primary { background: var(--ink); color: #fff; box-shadow: 0 5px 0 #0d1238; }
+.btn.sun { background: var(--sun); color: var(--ink); box-shadow: 0 5px 0 #C98A00; }
+.btn.ghost { background: var(--card); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); }
+.btn:active { transform: translateY(3px); box-shadow: none; }
+.fb.list { max-height: 80vh; overflow: auto; text-align: left; }
+
+/* result */
+.result { padding: calc(30px + env(safe-area-inset-top)) 20px 20px; text-align: center; }
+.trophy { font-size: 110px; line-height: 1; animation: pop .6s cubic-bezier(.3,1.6,.5,1) both; }
+.result h1 { font-size: 34px; margin-top: 10px; }
+.stars { font-size: 44px; letter-spacing: 6px; margin-top: 8px; color: #D2D7E8; }
+.stars b { color: var(--sun); font-weight: 400; }
+.rstats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.rstat { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 12px; }
+.rstat b { display: block; font-family: var(--display); font-size: 32px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.rstat span { font-weight: 800; color: var(--ink-2); font-size: 13.5px; }
+
+/* parent */
+.pin { padding: calc(30px + env(safe-area-inset-top)) 24px; text-align: center; }
+.pin h1 { font-size: 28px; }
+.pin p { color: var(--ink-2); font-weight: 700; margin: 6px 0 0; }
+.pin-dots { display: flex; justify-content: center; gap: 14px; margin: 22px 0; }
+.pin-dots i { width: 18px; height: 18px; border-radius: 50%; background: #D5DBEE; }
+.pin-dots i.f { background: var(--ink); }
+.pin-dots.err i { background: var(--coral); animation: shake .35s; }
+.keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 300px; margin: 0 auto; }
+.keypad button { height: 64px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 4px 0 var(--line); font-family: var(--display); font-weight: 800; font-size: 26px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; margin: 0 16px 14px; }
+.panel h2 { font-size: 19px; margin-bottom: 4px; }
+.panel .hint { color: var(--ink-2); font-size: 14px; font-weight: 600; margin: 0 0 10px; }
+.row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.row:first-of-type { border-top: 0; }
+.row .grow { flex: 1; min-width: 120px; }
+.field { display: grid; gap: 4px; margin-bottom: 10px; }
+.field label { font-weight: 800; font-size: 14px; }
+input[type="text"], input[type="password"], select, textarea {
+  width: 100%; font: inherit; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px;
+}
+textarea { min-height: 80px; resize: vertical; }
+textarea.ar, input.ar { font-family: var(--arab); font-size: 22px; line-height: 1.7; }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-weight: 800; }
+.switch:first-of-type { border-top: 0; }
+.switch input { width: 22px; height: 22px; accent-color: var(--ink); }
+.sbtn { border-radius: 12px; padding: 9px 14px; font-weight: 900; background: var(--ink); color: #fff; font-size: 14px; }
+.sbtn.light { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
+.sbtn.danger { background: var(--no-bg); color: #B4271A; }
+.seg { display: flex; gap: 6px; }
+.seg button { padding: 8px 12px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); font-weight: 900; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.ptable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ptable th, .ptable td { text-align: left; padding: 7px 4px; border-top: 1px solid var(--line); }
+.ptable th { font-size: 12.5px; color: var(--ink-2); }
+.ptable td.n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 800; }
+.tag { font-size: 11.5px; font-weight: 900; padding: 2px 8px; border-radius: 99px; background: #FFF1CC; color: #7A5300; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 99px; font-weight: 800; z-index: 30; animation: up .2s ease-out; }
+.empty { text-align: center; color: var(--ink-2); font-weight: 700; padding: 30px 16px; }
+.plist { display: grid; gap: 8px; margin-top: 12px; }
+.plist button { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-radius: 18px; background: var(--bg); font-weight: 900; font-size: 18px; }
+.plist button[aria-current="true"] { background: var(--ink); color: #fff; }
+
+@keyframes pop { 0% { transform: scale(.2); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes shake { 0%,100% { transform: none; } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+@media (min-width: 480px) { .mod { min-height: 168px; } }
+
+/* ---------- v2 additions ---------- */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 14px 16px 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip-b { flex: none; padding: 9px 14px; border-radius: 99px; background: var(--card); border: 1.5px solid var(--line); font-weight: 900; font-size: 14px; color: var(--ink-2); white-space: nowrap; }
+.chip-b[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.learn-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.learn-h h3 { font-size: 19px; }
+.fc-btn { flex: none; border-radius: 14px; padding: 9px 13px; font-weight: 900; font-size: 14px; background: var(--sun); color: var(--ink); box-shadow: 0 3px 0 #C98A00; }
+.count-note { color: var(--ink-2); font-weight: 800; font-size: 13px; margin-top: 2px; }
+.node .topic { font-size: 12.5px; font-weight: 800; color: var(--ink-2); margin-top: -2px; text-align: center; line-height: 1.2; max-width: 128px; }
+.syl { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.syl button { padding: 10px 0; border-radius: 12px; background: var(--bg); font-family: var(--display); font-weight: 800; font-size: 19px; }
+.syl .head { background: var(--ink); color: #fff; }
+.tip { background: var(--bg); border-radius: 16px; padding: 12px 14px; margin-top: 10px; font-weight: 700; color: #343B6E; }
+.tip b { color: var(--ink); }
+.calc { font-family: var(--display); font-weight: 700; font-size: 22px; line-height: 1.25; font-variant-numeric: tabular-nums; text-align: right; display: inline-block; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 14px; margin-top: 8px; }
+.calc hr { border: 0; border-top: 2px solid var(--ink); margin: 2px 0; }
+.qlist { display: grid; gap: 10px; padding: 16px; }
+.qitem { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 12px 14px; text-align: left; width: 100%; }
+.qnum { width: 44px; height: 44px; flex: none; border-radius: 14px; background: var(--q, #9C2A4A); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 18px; }
+.qitem .grow { flex: 1; min-width: 0; }
+.qitem b { font-family: var(--display); font-size: 18px; display: block; line-height: 1.15; }
+.qitem small { color: var(--ink-2); font-weight: 700; }
+.qitem .ar { font-size: 24px; flex: none; }
+.qitem.off { opacity: .45; }
+.qsec { font-weight: 900; color: var(--ink-2); font-size: 13px; letter-spacing: .4px; text-transform: uppercase; margin: 6px 4px 0; }
+.mushaf { font-family: var(--arab); direction: rtl; text-align: justify; text-align-last: center; font-size: 27px; line-height: 2.15; margin-top: 10px; }
+.mushaf .an { font-size: 22px; color: #9C2A4A; margin: 0 2px; }
+.mushaf-note { margin-top: 10px; background: #FFF1CC; color: #6B4A00; border-radius: 14px; padding: 8px 12px; font-weight: 800; font-size: 13.5px; }
+.fc-wrap { perspective: 1200px; margin-top: 12px; }
+.fc { position: relative; height: 270px; transition: transform .45s ease; transform-style: preserve-3d; cursor: pointer; }
+.fc.flip { transform: rotateY(180deg); }
+.fc > div { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 26px; display: grid; place-items: center; text-align: center; padding: 18px; }
+.fc .front { background: var(--ink); color: #fff; }
+.fc .back { background: var(--sun); color: var(--ink); transform: rotateY(180deg); }
+.fc .big-ar { font-family: var(--arab); font-size: 46px; line-height: 1.6; direction: rtl; }
+.fc .big-em { font-size: 80px; line-height: 1.1; }
+.fc .big-tx { font-family: var(--display); font-weight: 800; font-size: 34px; line-height: 1.15; }
+.fc .sm { font-weight: 800; opacity: .8; margin-top: 6px; font-size: 16px; }
+.fc-nav { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; margin-top: 14px; }
+.fc-nav .btn { margin: 0; padding: 12px; font-size: 18px; }
+.fc-count { font-weight: 900; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.fc-hint { text-align: center; font-weight: 800; color: var(--ink-2); font-size: 13px; margin-top: 8px; }
+.story { text-align: left; font-size: 17px; line-height: 1.6; background: var(--bg); border-radius: 16px; padding: 12px 14px; margin-top: 8px; font-weight: 600; }
+.story b { display: block; font-family: var(--display); font-size: 18px; margin-bottom: 4px; }
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1; margin: 0 4px; }
+.frac i { font-style: normal; }
+.frac i:first-child { border-bottom: 3px solid currentColor; padding: 0 4px 2px; }
+.frac i:last-child { padding-top: 2px; }
+.parent-q { margin-top: 6px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13.5px; font-weight: 800; color: var(--ink-2); }
+.parent-q select { width: auto; flex: 1; min-width: 180px; padding: 8px 10px; }
+
+/* ---------- v3: audio, perpustakaan, polesan ---------- */
+.big-play { display: inline-flex; align-items: center; gap: 10px; margin: 10px auto 4px; padding: 10px 20px 10px 10px; border-radius: 99px; background: #9C2A4A; color: #fff; font-family: var(--display); font-weight: 800; font-size: 19px; box-shadow: 0 5px 0 #6E1530; }
+.big-play .pi { width: 46px; height: 46px; border-radius: 50%; background: #fff; color: #9C2A4A; display: grid; place-items: center; font-size: 20px; padding-left: 3px; }
+.big-play.playing .pi, .opt-play.playing { animation: pulse 1s ease-in-out infinite; }
+.big-play.playing .pi::before { content: ''; }
+.big-play.wide { display: flex; width: 100%; justify-content: center; margin-top: 14px; }
+.opt-row { display: flex; gap: 10px; align-items: stretch; }
+.opt-row .opt { flex: 1; }
+.opt-play { flex: none; width: 58px; border-radius: 18px; background: #9C2A4A; color: #fff; font-size: 22px; box-shadow: 0 4px 0 #6E1530; padding-left: 3px; }
+.opt-play.off { background: transparent; box-shadow: none; }
+.opt-play.playing { background: var(--sun); color: var(--ink); box-shadow: 0 4px 0 #C98A00; }
+.play-hint { text-align: center; color: var(--ink-2); font-weight: 800; font-size: 13.5px; margin: 0; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.fb-ar { font-family: var(--arab); font-size: 40px; line-height: 1.5; color: var(--ink); margin-top: 4px; direction: rtl; }
+.fb.ok .fb-ar + .fb-t { margin-top: 0; font-size: 24px; }
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
+.confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 3px; animation: fall 1.6s cubic-bezier(.25,.6,.4,1) forwards; }
+@keyframes fall { to { transform: translate(var(--dx), 105vh) rotate(var(--rot)); opacity: .9; } }
+.qcard { background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFF 100%); }
+.qcard::before { content: ''; position: absolute; left: 24px; right: 24px; top: -1px; height: 5px; border-radius: 0 0 6px 6px; background: var(--sun); }
+.mod-body { position: relative; z-index: 1; min-width: 0; }
+.mod .bar { height: 6px; border-radius: 99px; background: rgba(255,255,255,.28); margin-top: 8px; overflow: hidden; }
+.mod.dark .bar { background: rgba(27,33,84,.15); }
+.mod .bar i { display: block; height: 100%; background: #fff; border-radius: 99px; }
+.mod.dark .bar i { background: var(--ink); }
+.mod.lib { color: var(--ink); border: 1.5px solid var(--line); min-height: 96px; }
+.mod.lib .glyph { background: var(--bg); font-size: 28px; }
+.mod.lib::after { display: none; }
+.tgt { display: inline-block; font-family: var(--body); font-size: 11px; font-weight: 900; color: #6B4A00; background: #FFE6A3; border-radius: 99px; padding: 1px 8px; vertical-align: middle; }
+.mushaf .ayah.can { cursor: pointer; text-decoration: underline dotted rgba(156,42,74,.45); text-underline-offset: 10px; border-radius: 10px; }
+.mushaf .ayah.playing { background: #FFE6A3; text-decoration: none; }
+.book-card { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--bk); border-radius: 22px; padding: 14px; }
+.book-cover { width: 74px; height: 104px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 12px rgba(27,33,84,.18); flex: none; background: var(--bg); }
+.book-cover.land { width: 110px; height: 62px; }
+.book-card .grow { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.book-card b { font-family: var(--display); font-size: 19px; line-height: 1.15; }
+.book-card small { color: var(--ink-2); font-weight: 700; }
+.bk-k { font-size: 11.5px; font-weight: 900; color: var(--ink-2); text-transform: uppercase; letter-spacing: .4px; }
+.book-open { justify-self: start; margin-top: 6px; border-radius: 12px; padding: 8px 14px; font-weight: 900; background: var(--ink); color: #fff; }
+.book-link { margin-top: 10px; border-radius: 12px; padding: 8px 12px; font-weight: 900; background: var(--sun); color: var(--ink); }
+.toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; margin-top: 10px; }
+.toc button { display: flex; justify-content: space-between; gap: 6px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--bg); font-weight: 800; font-size: 14px; text-align: left; }
+.toc button small { color: var(--ink-2); font-weight: 800; font-variant-numeric: tabular-nums; }
+.band.slim { padding-bottom: 14px; }
+.chips.sticky { position: sticky; top: 0; z-index: 5; background: var(--bg); padding-bottom: 10px; }
+.pages { display: grid; gap: 12px; padding: 4px 12px 20px; }
+.pages figure { margin: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(27,33,84,.12); scroll-margin-top: 64px; }
+.pages img { display: block; width: 100%; height: auto; }
+.pages figcaption { text-align: center; font-weight: 800; color: var(--ink-2); font-size: 12px; padding: 4px; background: var(--bg); }
+
+/* ---------- v4 ---------- */
+.home-foot { padding: 22px 16px 8px; text-align: center; }
+.home-foot button { color: var(--ink-2); font-weight: 700; font-size: 14px; line-height: 1.4; }
+.home-foot b { color: var(--ink); }
+.home-foot span { font-size: 12.5px; }
+.about-hero { background: var(--ink); color: #fff; border-radius: 26px; padding: 22px 18px; text-align: center; position: relative; overflow: hidden; }
+.about-hero::after { content: ''; position: absolute; width: 160px; height: 160px; border-radius: 50%; background: var(--sun); right: -60px; top: -70px; opacity: .9; }
+.about-hero > * { position: relative; z-index: 1; }
+.ab-logo { width: 96px; height: 96px; margin: 0 auto 10px; border-radius: 28px; background: #fff; color: var(--ink); display: grid; place-items: center; align-content: center; line-height: 1.1; box-shadow: 0 6px 0 rgba(0,0,0,.25); }
+.ab-logo .ar { font-size: 24px; font-weight: 700; }
+.about-hero h2 { font-size: 30px; }
+.about-hero p { opacity: .85; margin: 6px 0 0; font-weight: 600; }
+.maker { text-align: center; border: 2px solid var(--sun); }
+.mk-k { font-size: 12px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; color: var(--ink-2); }
+.mk-name { font-family: var(--display); font-weight: 800; font-size: 28px; margin-top: 4px; }
+.mk-role { font-weight: 800; color: #343B6E; }
+.mk-ar { font-size: 24px; color: var(--ink-2); margin-top: 6px; }
+.listen audio { width: 100%; margin-top: 10px; }
+details.dh { border-top: 1px solid var(--line); padding: 8px 0; }
+details.dh summary { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 15px; padding: 6px 0; list-style: none; }
+details.dh summary::-webkit-details-marker { display: none; }
+details.dh summary span { font-weight: 900; color: var(--ink-2); font-size: 13px; background: var(--bg); padding: 3px 10px; border-radius: 99px; }
+.dh-act { display: flex; gap: 8px; margin: 6px 0 8px; }
+.dh-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px dashed var(--line); }
+.dh-item input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--ink); flex: none; }
+.dh-item b { display: block; font-size: 14px; }
+.dh-item .ar { display: block; font-size: 19px; line-height: 1.7; color: #343B6E; }
+
+/* v5 perpustakaan */
+.lib-h { margin: 10px 2px 2px; font-family: var(--display); font-size: 18px; color: var(--c); display: flex; align-items: center; gap: 8px; }
+.lib-h::after { content: ''; flex: 1; height: 2px; background: var(--line); border-radius: 2px; }
+.chips .chip-b { unicode-bidi: plaintext; }
+.pages figure.strip { position: relative; }
+.pg-mark { position: absolute; left: 0; right: 0; height: 0; scroll-margin-top: 70px; pointer-events: none; }
+.pg-mark + .pg-mark, .pg-mark:not(:first-of-type) { border-top: 4px solid var(--bg); }
+.pg-mark i { position: absolute; left: 8px; top: 8px; font-style: normal; font-size: 11px; font-weight: 900; color: #fff; background: rgba(27,33,84,.55); padding: 2px 8px; border-radius: 99px; }
+
+/* v6 kenalan & layar penuh */
+.setup-top { padding-bottom: 26px; }
+.setup-h { font-family: var(--display); font-size: 28px; line-height: 1.15; margin: 18px 0 6px; }
+.setup-p { opacity: .8; font-weight: 600; margin: 0; }
+.setup { padding: 18px 16px 40px; display: grid; gap: 16px; max-width: 560px; margin: 0 auto; }
+.setup .field > label { font-weight: 900; font-size: 15px; }
+.setup input[type=text] { font-size: 20px; padding: 14px 16px; }
+.age-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.age-grid button { background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 10px 0; font-family: var(--display); font-weight: 800; font-size: 22px; }
+.age-grid small { font-size: 12px; margin-left: 2px; color: var(--ink-2); }
+.age-grid button[aria-pressed=true], .jk-grid button[aria-pressed=true] { border-color: #2B7BEF; background: #EAF2FF; box-shadow: 0 0 0 3px rgba(43,123,239,.18); }
+.jk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.jk-grid button { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 14px 8px; display: grid; justify-items: center; gap: 4px; font-weight: 900; font-size: 17px; }
+.jk-grid button span { font-size: 40px; line-height: 1; }
+.jk-grid small { font-size: 20px; color: var(--ink-2); }
+.setup-err { color: #C62828; font-weight: 800; min-height: 1.2em; margin: 0; }
+.plist .padd { justify-content: center; font-weight: 900; color: #2B7BEF; border: 2px dashed #B9CCF0; background: transparent; }
+.brand-name { flex-wrap: wrap; row-gap: 0; white-space: nowrap; min-width: 0; }
+.brand > span { flex-shrink: 0; }
+@media (max-width: 420px) { .brand .icon-btn { width: 38px; height: 38px; font-size: 18px; border-radius: 12px; } .brand-name { font-size: 20px; } }
+.praise-note { display: grid; gap: 4px; width: 100%; font-size: 13px; color: var(--ink-2); font-weight: 700; }
+.praise-note div { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.praise-note .ar { font-size: 17px; color: var(--ink); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sheet" aria-live="polite"></div>
+<script src="data.js"></script>
+<script src="data-bank.js"></script>
+<script src="data-nahwu.js"></script>
+<script src="data-quran.js"></script>
+<script src="data-audio.js"></script>
+<script src="data-buku.js"></script>
+<script src="data-saku.js"></script>
+<script>
+/* ================= UTIL ================= */
+const $ = s => document.querySelector(s);
+const app = $('#app'), sheet = $('#sheet');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const rnd = n => Math.floor(Math.random() * n);
+const ri = (a, b) => a + rnd(b - a + 1);
+const pick = a => a[rnd(a.length)];
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const sample = (a, n) => shuffle(a).slice(0, n);
+const chance = p => Math.random() < p;
+const cleanAr = t => t.replace(/[،؟.]/g, '');
+const fmt = n => Number(n).toLocaleString('id-ID');
+const arDigits = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+const mark = s => s.replace('[', '<mark>').replace(']', '</mark>');
+const unmark = s => s.replace(/[\[\]]/g, '');
+function uniqBy(a, f) { const seen = new Set(); return a.filter(x => { const k = f(x); if (seen.has(k)) return false; seen.add(k); return true; }); }
+
+/* ================= MERGED DATA ================= */
+const ALL_COLORS = [...COLORS, ...COLORS2];
+const COLOR = Object.fromEntries(ALL_COLORS.map(c => [c.id, c]));
+const ALL_WORDS = uniqBy([...WORDS, ...WORDS2.map(w => [w[0], w[1]])], w => w[0]);
+const ALL_KALIMAT = [...KALIMAT, ...KALIMAT2];
+const ALL_DOA = [...DOA, ...DOA2];
+const ALL_MUF = uniqBy(MUF, w => w[0] + w[1]);
+const ALL_JAMAK = uniqBy([...JAMAK, ...JAMAK2], j => j[0]);
+const ALL_LAWAN = uniqBy([...LAWAN, ...LAWAN2], p => p[0]);
+const ALL_MUH = [...MUHADATSAH.map(m => [m[0], m[1], m[2], 'Umum']), ...MUHADATSAH2];
+const ALL_OBJ = [...COLOR_OBJ, ...COLOR_OBJ2];
+const ALL_MIX = [...COLOR_MIX, ...COLOR_MIX2];
+const SURAH_BY = Object.fromEntries(SURAH.map(s => [s[0], { no: s[0], latin: s[1], ar: s[2], arti: s[3], ayat: s[4], juz: s[5] }]));
+
+/* ================= STATE ================= */
+const KEY = 'kebun-ilmu-v1';
+// Usia → level awal yang disarankan (TK/kelas 1 = 1, kelas 2 = 2, kelas 3–4 = 3, kelas 5 = 4, kelas 6 = 5)
+function levelFromAge(u) { u = +u || 0; return u <= 7 ? 1 : u === 8 ? 2 : u <= 10 ? 3 : u === 11 ? 4 : 5; }
+const isGirl = p => (p && p.jk) === 'P';
+function freshProfile(name, usia, jk) { return { id: 'p' + Date.now().toString(36) + rnd(999), name, usia: usia || 0, jk: jk || 'L', level: usia ? levelFromAge(usia) : 1, cups: 0, prog: {}, stats: {}, hafal: {}, quranUntil: 0, doaHafal: {} }; }
+function defaults() {
+  const p = freshProfile('Ananda');
+  return { profiles: [p], cur: p.id, pin: '1234', count: 5, lockLevel: false, sound: true, hidden: {}, hafalan: HAFALAN_DEFAULT.map(h => ({ ...h })), custom: [] };
+}
+function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.profiles && s.profiles.length ? s : null; } catch (e) { return null; } }
+const FIRST_RUN = !load();
+let S = load() || defaults();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const P = () => S.profiles.find(p => p.id === S.cur) || S.profiles[0];
+
+/* ================= SOUND & VOICE ================= */
+let actx;
+function tone(freq, t0, dur, vol, type) {
+  const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + t0;
+  o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  o.connect(g).connect(actx.destination); o.start(t); o.stop(t + dur + .05);
+}
+function blip(ok) {
+  if (!S.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    if (ok) { // "cling": dua denting lonceng kecil
+      [[1568, 0, .5], [3136, 0, .25], [2093, .11, .75], [4186, .11, .3]].forEach(([f, t, d], i) => tone(f, t, d, i % 2 ? .05 : .16));
+    } else { tone(220, 0, .25, .14, 'triangle'); tone(185, .12, .3, .1, 'triangle'); }
+  } catch (e) {}
+}
+
+/* ---------- Pemutar murottal (satu elemen audio untuk semua potongan) ---------- */
+const AUD = new Audio(); AUD.preload = 'auto';
+let audEnd = 0, audTok = 0, audBtn = null;
+function stopClip() { audTok++; try { AUD.pause(); } catch (e) {} if (audBtn) audBtn.classList.remove('playing'); audBtn = null; }
+function playClip(c, btn) {
+  if (!c) return; stopClip(); const tok = audTok; audEnd = c.b; audBtn = btn || null; if (audBtn) audBtn.classList.add('playing');
+  const go = () => { if (tok !== audTok) return; try { AUD.currentTime = c.a; } catch (e) {} AUD.play().catch(() => {}); watch(); };
+  const watch = () => { if (tok !== audTok) return; if (AUD.currentTime >= audEnd - .02 || AUD.ended) { stopClip(); return; } requestAnimationFrame(watch); };
+  const full = new URL(c.f, location.href).href;
+  if (AUD.src === full && AUD.readyState >= 1) go(); else { AUD.src = c.f; AUD.addEventListener('loadedmetadata', go, { once: true }); AUD.load(); }
+}
+const ayClip = (s, i) => { const q = QAUDIO[s]; const x = q && q.a[i]; return x && x[2] ? { f: q.f, a: x[0], b: x[1] } : null; };
+const openClip = s => { const q = QAUDIO[s]; return q ? { f: q.f, a: q.open[0], b: q.open[1] } : null; };
+const surahClip = s => { const q = QAUDIO[s]; return q ? { f: q.f, a: 0, b: q.d } : null; };
+const canSpeak = 'speechSynthesis' in window;
+function arVoice() { try { return speechSynthesis.getVoices().find(v => /^ar/i.test(v.lang)); } catch (e) { return null; } }
+function sayPraise(t) {
+  if (!S.sound || !canSpeak) return;
+  try { const v = arVoice(); if (!v) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.voice = v; u.lang = v.lang; u.rate = .9; u.pitch = 1.1; setTimeout(() => speechSynthesis.speak(u), 380); } catch (e) {}
+}
+try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; } catch (e) {}
+function speak(text, lang) { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = lang || 'id-ID'; u.rate = .85; speechSynthesis.speak(u); } catch (e) {} }
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 1800); }
+
+/* ================= QUESTION BUILDERS ================= */
+function mc(o) {
+  const n = o.n || 4;
+  const wrong = shuffle([...new Set(o.pool.filter(x => x !== o.answer))]).slice(0, n - 1);
+  const opts = shuffle([o.answer, ...wrong]);
+  return { ...o, type: 'mc', opts, ans: opts.indexOf(o.answer) };
+}
+const tf = (o, v) => ({ ...o, type: 'tf', ans: v });
+function nearNums(ans, opt = {}) {
+  const s = new Set([ans]); const a = Math.abs(ans);
+  const steps = a < 10 ? [1, 2, 3] : a < 100 ? [1, 2, 10, 5, 11] : a < 1000 ? [1, 10, 100, 2, 20, 11] : a < 100000 ? [1, 10, 100, 1000, 9, 110] : [10, 100, 1000, 10000, 1, 1100];
+  let t = 0;
+  while (s.size < 4 && t++ < 100) { const v = ans + (chance(.5) ? 1 : -1) * pick(steps) * (t > 40 ? ri(1, 3) : 1); if (opt.neg || v >= 0) s.add(v); }
+  return [...s];
+}
+function numMc(o, ans, opt = {}) {
+  const f = opt.f || fmt;
+  const vals = opt.vals || nearNums(ans, opt);
+  return mc({ ...o, kind: 'big', answer: f(ans), pool: vals.map(f) });
+}
+const LETTERS = 'ABCDEFGHIJKLMNOPRSTUWY'.split('');
+function fillQ(word, blanks, extra, o) {
+  const need = blanks.map(i => word[i]);
+  const dis = sample(LETTERS.filter(c => !need.includes(c)), extra);
+  return { ...o, type: 'fill', word, blanks, pool: shuffle([...need, ...dis]) };
+}
+function blanksFor(word, k) { return sample([...word].map((_, i) => i), Math.min(k, word.length - 1)).sort((a, b) => a - b); }
+function misspell(w) {
+  const a = [...w]; const i = ri(1, a.length - 2);
+  if (chance(.5) && a[i] !== a[i + 1]) { [a[i], a[i + 1]] = [a[i + 1], a[i]]; }
+  else { const V = 'AIUEO'; a[i] = V.includes(a[i]) ? pick([...V].filter(v => v !== a[i])) : pick(LETTERS.filter(c => c !== a[i] && !V.includes(c))); }
+  const r = a.join(''); return r === w ? w.slice(0, -1) + (w.endsWith('A') ? 'O' : 'A') : r;
+}
+const isVowel = c => 'AIUEO'.includes(c);
+function firstSyl(w) { return !isVowel(w[0]) && isVowel(w[1]) && !isVowel(w[2] || 'X') ? w.slice(0, 2) : (!isVowel(w[0]) && isVowel(w[1]) ? w.slice(0, 2) : null); }
+
+/* ---------- Membaca ---------- */
+const Wlen = (a, b) => ALL_WORDS.filter(w => w[0].length >= a && w[0].length <= b);
+const Tlen = (a, b) => TEBAKAN.filter(w => w[0].length >= a && w[0].length <= b);
+function sylQ(L) {
+  const cands = Wlen(4, 6).filter(w => firstSyl(w[0])); const w = pick(cands); const s = firstSyl(w[0]);
+  const pool = VOKAL.map(v => s[0] + v);
+  return mc({ key: 'sy' + w[0], label: 'Suku kata depannya apa?', emoji: w[1], speak: w[0].toLowerCase(), kind: 'letter', answer: s, pool, n: 3 });
+}
+function genBaca(L) {
+  const r = Math.random();
+  if (L === 1) {
+    if (r < .4) { const w = pick(Wlen(3, 5)); return fillQ(w[0], [0], 2, { key: 'a' + w[0], label: 'Huruf pertamanya apa?', emoji: w[1], speak: w[0].toLowerCase() }); }
+    if (r < .65) { const c = pick('ABDEGIKLMNOPRSTU'.split('')); return mc({ key: 'h' + c, label: 'Huruf kecil ini, huruf besarnya yang mana?', big: c.toLowerCase(), speak: 'huruf ' + c.toLowerCase(), kind: 'letter', n: 3, answer: c, pool: LETTERS }); }
+    return sylQ(L);
+  }
+  if (L === 2) {
+    if (r < .45) { const w = pick(Wlen(4, 6)); return fillQ(w[0], blanksFor(w[0], 1), 3, { key: w[0], label: 'Lengkapi hurufnya!', emoji: w[1], speak: w[0].toLowerCase() }); }
+    if (r < .7) { const w = pick(Wlen(4, 7)); return mc({ key: 't' + w[0], label: 'Mana tulisan yang benar?', emoji: w[1], kind: 'big', answer: w[0], pool: [misspell(w[0]), misspell(w[0]), misspell(w[0])], n: 3 }); }
+    return sylQ(L);
+  }
+  if (L === 3) {
+    if (r < .45) { const w = pick(Wlen(4, 6)); return fillQ(w[0], blanksFor(w[0], 2), 3, { key: w[0], label: 'Isi kotak yang kosong!', emoji: w[1], speak: w[0].toLowerCase() }); }
+    if (r < .7) { const w = pick(Tlen(3, 6)); return fillQ(w[0], blanksFor(w[0], 2), 3, { key: 'q' + w[0], label: 'Teka-teki kata', qtext: w[1] }); }
+    const k = pick(ALL_KALIMAT); return mc({ key: 'k' + k[0], label: 'Kata apa yang cocok?', html: `<div class="qtext">${esc(k[0]).replace('___', '<span class="blank">?</span>')}</div>`, answer: k[1], pool: k[2] });
+  }
+  if (L === 4) {
+    if (r < .3) { const w = pick(Wlen(4, 7)); return fillQ(w[0], [...w[0]].map((_, i) => i), 0, { key: 's' + w[0], label: 'Susun hurufnya jadi kata!', emoji: w[1] }); }
+    if (r < .5) { const w = pick(Wlen(6, 9)); return fillQ(w[0], blanksFor(w[0], 3), 3, { key: w[0], label: 'Isi tiga kotak yang kosong!', emoji: w[1] }); }
+    if (r < .75) { const w = pick(Tlen(4, 7)); return fillQ(w[0], blanksFor(w[0], Math.ceil(w[0].length / 2)), 3, { key: 'q' + w[0], label: 'Teka-teki kata', qtext: w[1] }); }
+    const k = pick(ALL_KALIMAT); return mc({ key: 'k' + k[0], label: 'Kata apa yang cocok?', html: `<div class="qtext">${esc(k[0]).replace('___', '<span class="blank">?</span>')}</div>`, answer: k[1], pool: k[2] });
+  }
+  if (r < .35) { const b = pick(BACAAN), s = pick(b.soal); return mc({ key: 'b' + s[0], label: 'Baca ceritanya, lalu jawab', html: `<div class="story"><b>${esc(b.judul)}</b>${esc(b.teks)}</div><div class="qtext" style="font-size:20px;margin-top:10px">${esc(s[0])}</div>`, answer: s[1], pool: s[2] }); }
+  if (r < .5) { const k = pick(ALL_KALIMAT); return mc({ key: 'k' + k[0], label: 'Kata apa yang cocok?', html: `<div class="qtext">${esc(k[0]).replace('___', '<span class="blank">?</span>')}</div>`, answer: k[1], pool: k[2] }); }
+  if (r < .65) { const w = pick(Wlen(6, 10)); const right = chance(.5); const shown = right ? w[0] : misspell(w[0]); return tf({ key: 'e' + w[0], label: 'Tulisan ini sudah benar?', emoji: w[1], big: shown, reveal: w[0] }, shown === w[0]); }
+  if (r < .82) { const w = pick(Tlen(5, 8)); return fillQ(w[0], [...w[0]].map((_, i) => i), 0, { key: 's' + w[0], label: 'Susun huruf sesuai petunjuk', qtext: w[1] }); }
+  const w = pick(Wlen(7, 10)); return fillQ(w[0], blanksFor(w[0], 4), 2, { key: w[0], label: 'Lengkapi kata yang panjang ini!', emoji: w[1] });
+}
+
+/* ---------- Matematika: 4 operasi tiap level ---------- */
+const OBJ = ['🍎', '⭐', '🎈', '🍓', '🌸', '🍪', '🍊', '⚽', '🍌', '🧁'];
+const MTK_TOPICS = ['Tambah', 'Kurang', 'Kali', 'Bagi', 'Campuran'];
+const fracHtml = (a, b) => `<span class="frac"><i>${a}</i><i>${b}</i></span>`;
+function mtkOp(L, op) {
+  const big = (label, expr, ans, o = {}) => numMc({ key: expr, label, big: expr + ' = ?', ...o.q }, ans, o);
+  if (L === 1) {
+    const e = pick(OBJ);
+    if (op === 0) { const a = ri(1, 5), b = ri(1, 5); return chance(.6) ? numMc({ key: 'p' + a + b, label: 'Kalau digabung, jadi berapa?', emojiRow: e.repeat(a) + ' + ' + e.repeat(b) }, a + b, { vals: nearNums(a + b) }) : big('Berapa hasilnya?', `${a} + ${b}`, a + b); }
+    if (op === 1) { const a = ri(3, 10), b = ri(1, a - 1); return chance(.6) ? numMc({ key: 'k' + a + b, label: `Ada ${a}, diambil ${b}. Sisa berapa?`, emojiRow: e.repeat(a - b) + '<span style="opacity:.25">' + e.repeat(b) + '</span>' }, a - b) : big('Berapa hasilnya?', `${a} − ${b}`, a - b); }
+    if (op === 2) { const g = ri(2, 4), n = ri(1, 3); return numMc({ key: 'x' + g + n, label: `${g} kelompok, tiap kelompok ${n}. Semuanya berapa?`, emojiRow: Array.from({ length: g }, () => e.repeat(n)).join('&nbsp;&nbsp;') }, g * n); }
+    if (op === 3) { const k = ri(2, 4), n = ri(1, 3); return numMc({ key: 'd' + k + n, label: `${k * n} ${e} dibagi rata untuk ${k} anak. Tiap anak dapat berapa?`, emojiRow: e.repeat(k * n) }, n); }
+    const n = ri(3, 10); return numMc({ key: 'c' + n + e, label: 'Ada berapa?', emojiRow: e.repeat(n) }, n);
+  }
+  if (L === 2) {
+    if (op === 0) { const a = ri(5, 40), b = ri(3, 50 - a); return big('Penjumlahan', `${a} + ${b}`, a + b); }
+    if (op === 1) { const a = ri(15, 60), b = ri(3, a - 2); return big('Pengurangan', `${a} − ${b}`, a - b); }
+    if (op === 2) { const a = ri(2, 5), b = ri(1, 10); return big('Perkalian', `${a} × ${b}`, a * b); }
+    if (op === 3) { const b = ri(2, 5), a = ri(1, 10); return big('Pembagian', `${a * b} ÷ ${b}`, a); }
+    if (chance(.5)) { const b = ri(2, 15), c = b + ri(3, 30); return numMc({ key: 'm' + b + c, label: 'Angka berapa yang hilang?', big: `? + ${b} = ${c}` }, c - b); }
+    const a = ri(2, 5), b = ri(2, 10), c = chance(.5) ? a * b : a * b + pick([-a, a, 1, -1]);
+    return tf({ key: 't' + a + b + c, label: 'Benar atau salah?', big: `${a} × ${b} = ${c}`, reveal: `${a} × ${b} = ${a * b}` }, c === a * b);
+  }
+  if (L === 3) { // kelas 3–4: hitung cepat tanpa kertas
+    if (op === 0) { return chance(.5) ? (() => { const a = ri(12, 60), b = ri(11, 39); return big('Penjumlahan', `${a} + ${b}`, a + b); })() : (() => { const a = ri(1, 8) * 100 + ri(0, 9) * 10, b = ri(1, 9) * 10; return big('Penjumlahan', `${a} + ${b}`, a + b); })(); }
+    if (op === 1) { return chance(.5) ? (() => { const a = ri(30, 99), b = ri(11, a - 5); return big('Pengurangan', `${a} − ${b}`, a - b); })() : (() => { const a = ri(2, 9) * 100, b = ri(1, 9) * 10; return big('Pengurangan', `${a} − ${b}`, a - b); })(); }
+    if (op === 2) { return chance(.7) ? (() => { const a = ri(2, 10), b = ri(2, 10); return big('Perkalian', `${a} × ${b}`, a * b); })() : (() => { const a = ri(11, 20), b = ri(2, 5); return big('Perkalian', `${a} × ${b}`, a * b); })(); }
+    if (op === 3) { const b = ri(2, 9), a = ri(2, 10); return big('Pembagian', `${a * b} ÷ ${b}`, a); }
+    const st = [
+      () => { const a = ri(3, 8), b = ri(2, 5); return [`Ahmad punya ${a * b} butir kurma, dibagi rata untuk ${b} temannya. Setiap teman dapat berapa butir?`, a]; },
+      () => { const r2 = ri(3, 6), c = ri(4, 10); return [`Di masjid ada ${r2} shaf. Setiap shaf berisi ${c} orang. Berapa jumlah jamaahnya?`, r2 * c]; },
+      () => { const a = ri(40, 90), b = ri(10, 35); return [`Di rak ada ${a} buku. Sebanyak ${b} buku dipinjam santri. Berapa buku yang tersisa?`, a - b]; },
+      () => { const a = ri(2, 9) * 5, b = ri(2, 9) * 5; return [`Hari Senin Umar menabung Rp${a}.000 dan hari Kamis Rp${b}.000. Berapa ribu rupiah tabungannya?`, a + b]; }
+    ];
+    const [txt, ans] = pick(st)(); return numMc({ key: txt, label: 'Soal cerita', html: `<div class="qtext" style="font-size:20px">${esc(txt)}</div>` }, ans);
+  }
+  if (L === 4) { // kelas 5
+    if (op === 0) { const a = ri(100, 800), b = ri(50, 199); return big('Penjumlahan', `${a} + ${b}`, a + b); }
+    if (op === 1) { const a = ri(300, 999), b = ri(100, a - 50); return big('Pengurangan', `${a} − ${b}`, a - b); }
+    if (op === 2) { return chance(.6) ? (() => { const a = ri(12, 30), b = ri(3, 9); return big('Perkalian', `${a} × ${b}`, a * b); })() : (() => { const a = ri(11, 15), b = ri(11, 15); return big('Perkalian', `${a} × ${b}`, a * b); })(); }
+    if (op === 3) { const b = ri(3, 9), a = ri(11, 30); return big('Pembagian', `${a * b} ÷ ${b}`, a); }
+    const r = Math.random();
+    if (r < .35) { const a = ri(2, 20), b = ri(2, 9), c = ri(2, 9); return big('Kerjakan perkalian dulu, ya!', `${a} + ${b} × ${c}`, a + b * c); }
+    if (r < .6) { const a = ri(2, 9), b = ri(2, 9), c = ri(2, 5); return big('Kerjakan yang di dalam kurung dulu', `(${a} + ${b}) × ${c}`, (a + b) * c); }
+    const n = pick([4, 5, 6, 8, 10]), a = ri(1, n - 2), b = ri(1, n - 1 - a);
+    return mc({ key: 'f' + a + b + n, label: 'Penjumlahan pecahan', html: `<div class="qbig">${fracHtml(a, n)} + ${fracHtml(b, n)} = ?</div>`, kind: 'big', answer: `${a + b}/${n}`, pool: [`${a + b}/${n * 2}`, `${Math.abs(a - b) || 1}/${n}`, `${a * b}/${n}`, `${a + b + 1}/${n}`] });
+  }
+  // L5 — kelas 6, tetap bisa dihitung di kepala
+  if (op === 0) {
+    if (chance(.5)) { const a = ri(10, 90) * 100 + ri(1, 9) * 10, b = ri(5, 40) * 100; return big('Penjumlahan', `${fmt(a)} + ${fmt(b)}`, a + b); }
+    const a = ri(11, 99), b = ri(11, 99); const f = v => (v / 10).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    return numMc({ key: 'dc' + a + b, label: 'Penjumlahan desimal', big: `${f(a)} + ${f(b)} = ?` }, a + b, { f, vals: nearNums(a + b).map(Number) });
+  }
+  if (op === 1) {
+    if (chance(.5)) { const a = ri(-10, 10), b = ri(3, 15); return numMc({ key: 'n' + a + b, label: 'Bilangan bulat (negatif)', big: `${a} − ${b} = ?` }, a - b, { neg: true, f: v => String(v) }); }
+    const a = ri(20, 99) * 100, b = ri(5, 19) * 100; return big('Pengurangan', `${fmt(a)} − ${fmt(b)}`, a - b);
+  }
+  if (op === 2) { return chance(.5) ? (() => { const a = ri(12, 25), b = ri(11, 19); return big('Perkalian', `${a} × ${b}`, a * b); })() : (() => { const a = ri(101, 250), b = ri(2, 4); return big('Perkalian', `${a} × ${b}`, a * b); })(); }
+  if (op === 3) { return chance(.5) ? (() => { const b = ri(11, 15), a = ri(5, 15); return big('Pembagian', `${a * b} ÷ ${b}`, a); })() : (() => { const b = ri(4, 9), a = ri(21, 60); return big('Pembagian', `${a * b} ÷ ${b}`, a); })(); }
+  const r = Math.random();
+  if (r < .2) { const n = ri(2, 15); return numMc({ key: 'sq' + n, label: 'Bilangan kuadrat', big: `${n}² = ?` }, n * n); }
+  if (r < .4) { const n = ri(2, 15); return numMc({ key: 'rt' + n, label: 'Akar kuadrat', big: `√${n * n} = ?` }, n); }
+  if (r < .55) { const a = ri(2, 10), b = ri(2, 10); const g = (x, y) => y ? g(y, x % y) : x; const kpk = a * b / g(a, b); return numMc({ key: 'kpk' + a + b, label: 'KPK (kelipatan persekutuan terkecil)', big: `KPK ${a} dan ${b} = ?` }, kpk, { vals: [kpk, a * b === kpk ? kpk * 2 : a * b, Math.max(a, b), kpk + Math.min(a, b)] }); }
+  if (r < .7) { const g0 = ri(2, 8), a = g0 * ri(2, 5), b = g0 * ri(2, 5); const g = (x, y) => y ? g(y, x % y) : x; const fpb = g(a, b); return numMc({ key: 'fpb' + a + b, label: 'FPB (faktor persekutuan terbesar)', big: `FPB ${a} dan ${b} = ?` }, fpb, { vals: [fpb, fpb * 2, Math.max(1, fpb / 2 | 0), Math.min(a, b)] }); }
+  if (r < .85) { const a = ri(5, 30), b = ri(2, 9), c = ri(2, 9), d = ri(1, 10); return big('Operasi hitung campuran', `${a} + ${b} × ${c} − ${d}`, a + b * c - d); }
+  const p = pick([10, 20, 25, 50]), base = pick([40, 60, 80, 100, 120, 200]); return numMc({ key: 'pc' + p + base, label: 'Persen', big: `${p}% dari ${base} = ?` }, base * p / 100);
+}
+function genMtk(L, t) { const op = t === 4 ? rnd(5) : t; return mtkOp(L, op === 4 ? 4 : op); }
+
+/* ---------- Warna ---------- */
+const BASIC = ['merah', 'biru', 'kuning', 'hijau', 'putih', 'hitam', 'oranye', 'ungu'];
+const swQ = (o, ans, pool, n) => ({ ...mc({ kind: 'swatch', answer: ans, pool, n: n || 4 }), ...o });
+function genWarna(L) {
+  const r = Math.random(), all = ALL_COLORS.map(c => c.id), mainIds = COLORS.map(c => c.id);
+  const factQ = () => { const f = pick(COLOR_FACTS); return mc({ key: 'fa' + f[0], label: 'Pengetahuan warna', qtext: f[0], answer: f[1], pool: f[2] }); };
+  const objQ = (n) => { const o = pick(ALL_OBJ); return swQ({ key: 'o' + o[1], label: 'Biasanya berwarna apa?', emoji: o[0], qtext: o[1][0].toUpperCase() + o[1].slice(1) }, o[2], all, n); };
+  if (L === 1) {
+    const c = COLOR[pick(BASIC)];
+    if (r < .4) return swQ({ key: 'w' + c.id, label: 'Mana warna ini?', qtext: c.name, speak: 'Mana warna ' + c.name }, c.id, BASIC, 3);
+    if (r < .75) return mc({ key: 'n' + c.id, label: 'Ini warna apa?', swatch: c.hex, answer: c.name, pool: BASIC.map(id => COLOR[id].name), n: 3 });
+    const o = pick(ALL_OBJ.filter(x => BASIC.includes(x[2]))); return swQ({ key: 'o' + o[1], label: 'Biasanya berwarna apa?', emoji: o[0], qtext: o[1][0].toUpperCase() + o[1].slice(1) }, o[2], BASIC, 3);
+  }
+  if (L === 2) {
+    if (r < .45) return objQ(4);
+    if (r < .7) { const c = pick(ALL_COLORS); return mc({ key: 'n' + c.id, label: 'Ini warna apa?', swatch: c.hex, answer: c.name, pool: ALL_COLORS.map(x => x.name) }); }
+    return factQ();
+  }
+  if (L === 3) {
+    if (r < .4) { const m = pick(ALL_MIX); return swQ({ key: 'x' + m.join(), label: 'Kalau dicampur, jadi warna apa?', mix: [COLOR[m[0]].hex, COLOR[m[1]].hex] }, m[2], all.filter(x => x !== m[0] && x !== m[1])); }
+    if (r < .7) return factQ();
+    return objQ(4);
+  }
+  if (L === 4) {
+    const c = pick(COLORS);
+    if (r < .3) return mc({ key: 'a' + c.id, label: 'Apa arti kata ini?', ar: c.ar, answer: c.name, pool: COLORS.map(x => x.name) });
+    if (r < .6) return mc({ key: 'b' + c.id, label: 'Warna ini dalam bahasa Arab?', swatch: c.hex, kind: 'ar', answer: c.ar, pool: COLORS.map(x => x.ar) });
+    const q = pick(COLOR_AR_Q); return mc({ key: 'q' + q[0], label: 'Jawab dengan bahasa Arab', ar: q[0], sub: q[1], kind: 'ar', answer: q[2], pool: COLORS.map(x => x.ar) });
+  }
+  const withF = COLORS.filter(c => c.arF);
+  if (r < .55) {
+    const c = pick(withF), noun = pick(AR_NOUNS_COLOR);
+    const right = noun[1] === 'f' ? c.arF : c.ar, wrongSame = noun[1] === 'f' ? c.ar : c.arF;
+    const others = sample(withF.filter(x => x !== c), 2).map(x => noun[1] === 'f' ? x.arF : x.ar);
+    return mc({ key: 'f' + c.id + noun[0], label: `Pilih kata warna ${c.name.toLowerCase()} yang cocok`, ar: `${noun[0]} <span class="blank">؟</span>`, sub: noun[2] + ' ' + c.name.toLowerCase(), kind: 'ar', answer: right, pool: [wrongSame, ...others], explain: noun[1] === 'f' ? 'Kata bendanya muannats, jadi warnanya juga muannats.' : 'Kata bendanya mudzakkar, jadi warnanya juga mudzakkar.' });
+  }
+  if (r < .8) { const c = pick(withF), noun = pick(AR_NOUNS_COLOR), w = noun[1] === 'f' ? c.arF : c.ar; const ans = noun[2].replace(' itu', '') + ' itu ' + c.name.toLowerCase();
+    const pool = sample(withF.filter(x => x !== c), 3).map(x => noun[2].replace(' itu', '') + ' itu ' + x.name.toLowerCase());
+    return mc({ key: 'tr' + c.id + noun[0], label: 'Apa artinya?', ar: noun[0] + ' ' + w, answer: ans, pool }); }
+  const q = pick(COLOR_AR_Q); return mc({ key: 'q' + q[0], label: 'Jawab dengan bahasa Arab', ar: q[0], kind: 'ar', answer: q[2], pool: COLORS.map(x => x.ar) });
+}
+
+/* ---------- Mufradat ---------- */
+function mufPool(L) { return ALL_MUF.filter(w => w[3] === L); }
+function sameTheme(w, list) { const t = list.filter(x => x[2] === w[2] && x[1] !== w[1]); return t.length >= 3 ? t : list.filter(x => x[1] !== w[1]); }
+function mufBoth(w, list, kAr) {
+  const pool = sameTheme(w, list);
+  if (chance(.6)) return mc({ key: 'a' + w[0], label: 'Apa artinya?', ar: w[0], sub: w[2], speakAr: w[0], answer: w[1], pool: pool.map(x => x[1]) });
+  return mc({ key: 'b' + w[0], label: 'Bahasa Arabnya apa?', qtext: w[1][0].toUpperCase() + w[1].slice(1), sub: w[2], kind: 'ar', answer: w[0], pool: pool.map(x => x[0]) });
+}
+function genMuf(L) {
+  const r = Math.random();
+  if (L === 1) {
+    const list = mufPool(1);
+    if (r < .7) { const w = pick(list); return mc({ key: w[0], label: 'Gambar mana yang benar?', ar: w[0], sub: w[5], speakAr: w[0], kind: 'emo', answer: w[4], pool: list.map(x => x[4]), n: 3 }); }
+    const a = pick(ANGKA); return mc({ key: a[0], label: 'Ini angka berapa?', ar: a[0], sub: a[1], speakAr: a[0], kind: 'big', answer: String(a[3]), pool: ANGKA.map(x => String(x[3])), n: 3 });
+  }
+  if (L === 2) { const list = mufPool(2); const w = pick(r < .85 ? list : mufPool(1)); return mufBoth(w, w[3] === 1 ? mufPool(1) : list); }
+  if (L === 3) { const list = mufPool(3); const w = pick(r < .85 ? list : mufPool(2)); return mufBoth(w, w[3] === 3 ? list : mufPool(2)); }
+  if (L === 4) {
+    if (r < .25) { const j = pick(ALL_JAMAK); return mc({ key: 'j' + j[0], label: 'Apa bentuk jamaknya?', ar: j[0], sub: j[2], kind: 'ar', answer: j[1], pool: ALL_JAMAK.map(x => x[1]) }); }
+    if (r < .45) { const p = pick(ALL_LAWAN), flip = chance(.5), q = flip ? p[1] : p[0], a = flip ? p[0] : p[1]; return mc({ key: 'l' + q, label: 'Apa lawan katanya?', ar: q, kind: 'ar', answer: a, pool: ALL_LAWAN.flat() }); }
+    const list = mufPool(4); return mufBoth(pick(list), list);
+  }
+  const withAns = ALL_MUH.filter(m => m[2]);
+  if (r < .35) { const m = pick(ALL_MUH); return mc({ key: 'm' + m[0], label: 'Apa arti ungkapan ini?', ar: m[0], sub: m[3], speakAr: m[0], answer: m[1], pool: ALL_MUH.map(x => x[1]) }); }
+  if (r < .6) { const m = pick(withAns); return mc({ key: 'r' + m[0], label: 'Jawaban yang tepat adalah…', ar: m[0], sub: m[1], kind: 'ar', answer: m[2], pool: withAns.map(x => x[2]) }); }
+  const k = pick(KALIMAT_AR);
+  if (chance(.5)) return mc({ key: 'ka' + k[0], label: 'Apa arti kalimat ini?', ar: k[0], speakAr: k[0], answer: k[1], pool: KALIMAT_AR.map(x => x[1]) });
+  return mc({ key: 'kb' + k[0], label: 'Bahasa Arabnya yang mana?', qtext: k[1], kind: 'ar', answer: k[0], pool: KALIMAT_AR.map(x => x[0]) });
+}
+
+/* ---------- Nahwu & Sharaf ---------- */
+const babsOf = L => NAHWU_BAB.filter(b => b.lv === L);
+const markQ = (item, label, answer, pool, n) => mc({ key: label + item, label, ar: mark(item), long: unmark(item).length > 18, answer, pool, n });
+function soalBab(key) {
+  const r = Math.random();
+  if (Array.isArray(key)) { const it = pick(key); return it.s ? tf({ key: it.s, label: 'Benar atau salah?', qtext: it.s }, it.v) : mc({ key: it.q + (it.ar || ''), label: it.ar ? it.q : 'Pilih jawaban', ar: it.ar, qtext: it.ar ? null : it.q, answer: it.a, pool: it.p }); }
+  switch (key) {
+    case 'kalimah': {
+      if (r < .35) { const t = pick(['isim', 'fiil', 'huruf']), w = pick(KALIMAH[t]); const nm = { isim: 'Isim', fiil: 'Fi\'il', huruf: 'Huruf' }; return mc({ key: 'k' + w, label: 'Kata ini termasuk…', ar: w, answer: nm[t], pool: Object.values(nm), n: 3 }); }
+      if (r < .6) { const it = pick(NB.isimAlasan); return markQ(it[0], 'Mengapa kata ini isim?', it[1], ['Tanwin', 'Alif-lam', 'Huruf jar', 'Huruf nida']); }
+      if (r < .8) { const it = pick(NB.fiilAlasan); return markQ(it[0], 'Mengapa kata ini fi\'il?', it[1], ['Qad', 'Sa / saufa', 'Ta\' mati'], 3); }
+      const a = pick(KALIMAH.isim); return mc({ key: 'm' + a, label: 'Pilih satu kata', qtext: 'Mana yang isim?', kind: 'ar', answer: a, pool: [pick(KALIMAH.fiil), pick(KALIMAH.huruf)], n: 3 });
+    }
+    case 'gender': {
+      if (r < .55) { const g = chance(.5) ? 'm' : 'f', w = pick(NB.gender[g]); return mc({ key: 'g' + w, label: 'Mudzakkar atau muannats?', ar: w, answer: g === 'm' ? 'Mudzakkar' : 'Muannats', pool: ['Mudzakkar', 'Muannats'], n: 2 }); }
+      const it = pick(NB.tandaMuannats); return mc({ key: 't' + it[0], label: 'Apa tanda muannatsnya?', ar: it[0], answer: it[1], pool: ['Ta\' marbuthah', 'Alif maqshurah', 'Alif mamdudah', 'Tanpa tanda'] });
+    }
+    case 'bilangan': {
+      if (r < .3) { const b = pick(BILANGAN); return mc({ key: 'n' + b[0], label: 'Termasuk jenis apa?', ar: b[0], answer: b[1], pool: [...new Set(BILANGAN.map(x => x[1]))] }); }
+      if (r < .55) { const it = pick(NB.jamakMacam); return mc({ key: 'j' + it[0], label: 'Jamak macam apa?', ar: it[0], answer: it[1], pool: ['Jamak mudzakkar salim', 'Jamak muannats salim', 'Jamak taksir'], n: 3 }); }
+      if (r < .8) { const it = pick(NB.mutsanna); return mc({ key: 'u' + it[0], label: 'Apa bentuk mutsanna-nya?', ar: it[0], kind: 'ar', answer: it[1], pool: NB.mutsanna.map(x => x[1]) }); }
+      const j = pick(ALL_JAMAK); return mc({ key: 'jt' + j[0], label: 'Apa bentuk jamaknya?', ar: j[0], kind: 'ar', answer: j[1], pool: ALL_JAMAK.map(x => x[1]) });
+    }
+    case 'makrifah': {
+      if (r < .3) { const f = pick(MAKRIFAH); return mc({ key: 'r' + f[0], label: 'Nakirah atau ma\'rifah?', ar: f[0], answer: f[1], pool: ['Nakirah', 'Ma\'rifah'], n: 2 }); }
+      if (r < .55) { const it = pick(NB.makrifahMacam); return mc({ key: 'mm' + it[0], label: 'Ma\'rifah macam apa?', ar: it[0], answer: it[1], pool: ['Dhamir', '\'Alam', 'Isim isyarah', 'Isim maushul', 'Ber-alif-lam', 'Mudhaf'] }); }
+      if (r < .8) { const it = pick(NB.dhamir); return mc({ key: 'dh' + it[0], label: 'Apa arti dhamir ini?', ar: it[0], answer: it[1], pool: NB.dhamir.map(x => x[1]) }); }
+      const it = pick(NB.isyarah); return mc({ key: 'is' + it[0], label: 'Apa artinya?', ar: it[0], answer: it[1], pool: NB.isyarah.map(x => x[1]) });
+    }
+    case 'murab': {
+      if (r < .6) { const it = pick(NB.murab); return mc({ key: 'mu' + it[0], label: 'Mu\'rab atau mabni?', ar: it[0], answer: it[1], pool: ['Mu\'rab', 'Mabni'], n: 2 }); }
+      const it = pick(NB.istifham); return mc({ key: 'if' + it[0], label: 'Apa arti kata tanya ini?', ar: it[0], answer: it[1], pool: NB.istifham.map(x => x[1]) });
+    }
+    case 'waktu': {
+      if (r < .45) { const it = pick(NB.waktu); return mc({ key: 'w' + it[0], label: 'Fi\'il apa ini?', ar: it[0], answer: it[1], pool: ['Madhi', 'Mudhari\'', 'Amar'], n: 3 }); }
+      if (r < .75) { const it = pick(NB.amar); return mc({ key: 'am' + it[0], label: 'Buat fi\'il amarnya!', ar: it[0], kind: 'ar', answer: it[1], pool: NB.amar.map(x => x[1]) }); }
+      const t = pick(TASHRIF); return mc({ key: 'md' + t[0], label: 'Apa fi\'il mudhari\'-nya?', ar: t[0], kind: 'ar', answer: t[1], pool: TASHRIF.map(x => x[1]) });
+    }
+    case 'majhul': {
+      if (r < .4) { const f = pick(MAJHUL); return mc({ key: 'j' + f[0], label: 'Ma\'lum atau majhul?', ar: f[0], answer: f[1], pool: ['Ma\'lum', 'Majhul'], n: 2 }); }
+      if (r < .85) { const it = pick(NB.majhul); return mc({ key: 'mj' + it[0], label: 'Ubah menjadi majhul!', ar: it[0], kind: 'ar', answer: it[1], pool: NB.majhul.filter(x => x !== it).map(x => x[1]) }); }
+      return tf({ key: 'tfam', label: 'Benar atau salah?', qtext: 'Fi\'il amar punya bentuk majhul.' }, false);
+    }
+    case 'jumlah': {
+      if (r < .8) { const it = pick(NB.jumlah); return mc({ key: 'ju' + it[0], label: 'Apa jenis susunan ini?', ar: it[0], answer: it[1], pool: ['Jumlah ismiyyah', 'Jumlah fi\'liyyah', 'Jar-majrur', 'Zharaf'] }); }
+      const ok = chance(.5); return tf({ key: 'kl' + ok, label: 'Apakah ini kalam (kalimat sempurna)?', ar: ok ? 'الْمَسْجِدُ نَظِيفٌ' : 'إِنْ جَاءَ مُحَمَّدٌ' }, ok);
+    }
+    case 'irabTanda': {
+      if (r < .55) { const it = pick(NB.tandaIrab); return mc({ key: 'ti' + it[0], label: 'Tanda i\'rab', qtext: it[0], answer: it[1], pool: it[2] }); }
+      if (r < .9) { const it = pick(NB.irabKalimat); return markQ(it[0], 'Apa keadaan i\'rab kata yang ditandai?', it[1], ['Rafa\'', 'Nashab', 'Jar', 'Jazm']); }
+      return tf({ key: 'tfj', label: 'Benar atau salah?', qtext: 'Isim tidak pernah dibaca jazm.' }, true);
+    }
+    case 'ghairu': {
+      if (r < .55) { const a = pick(NB.ghairu.ya); return mc({ key: 'gh' + a, label: 'Pilih satu kata', qtext: 'Mana yang ghairu munsharif?', kind: 'ar', answer: a, pool: NB.ghairu.tidak, n: 3 }); }
+      const it = pick(NB.ghairuBaca); return mc({ key: 'gb' + it[0] + it[1], label: 'Pilih bacaan yang benar', ar: it[0], kind: 'ar', answer: it[1], pool: [it[2]], n: 2 });
+    }
+    case 'marfuat': { const it = pick(NB.marfuat); return markQ(it[0], 'Apa kedudukan kata yang ditandai?', it[1], [...new Set(NB.marfuat.map(x => x[1]))]); }
+    case 'manshubat': { const it = pick(NB.manshubat); return markQ(it[0], 'Apa kedudukan kata yang ditandai?', it[1], [...new Set(NB.manshubat.map(x => x[1]))]); }
+    case 'majrurat': {
+      if (r < .6) { const it = pick(NB.majrurat); return markQ(it[0], 'Kenapa kata yang ditandai dibaca jar?', it[1], ['Karena huruf jar', 'Mudhaf ilaih', 'Tabi\' yang majrur'], 3); }
+      const it = pick(NB.hurufJar); return mc({ key: 'hj' + it[0], label: 'Apa arti huruf jar ini?', ar: it[0], answer: it[1], pool: NB.hurufJar.map(x => x[1]) });
+    }
+    case 'tawabi': {
+      if (r < .65) { const it = pick(NB.tawabi); return markQ(it[0], 'Apa jenis tabi\' yang ditandai?', it[1], ['Na\'at', '\'Athaf', 'Taukid', 'Badal']); }
+      const it = pick(NB.hurufAthaf); return mc({ key: 'ha' + it[0], label: 'Apa arti huruf \'athaf ini?', ar: it[0], answer: it[1], pool: NB.hurufAthaf.map(x => x[1]) });
+    }
+    case 'tashrif': {
+      const t = pick(TASHRIF);
+      if (r < .25) return mc({ key: 'd' + t[0], label: 'Apa fi\'il mudhari\'-nya?', ar: t[0], kind: 'ar', answer: t[1], pool: TASHRIF.map(x => x[1]) });
+      if (r < .45) return mc({ key: 'z' + t[0], label: 'Ikut wazan yang mana?', ar: t[0] + ' – ' + t[1], kind: 'ar', answer: t[3], pool: [...new Set(TASHRIF.map(x => x[3]))] });
+      if (r < .7) { const it = pick(NB.tashrifIstilahi); return mc({ key: 'ti' + it[1], label: `Dari ${it[0]}, kata ini termasuk…`, ar: it[1], answer: it[2], pool: ['Isim fa\'il', 'Isim maf\'ul', 'Fi\'il nahi', 'Isim alat', 'Masdar'] }); }
+      const it = pick(NB.lughawi); return mc({ key: 'lg' + it[0], label: 'Siapa pelakunya?', ar: it[0], answer: it[1], pool: [...new Set(NB.lughawi.map(x => x[1]))] });
+    }
+  }
+}
+function genNahwu(L, t) {
+  const r = Math.random();
+  if (L === 1) {
+    if (r < .35) { const h = pick(HURUF_HARAKAT), k = pick(HARAKAT); return mc({ key: 'h' + h[0] + k.name, label: 'Apa nama harakatnya?', ar: h[0] + k.mark, answer: k.name, pool: HARAKAT.map(x => x.name), n: 3 }); }
+    if (r < .7) { const h = pick(HURUF_HARAKAT), k = pick(HARAKAT.slice(0, 3)); return mc({ key: 'b' + h[0] + k.name, label: 'Dibaca apa?', ar: h[0] + k.mark, kind: 'big', answer: h[1] + k.bunyi, pool: HARAKAT.slice(0, 3).map(x => h[1] + x.bunyi), n: 3 }); }
+    const hs = HURUF_HIJAIYAH.filter(x => x[0] !== 'ا' && x[0] !== 'ع'), h = pick(hs);
+    return mc({ key: 'f' + h[0], label: 'Huruf ini dibaca apa?', ar: h[0] + 'َ', kind: 'big', answer: h[1] + 'a', pool: hs.map(x => x[1] + 'a'), n: 3 });
+  }
+  if (L === 2) {
+    if (r < .6) { const it = pick(HARAKAT2); return mc({ key: 'r' + it[0], label: 'Dibaca apa?', ar: it[0], kind: 'big', answer: it[1], pool: HARAKAT2.map(x => x[1]) }); }
+    const T = [['بٌ','Dhammatain'],['بًا','Fathatain'],['بٍ','Kasratain'],['بَّ','Syaddah'],['بَا','Mad (panjang)'],['بْ','Sukun']];
+    const it = pick(T); return mc({ key: 'n' + it[0], label: 'Tanda apa yang ada di sini?', ar: it[0], answer: it[1], pool: T.map(x => x[1]) });
+  }
+  const babs = babsOf(L), bab = babs[Math.min(t, babs.length - 1)];
+  return soalBab(bab.soal);
+}
+
+/* ---------- Al-Qur'an ---------- */
+const QURAN_DEFAULT_END = 78; // bawaan: Al-Fatihah + seluruh Juz 30
+function quranPool(p) {
+  p = p || P();
+  const end = p.quranUntil || QURAN_DEFAULT_END;
+  return HAFALAN_ORDER.slice(0, HAFALAN_ORDER.indexOf(end) + 1);
+}
+const QURAN_TOPICS = ['Lanjutkan Ayat', 'Tebak Surat', 'Dengar & Cocokkan', 'Urutan & Jumlah', 'Campuran'];
+const ayatHtml = (s, i) => `${AYAT[s][i]} <span class="an">﴿${arDigits(i + 1)}﴾</span>`;
+function ayatList(pool, needAudio) { // [s,i] yang punya teks (dan suara)
+  const out = []; pool.forEach(s => (AYAT[s] || []).forEach((_, i) => { if (!needAudio || ayClip(s, i)) out.push([s, i]); })); return out;
+}
+function genQuran(L, t) {
+  const pool = quranPool(), kid = L <= 2; // TK – kelas 2: soal bersuara, pilihan juga bersuara
+  const n = kid ? 3 : 4, nm = s => SURAH_BY[s].latin;
+  let type = t === 4 ? rnd(4) : t;
+  const withAud = ayatList(pool, true);
+  if (type === 0) {
+    const cand = (kid ? withAud : ayatList(pool, false)).filter(([s, i]) => AYAT[s][i + 1] && (!kid || ayClip(s, i + 1)));
+    if (!cand.length) type = 1; else {
+      const [s, i] = pick(cand), ans = AYAT[s][i + 1];
+      const others = (kid ? withAud : ayatList(pool, false)).filter(([x, j]) => !(x === s && j === i + 1) && AYAT[x][j] !== ans);
+      const same = others.filter(([x]) => x === s), dist = [...sample(same, 2), ...sample(others, 4)];
+      const clips = {}; [[s, i + 1], ...dist].forEach(([x, j]) => { const c = ayClip(x, j); if (c) clips[AYAT[x][j]] = c; });
+      return mc({ key: 'l' + s + i, label: `QS. ${nm(s)} · Ayat sesudahnya adalah…`, ar: ayatHtml(s, i), long: true, kind: 'ar', audio: ayClip(s, i), clips: kid ? clips : null, answer: ans, pool: dist.map(([x, j]) => AYAT[x][j]), n });
+    }
+  }
+  if (type === 1) {
+    const aud = pool.filter(s => QAUDIO[s]);
+    const src = aud.length >= 2 ? aud : pool;
+    const s = pick(src), cands = (AYAT[s] || []).map((_, i) => i).filter(i => ayClip(s, i));
+    const i = cands.length ? pick(cands) : -1;
+    const clips = {}; src.forEach(x => { const c = openClip(x); if (c) clips[nm(x)] = c; });
+    return mc({ key: 't' + s + i, label: kid ? 'Dengarkan. Ini surat apa?' : 'Ayat ini dari surat apa?', ar: i >= 0 ? ayatHtml(s, i) : (AYAT[s] ? ayatHtml(s, 0) : null), long: true, audio: i >= 0 ? ayClip(s, i) : openClip(s), clips: kid ? clips : null, answer: nm(s), pool: src.map(nm), n: Math.min(n, src.length) });
+  }
+  if (type === 2) {
+    if (kid || chance(.5)) { // dengar lalu pilih ayat yang sama
+      const list = withAud.length >= 3 ? withAud : null;
+      if (list) {
+        const [s, i] = pick(list), ans = AYAT[s][i];
+        const others = list.filter(([x, j]) => AYAT[x][j] !== ans), dist = [...sample(others.filter(([x]) => x === s), 2), ...sample(others, 3)];
+        const clips = {}; [[s, i], ...dist].forEach(([x, j]) => { clips[AYAT[x][j]] = ayClip(x, j); });
+        return mc({ key: 'c' + s + i, label: 'Dengarkan. Ayat mana yang dibaca?', audio: ayClip(s, i), hideText: true, kind: 'ar', clips: kid ? clips : null, answer: ans, pool: dist.map(([x, j]) => AYAT[x][j]), n });
+      }
+    }
+    const all = ayatList(pool, false).filter(([s, i]) => AYAT[s][i].split(' ').length >= 2);
+    const [s, i] = pick(all), toks = AYAT[s][i].split(' ');
+    const idx = toks.map((_, j) => j).filter(j => cleanAr(toks[j]).length >= 3);
+    const j = pick(idx.length ? idx : [0]), ans = toks[j];
+    const allTok = [...new Set(pool.filter(x => AYAT[x]).flatMap(x => AYAT[x].flatMap(a => a.split(' '))).filter(w => w.length >= 3 && w !== ans))];
+    const shown = toks.map((w, k) => k === j ? '<span class="blank">؟</span>' : w).join(' ') + ` <span class="an">﴿${arDigits(i + 1)}﴾</span>`;
+    return mc({ key: 'f' + s + i + j, label: `QS. ${nm(s)} · Lengkapi ayatnya!`, ar: shown, long: true, kind: 'ar', audio: ayClip(s, i), answer: ans, pool: allTok, n });
+  }
+  // type 3: urutan & jumlah (kid: tebak surat dari ayat tengah)
+  if (kid) {
+    const aud = pool.filter(s => QAUDIO[s]); if (aud.length < 2) return genQuran(L, 0);
+    const s = pick(aud), cands = QAUDIO[s].a.map((x, i) => x[2] ? i : -1).filter(i => i > 0);
+    const clips = {}; aud.forEach(x => { clips[nm(x)] = openClip(x); });
+    const audio = cands.length ? ayClip(s, pick(cands)) : openClip(s);
+    return mc({ key: 'm' + s + audio.a, label: 'Dengarkan potongan ini. Dari surat apa?', audio, answer: nm(s), clips, pool: aud.map(nm), n: Math.min(n, aud.length) });
+  }
+  const r = Math.random(), s = pick(pool), S0 = SURAH_BY[s];
+  if (r < .25 && s !== 1 && s < 114) { const nx = s + 1; return mc({ key: 'u' + s, label: 'Urutan surat dalam mushaf', qtext: `Surat sesudah ${S0.latin} adalah…`, answer: SURAH_BY[nx].latin, pool: SURAH.filter(x => x[0] !== nx && x[0] >= 67).map(x => x[1]).filter(x => x !== S0.latin), n }); }
+  if (r < .45) return numMc({ key: 'k' + s, label: 'Nomor surat', qtext: `${S0.latin} adalah surat ke berapa?` }, s, { vals: [s, s + 1, s - 1, s + 10].filter(v => v > 0 && v <= 114) });
+  if (r < .65) return numMc({ key: 'j' + s, label: 'Jumlah ayat', qtext: `Surat ${S0.latin} ada berapa ayat?` }, S0.ayat, { vals: [...new Set([S0.ayat, ...SURAH.map(x => x[4]).filter(v => v !== S0.ayat && Math.abs(v - S0.ayat) <= 12)])].slice(0, 6) });
+  if (r < .82) return mc({ key: 'a' + s, label: 'Arti nama surat', qtext: `${S0.latin} (${S0.ar}) artinya…`, answer: S0.arti, pool: SURAH.map(x => x[3]).filter(x => x !== S0.arti), n });
+  const withFirst = pool.filter(x => AYAT[x]), s2 = pick(withFirst);
+  const clips = {}; withFirst.forEach(x => { const c = ayClip(x, 0); if (c) clips[AYAT[x][0]] = c; });
+  return mc({ key: 'p' + s2, label: 'Ayat pertama surat…', qtext: `${SURAH_BY[s2].latin}`, kind: 'ar', clips, answer: AYAT[s2][0], pool: withFirst.filter(x => x !== s2).map(x => AYAT[x][0]), n: Math.min(n, withFirst.length) });
+}
+
+/* ---------- Doa & Dzikir ---------- */
+const ALL_TOKENS = [...new Set([...ALL_DOA, ...DZIKIR_SHALAT, ...DZIKIR_PP].flatMap(d => d.ar.split(' ').map(cleanAr)).filter(t => t.length >= 4))];
+function lengkapi(item, label, n) {
+  if (!item) return null;
+  const toks = item.ar.split(' ');
+  const idx = toks.map((t, i) => i).filter(i => cleanAr(toks[i]).length >= 4);
+  if (toks.length < 3 || !idx.length) return null;
+  const i = pick(idx), ans = cleanAr(toks[i]);
+  const shown = toks.map((t, j) => j === i ? '<span class="blank">؟</span>' + (t.endsWith('،') ? '،' : '') : esc(t)).join(' ');
+  return mc({ key: 'f' + item.id + i, label: label || 'Lengkapi bacaannya!', ar: shown, long: toks.length > 5, sub: item.judul || '', kind: 'ar', answer: ans, pool: ALL_TOKENS.filter(t => t !== ans), n: n || 4 });
+}
+const KALI_POOL = ['1', '3', '7', '10', '33', '100'];
+const DZ_ALL = [
+  ...ALL_DOA.map(d => ({ ...d, jenis: 'doa' })),
+  ...DZIKIR_SHALAT.map(d => ({ ...d, jenis: 'shalat', judul: 'Dzikir setelah shalat', e: '🕌' })),
+  ...DZIKIR_PP.map(d => ({ ...d, jenis: 'pp', judul: 'Dzikir ' + d.waktu, e: d.waktu === 'pagi' ? '🌅' : d.waktu === 'petang' ? '🌇' : '🌤️' }))
+];
+const DZ_BY = Object.fromEntries(DZ_ALL.map(d => [d.id, d]));
+const DOA_TOPICS = ['Doa Harian', 'Dzikir Setelah Shalat', 'Dzikir Pagi Petang', 'Tes Hafalan (pilihan orang tua)', 'Campuran'];
+function genDoa(L, t) {
+  const kid = L <= 2, n = kid ? 3 : 4, r = Math.random();
+  const D = ALL_DOA.filter(d => d.lvl <= Math.max(L, 2));
+  const long3 = list => list.filter(d => d.ar.split(' ').length >= 3 && !d.noFill);
+  const tebak = (pool, all) => { const d = pick(pool); all = all || D; return mc({ key: 't' + d.id, label: 'Ini doa apa?', ar: d.ar, long: d.ar.length > 40, audio: DOA_AUDIO[d.id] || null, answer: d.e + ' ' + d.judul, pool: all.filter(x => x.judul !== d.judul).map(x => x.e + ' ' + x.judul), n }); };
+  const situasi = (pool, all) => { const p = pool.filter(x => x.ar.length < 70); if (!p.length) return null; const d = pick(p); all = (all || D).filter(x => x.ar.length < 70); return mc({ key: 's' + d.id, label: 'Doa yang dibaca adalah…', emoji: d.e, qtext: d.judul, kind: 'ar', clips: Object.fromEntries(all.filter(x => DOA_AUDIO[x.id]).map(x => [x.ar, DOA_AUDIO[x.id]])), answer: d.ar, pool: all.map(x => x.ar), n }); };
+  const jumlah = (list, ctx) => { const d = pick(list.filter(x => x.kali)); return mc({ key: 'j' + d.id, label: ctx, ar: d.ar, long: d.ar.length > 40, qtext: 'dibaca berapa kali?', kind: 'big', answer: String(d.kali), pool: KALI_POOL, n }); };
+  const waktu = list => { const d = pick(list); const lab = { pagi: '🌅 Pagi', petang: '🌇 Petang', 'pagi & petang': '🌤️ Pagi dan petang' }; return mc({ key: 'w' + d.id, label: 'Dzikir ini dibaca kapan?', ar: d.ar, long: true, answer: lab[d.waktu], pool: Object.values(lab), n: 3 }); };
+  const shalat = DZIKIR_SHALAT.filter(x => !x.noFill);
+  const type = t === 4 ? rnd(3) : t;
+  if (type === 0) {
+    if (kid) return chance(.5) ? tebak(D) : (situasi(D) || tebak(D));
+    if (r < .3) return tebak(D); if (r < .5) return situasi(D) || tebak(D);
+    return lengkapi(pick(long3(D)), null, n) || tebak(D);
+  }
+  if (type === 1) {
+    if (kid || r < .45) return jumlah(shalat, 'Dzikir setelah shalat');
+    return lengkapi(pick(long3(shalat)), 'Lengkapi dzikir setelah shalat!', n) || jumlah(shalat, 'Dzikir setelah shalat');
+  }
+  if (type === 2) {
+    if (r < .35) return waktu(DZIKIR_PP);
+    if (kid || r < .65) return jumlah(DZIKIR_PP, 'Dzikir pagi petang');
+    return lengkapi(pick(long3(DZIKIR_PP)), 'Lengkapi dzikir pagi petang!', n) || waktu(DZIKIR_PP);
+  }
+  // Tes hafalan: hanya bacaan yang ditandai orang tua
+  const ids = Object.keys(P().doaHafal || {}).filter(k => P().doaHafal[k] && DZ_BY[k]);
+  const H = ids.map(k => DZ_BY[k]);
+  if (H.length < 2) return genDoa(L, rnd(3));
+  const d = pick(H), hd = H.filter(x => x.jenis === 'doa');
+  if (d.jenis === 'doa' && (kid || r < .5)) return chance(.5) ? tebak([d], hd.length >= 2 ? hd : D) : (situasi([d], hd.length >= 2 ? hd : D) || tebak([d], D));
+  if (d.kali && r < .35) return jumlah([d], d.judul);
+  if (d.jenis === 'pp' && r < .55) return waktu([d]);
+  return lengkapi(d.ar.split(' ').length >= 3 && !d.noFill ? d : null, 'Tes hafalan: lengkapi bacaannya!', n) || (d.kali ? jumlah([d], d.judul) : tebak([d], D));
+}
+
+/* ---------- Asyik Belajar Nahwu (pilih bab bebas) ---------- */
+function genAbn(L, t) { return soalBab(NAHWU_BAB[Math.min(t, NAHWU_BAB.length - 1)].soal); }
+
+/* ---------- Buku Saku Santri (muhadatsah per tempat) ---------- */
+function genSaku(L, t) {
+  const s = SAKU[Math.min(t, SAKU.length - 1)], n = L <= 2 ? 3 : 4, r = Math.random();
+  const U = s.ung, K = s.kos;
+  if ((r < .3 && U.length >= 3) || K.length < 3) { const u = pick(U); return mc({ key: 'ua' + u[0], label: s.e + ' ' + s.judul + ' · Apa artinya?', ar: u[0], speakAr: u[0], answer: u[1], pool: U.map(x => x[1]), n, safe: true }); }
+  if (r < .55 && U.length >= 3) { const u = pick(U); return mc({ key: 'ub' + u[0], label: s.e + ' ' + s.judul + ' · Bahasa Arabnya?', qtext: u[1], kind: 'ar', answer: u[0], pool: U.map(x => x[0]), n }); }
+  if (r < .8) { const k = pick(K); return mc({ key: 'ka' + k[0], label: s.e + ' ' + s.judul + ' · Arti kosakata', ar: k[0], speakAr: k[0], answer: k[1], pool: K.map(x => x[1]), n, safe: true }); }
+  const k = pick(K); return mc({ key: 'kb' + k[0], label: s.e + ' ' + s.judul + ' · Kosakata Arabnya?', qtext: k[1], kind: 'ar', answer: k[0], pool: K.map(x => x[0]), n });
+}
+
+/* ---------- Hafalan (dari orang tua) ---------- */
+function genHafalan(L) {
+  const items = S.hafalan; if (!items.length) return null;
+  const h = pick(items);
+  if (items.length >= 2 && chance(.35)) return mc({ key: 'j' + h.id, safe: true, label: 'Ini hafalan apa?', ...(h.ar ? { ar: h.teks.split(' ').slice(0, 6).map(esc).join(' ') + ' …', long: true } : { qtext: h.teks.split(' ').slice(0, 6).join(' ') + ' …' }), answer: h.judul, pool: items.map(x => x.judul), n: Math.min(4, items.length) });
+  const toks = h.teks.split(/\s+/), clean = t => h.ar ? cleanAr(t).replace(/۝/g, '') : t.replace(/[,.;:!?]/g, '');
+  const idx = toks.map((t, i) => i).filter(i => clean(toks[i]).length >= 3);
+  if (!idx.length) return null;
+  const i = pick(idx), ans = clean(toks[i]);
+  const allTok = [...new Set(S.hafalan.filter(x => x.ar === h.ar).flatMap(x => x.teks.split(/\s+/).map(clean)).filter(t => t.length >= 3 && t !== ans))];
+  const extra = h.ar ? ALL_TOKENS : ['dan', 'shalat', 'Allah', 'puasa', 'zakat', 'haji', 'iman', 'ilmu', 'sabar', 'jujur'];
+  const pool = [...allTok, ...sample(extra.filter(t => t !== ans), 6)];
+  const shown = toks.map((t, j) => j === i ? '<span class="blank">' + (h.ar ? '؟' : '?') + '</span>' : esc(t)).join(' ');
+  return mc({ key: 'f' + h.id + i, safe: true, label: 'Lengkapi hafalannya!', sub: h.judul, ...(h.ar ? { ar: shown, long: true, kind: 'ar' } : { html: `<div class="qtext">${shown}</div>` }), answer: ans, pool, n: L <= 2 ? 3 : 4 });
+}
+
+/* ================= MODULES ================= */
+const MODS = [
+  { id: 'quran', title: 'Al-Qur\'an', ar: 'الْقُرْآنُ الْكَرِيمُ', c: '#9C2A4A', cd: '#6E1530', glyph: 'قُرْآن', glyphAr: true, wide: true, gen: genQuran, desc: 'Hafalan Juz 30 & 29, sesuai capaian anak', topics: () => QURAN_TOPICS },
+  { id: 'baca', title: 'Membaca', ar: 'الْقِرَاءَةُ', c: '#FF6150', cd: '#C93A2C', glyph: 'Aa', gen: genBaca, desc: 'Huruf, suku kata, kata, cerita' },
+  { id: 'mtk', title: 'Matematika', ar: 'الْحِسَابُ', c: '#2B7BEF', cd: '#1757B5', glyph: '+×', gen: genMtk, desc: 'Tambah, kurang, kali, bagi', topics: () => MTK_TOPICS },
+  { id: 'warna', title: 'Warna', ar: 'الْأَلْوَانُ', c: '#FF8A2A', cd: '#C9620A', glyph: 'dots', gen: genWarna, desc: 'Nama, campuran, bahasa Arab' },
+  { id: 'muf', title: 'Mufradat', ar: 'الْمُفْرَدَاتُ', c: '#6F55F2', cd: '#4B33C2', glyph: 'ب', glyphAr: true, gen: genMuf, desc: 'Kosakata & percakapan Arab' },
+  { id: 'nahwu', title: 'Harakat & Nahwu', ar: 'الْحَرَكَاتُ وَالنَّحْوُ', c: '#2C347A', cd: '#151A4D', glyph: 'بَ', glyphAr: true, gen: genNahwu, desc: 'Harakat (TK), nahwu sesuai kelas',
+    topics: L => L <= 2 ? null : babsOf(L).map(b => 'Bab ' + b.no + ' · ' + b.judul) },
+  { id: 'abn', title: 'Asyik Belajar Nahwu', ar: 'النَّحْوُ وَالصَّرْفُ', c: '#C2410C', cd: '#8A2C06', glyph: 'اِسْمٌ', glyphAr: true, gen: genAbn, free: true, desc: 'Buku nahwu: pilih bab, belajar, lalu main',
+    topics: () => NAHWU_BAB.map(b => 'Bab ' + b.no + ' · ' + b.judul) },
+  { id: 'saku', title: 'Buku Saku Santri', ar: 'الْمُعْجَمُ الْجَيْبِيُّ', c: '#0F4C81', cd: '#08304F', glyph: 'حِوَار', glyphAr: true, gen: genSaku, free: true, desc: 'Kamus & muhadatsah: pilih tempat',
+    topics: () => SAKU.map(x => x.e + ' ' + x.judul) },
+  { id: 'hafalan', title: 'Hafalan', ar: 'الْحِفْظُ', c: '#EC4B8C', cd: '#B42563', glyph: 'حِفْظ', glyphAr: true, gen: genHafalan, desc: 'Diisi oleh orang tua' },
+  { id: 'doa', title: 'Doa & Dzikir', ar: 'الْأَدْعِيَةُ وَالْأَذْكَارُ', c: '#FFB81F', cd: '#C98A00', glyph: 'دُعَاء', glyphAr: true, dark: true, wide: true, gen: genDoa, desc: 'Doa harian, dzikir setelah shalat, dzikir pagi petang', topics: () => DOA_TOPICS }
+];
+const MOD = Object.fromEntries(MODS.map(m => [m.id, m]));
+function topicsOf(m, L) { const t = m.topics && m.topics(L); return t && t.length ? t : Array.from({ length: 5 }, () => null); }
+
+/* ================= VIEWS ================= */
+let view = { name: FIRST_RUN ? 'setup' : 'home' };
+function go(v) { stopClip(); view = v; sheet.className = ''; sheet.innerHTML = ''; render(); window.scrollTo(0, 0); }
+function glyphHtml(m) {
+  if (m.glyph === 'dots') return `<div class="glyph"><div class="dots4"><i style="background:#E53935"></i><i style="background:#FDD835"></i><i style="background:#1E6FE0"></i><i style="background:#8E24AA"></i></div></div>`;
+  return `<div class="glyph ${m.glyphAr ? 'ar' : ''}">${m.glyph}</div>`;
+}
+function starsOf(p, mod, L) { return (p.prog[mod + L] || []).reduce((a, b) => a + (b || 0), 0); }
+
+function renderHome() {
+  const p = P(), L = p.level, lv = LEVELS[L - 1];
+  const mods = MODS.filter(m => !S.hidden[m.id]);
+  app.innerHTML = `
+  <header class="top">
+    <div class="brand">
+      <div class="brand-name">Kebun Ilmu <span class="ar">بُسْتَانُ الْعِلْمِ</span></div>
+      <span style="display:flex;gap:8px">${fsOK ? `<button class="icon-btn" id="fsBtn" aria-label="Layar penuh">${document.fullscreenElement ? '🗗' : '⛶'}</button>` : ''}<button class="icon-btn" id="aboutBtn" aria-label="Tentang aplikasi">ℹ️</button><button class="icon-btn" id="parentBtn" aria-label="Kontrol orang tua">⚙️</button></span>
+    </div>
+    <div class="hello">
+      <div><small>Assalamu'alaikum,</small><button class="who" id="whoBtn" aria-label="Ganti anak">${isGirl(p) ? '👧' : '👦'} ${esc(p.name)} ${S.profiles.length > 1 ? '<span class="chev">▾</span>' : ''}</button></div>
+      <div class="cups" aria-label="Jumlah piala">🏆 ${p.cups}</div>
+    </div>
+  </header>
+  <section class="section">
+    <div class="section-h"><h2>Pilih level</h2><small>${lv.name} · ${lv.kelas}</small></div>
+    <div class="levels" role="group" aria-label="Level">
+      ${LEVELS.map(l => `<button class="lv" data-l="${l.n}" aria-pressed="${l.n === L}" ${S.lockLevel && l.n !== L ? 'disabled' : ''}><b>${l.n}</b><span>${l.kelas.replace('Kelas ', 'Kls ')}</span></button>`).join('')}
+    </div>
+    ${S.lockLevel ? '<p class="lv-note">🔒 Level dikunci oleh orang tua.</p>' : ''}
+  </section>
+  <section class="section">
+    <div class="section-h"><h2>Mau belajar apa?</h2></div>
+    <div class="mods">
+      ${mods.map(m => { const total = topicsOf(m, L).length * 3; return `<button class="mod ${m.dark ? 'dark' : ''} ${m.wide ? 'wide' : ''}" data-m="${m.id}" style="--c:${m.c};--cd:${m.cd}">
+        ${glyphHtml(m)}
+        <div class="mod-body"><h3>${m.title}</h3><div class="sub">${m.ar}</div><div class="meta">⭐ ${starsOf(p, m.id, L)}/${total} · ${m.desc}</div><div class="bar"><i style="width:${Math.round(100 * starsOf(p, m.id, L) / total)}%"></i></div></div>
+      </button>`; }).join('')}
+      <button class="mod wide lib" id="libBtn" style="--c:#FFFFFF;--cd:#DCE1F2"><div class="glyph">📚</div><div class="mod-body"><h3>Perpustakaan</h3><div class="meta">${Object.keys(BUKU).length} buku: bahasa Arab, nahwu sharaf, tajwid, dan fikih</div></div></button>
+    </div>
+  </section>
+  <footer class="home-foot"><button id="aboutFoot">Dibuat oleh <b>Ukkaasyah Abdurrahman</b><br><span>Pengajar di Pondok Pesantren Luqmanul Hakim Marelan</span></button></footer>`;
+  app.querySelectorAll('.lv').forEach(b => b.onclick = () => { p.level = +b.dataset.l; save(); render(); });
+  app.querySelectorAll('.mod[data-m]').forEach(b => b.onclick = () => go({ name: 'mod', mod: b.dataset.m, tab: 'main' }));
+  $('#parentBtn').onclick = () => go({ name: 'pin', buf: '' });
+  $('#libBtn').onclick = () => go({ name: 'library' });
+  if ($('#fsBtn')) $('#fsBtn').onclick = toggleFs;
+  $('#aboutBtn').onclick = $('#aboutFoot').onclick = () => go({ name: 'about' });
+  $('#whoBtn').onclick = () => {
+    if (S.profiles.length < 2) { go({ name: 'setup', add: true }); return; }
+    openSheet(`<div class="fb list ok"><div class="fb-t" style="color:var(--ink)">Siapa yang main?</div><div class="plist">${S.profiles.map(x => `<button data-id="${x.id}" aria-current="${x.id === S.cur}"><span>${isGirl(x) ? '👧' : '👦'} ${esc(x.name)}</span><span>🏆 ${x.cups} · Lv ${x.level}</span></button>`).join('')}</div></div>`);
+    sheet.querySelectorAll('[data-id]').forEach(b => b.onclick = () => { S.cur = b.dataset.id; save(); go({ name: 'home' }); });
+    const pl = sheet.querySelector('.plist'); const add = document.createElement('button'); add.className = 'padd'; add.textContent = '+ Tambah anak'; add.onclick = () => go({ name: 'setup', add: true }); pl.appendChild(add);
+  };
+}
+
+/* ---------- Layar penuh (untuk demo / tampil seperti aplikasi) ---------- */
+const fsOK = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+function toggleFs() {
+  try {
+    const d = document, el = d.documentElement;
+    if (d.fullscreenElement || d.webkitFullscreenElement) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    else { const r = (el.requestFullscreen || el.webkitRequestFullscreen).call(el); if (r && r.catch) r.catch(() => toast('Layar penuh tidak tersedia di sini')); }
+  } catch (e) { toast('Layar penuh tidak tersedia di sini'); }
+}
+document.addEventListener('fullscreenchange', () => { const b = $('#fsBtn'); if (b) b.textContent = document.fullscreenElement ? '🗗' : '⛶'; });
+
+/* ---------- Kenalan: nama, usia, jenis kelamin ---------- */
+function renderSetup() {
+  const v = view; v.usia = v.usia || 0; v.jk = v.jk || '';
+  const first = !v.add;
+  app.innerHTML = `<header class="top setup-top">
+    ${first ? '' : '<button class="back" id="back" aria-label="Kembali" style="margin-bottom:10px">‹</button>'}
+    <div class="brand-name">Kebun Ilmu <span class="ar">بُسْتَانُ الْعِلْمِ</span></div>
+    <h1 class="setup-h">${first ? 'Assalamu\'alaikum! Kenalan dulu, yuk' : 'Tambah anak'}</h1>
+    <p class="setup-p">Isi nama, usia, dan jenis kelamin anak. Level soal disesuaikan dari usianya, dan bisa diubah kapan saja.</p>
+  </header>
+  <form id="setupF" class="setup">
+    <div class="field"><label for="sNama">Nama anak</label><input type="text" id="sNama" maxlength="24" placeholder="mis. Abdullah" value="${esc(v.nama || '')}" autocomplete="off"></div>
+    <div class="field"><label>Usia</label><div class="age-grid">${[4, 5, 6, 7, 8, 9, 10, 11, 12].map(u => `<button type="button" data-u="${u}" aria-pressed="${v.usia === u}">${u}<small>th</small></button>`).join('')}</div>
+      ${v.usia ? `<p class="hint">Level ${levelFromAge(v.usia)} · ${LEVELS[levelFromAge(v.usia) - 1].kelas}</p>` : ''}</div>
+    <div class="field"><label>Jenis kelamin</label><div class="jk-grid">
+      <button type="button" data-jk="L" aria-pressed="${v.jk === 'L'}"><span>👦</span>Laki-laki<small class="ar">أَحْسَنْتَ</small></button>
+      <button type="button" data-jk="P" aria-pressed="${v.jk === 'P'}"><span>👧</span>Perempuan<small class="ar">أَحْسَنْتِ</small></button></div></div>
+    <p class="setup-err" id="sErr" role="alert"></p>
+    <button class="btn primary" type="submit">${first ? 'Mulai belajar ›' : 'Simpan'}</button>
+  </form>`;
+  const keep = () => { v.nama = $('#sNama').value; };
+  app.querySelectorAll('[data-u]').forEach(b => b.onclick = () => { keep(); v.usia = +b.dataset.u; render(); });
+  app.querySelectorAll('[data-jk]').forEach(b => b.onclick = () => { keep(); v.jk = b.dataset.jk; render(); });
+  if ($('#back')) $('#back').onclick = () => go({ name: 'home' });
+  $('#setupF').onsubmit = e => {
+    e.preventDefault(); keep();
+    const nama = (v.nama || '').trim();
+    const err = !nama ? 'Tulis nama anak dulu.' : !v.usia ? 'Pilih usia anak.' : !v.jk ? 'Pilih laki-laki atau perempuan.' : '';
+    if (err) { $('#sErr').textContent = err; return; }
+    const p = freshProfile(nama, v.usia, v.jk);
+    if (first) { S.profiles = [p]; } else S.profiles.push(p);
+    S.cur = p.id; save(); go({ name: 'home' }); toast('Ahlan wa sahlan, ' + nama + '!');
+  };
+}
+
+function band(m) {
+  const L = P().level;
+  let extra = '';
+  if (m.id === 'quran') { const pool = quranPool(); const last = SURAH_BY[pool[pool.length - 1]]; extra = `<span class="chip" style="margin-left:6px">Hafalan: ${pool.length} surat, sampai ${last.latin}</span>`; }
+  if (m.id === 'nahwu' && L >= 3) extra = `<span class="chip" style="margin-left:6px">${L === 3 ? 'Materi kelas 4' : L === 4 ? 'Materi kelas 5' : 'Materi kelas 6'}</span>`;
+  return `<header class="band ${m.dark ? 'dark' : ''}" style="--c:${m.c}">
+    <div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button>
+      <div><h1>${m.title}</h1><div class="ar">${m.ar}</div></div></div>
+    <span class="chip">Level ${L} · ${LEVELS[L - 1].kelas}</span>${extra}
+  </header>`;
+}
+
+function renderMod() {
+  const m = MOD[view.mod], p = P(), L = p.level;
+  const prog = p.prog[m.id + L] || [], topics = topicsOf(m, L);
+  let body = '';
+  if (view.tab === 'main') {
+    if (m.id === 'hafalan' && !S.hafalan.length) body = `<div class="empty">Belum ada hafalan. Minta ayah atau ibu menambahkannya di ⚙️ Kontrol Orang Tua.</div>`;
+    else body = `<div class="path">${topics.map((tp, i) => {
+      const st = prog[i] || 0, open = m.free || i === 0 || (prog[i - 1] || 0) > 0;
+      const cls = !open ? 'lock' : st ? 'done' : '';
+      return `<div class="node-row"><button class="node ${cls}" data-t="${i}" ${open ? '' : 'disabled'} aria-label="Tantangan ${i + 1}">
+        <span class="disc" style="--c:${m.c};--cd:${m.cd}">${open ? i + 1 : '🔒'}</span>
+        <span class="lbl">${m.free ? (m.id === 'abn' ? 'Bab ' + (i + 1) : 'Tempat ' + (i + 1)) : 'Tantangan ' + (i + 1)}</span>${tp ? `<span class="topic">${esc(m.free ? tp.replace(/^Bab \d+ · /, '') : tp)}</span>` : ''}
+        <span class="st">${'<b>★</b>'.repeat(st)}${'★'.repeat(3 - st)}</span></button></div>`;
+    }).join('')}</div>`;
+  } else body = learnHtml(m, L);
+  app.innerHTML = band(m) + `<div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="learn" aria-selected="${view.tab === 'learn'}">📖 Belajar</button>
+      <button class="tab" role="tab" data-tab="main" aria-selected="${view.tab === 'main'}">🎮 Main</button>
+    </div>${body}`;
+  $('#back').onclick = () => go({ name: 'home' });
+  app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { view.tab = b.dataset.tab; view.sub = null; render(); });
+  app.querySelectorAll('.node:not(.lock)').forEach(b => b.onclick = () => startGame(m.id, +b.dataset.t));
+  bindLearn(m, L);
+}
+
+/* ---------- Belajar ---------- */
+let FC = null; // flashcard deck for current learn view
+function chips(list, cur) { return `<div class="chips" role="tablist">${list.map(([k, label]) => `<button class="chip-b" data-sub="${esc(k)}" aria-pressed="${k === cur}">${label}</button>`).join('')}</div>`; }
+function sayBtn(t, lang) { return canSpeak ? `<button class="say" data-say="${esc(t)}" data-lang="${lang || 'id-ID'}" aria-label="Dengarkan">🔊</button>` : ''; }
+function learnHtml(m, L) {
+  FC = null;
+  const fn = LEARN[m.id]; return fn ? fn(L) : '';
+}
+const LEARN = {
+  baca(L) {
+    const subs = [['huruf', 'Huruf'], ['suku', 'Suku Kata'], ['kata', 'Kata Bergambar']];
+    if (L >= 3) subs.push(['teka', 'Teka-teki']);
+    if (L >= 4) subs.push(['kalimat', 'Kalimat']);
+    if (L >= 5) subs.push(['cerita', 'Cerita Pendek']);
+    const sub = view.sub || (L <= 1 ? 'huruf' : L === 2 ? 'suku' : 'kata');
+    let html = '';
+    if (sub === 'huruf') html = `<div class="lcard"><h3>Kenali huruf</h3><p>Ketuk hurufnya untuk mendengar bunyinya.</p><div class="alpha" style="margin-top:12px">${'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(c => `<button data-say="${c.toLowerCase()}">${c}<small>${c.toLowerCase()}</small></button>`).join('')}</div></div>`;
+    if (sub === 'suku') html = `<div class="lcard"><h3>Tabel suku kata</h3><p>Huruf mati bertemu huruf hidup. Ketuk untuk mendengar.</p><div class="syl" style="margin-top:12px">${VOKAL.map(v => `<button class="head">${v}</button>`).join('')}${KONSONAN.map(k => VOKAL.map(v => `<button data-say="${(k + v).toLowerCase()}">${k + v}</button>`).join('')).join('')}</div>
+      <div class="tip"><b>Coba gabungkan:</b> BU + KU = BUKU, BO + LA = BOLA, SA + PU = SAPU, RO + TI = ROTI.</div></div>`;
+    if (sub === 'kata') { const words = ALL_WORDS; FC = words.map(w => ({ f: `<div><div class="big-em">${w[1]}</div></div>`, b: `<div class="big-tx" style="letter-spacing:3px">${w[0]}</div>`, say: w[0].toLowerCase() }));
+      html = `<div class="lcard"><div class="learn-h"><div><h3>Kata bergambar</h3><div class="count-note">${words.length} kata</div></div><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="wgrid" style="margin-top:12px">${words.map(w => `<button class="wcard" data-say="${w[0].toLowerCase()}"><span class="em">${w[1]}</span><span class="id" style="font-family:var(--display);font-size:18px;letter-spacing:1.5px">${w[0]}</span></button>`).join('')}</div></div>`; }
+    if (sub === 'teka') { FC = TEBAKAN.map(t => ({ f: `<div class="big-tx" style="font-size:24px">${esc(t[1])}</div>`, b: `<div class="big-tx">${t[0]}</div>` }));
+      html = `<div class="lcard"><div class="learn-h"><div><h3>Teka-teki kata</h3><div class="count-note">${TEBAKAN.length} teka-teki</div></div><button class="fc-btn" data-fc>🃏 Main kartu</button></div><div class="ex">${TEBAKAN.map(t => `<div class="ex-row"><b style="font-family:var(--display);min-width:96px;letter-spacing:1px">${t[0]}</b><span>${esc(t[1])}</span></div>`).join('')}</div></div>`; }
+    if (sub === 'kalimat') html = `<div class="lcard"><h3>Kalimat sehari-hari</h3><div class="ex">${ALL_KALIMAT.map(k => `<div class="ex-row"><span style="font-size:16px">${esc(k[0].replace('___', k[1].toLowerCase()))}</span></div>`).join('')}</div></div>`;
+    if (sub === 'cerita') html = BACAAN.map(b => `<div class="lcard"><h3>${esc(b.judul)}</h3><p style="font-size:16.5px;line-height:1.6">${esc(b.teks)}</p></div>`).join('');
+    return chips(subs, sub) + `<div class="learn">${html}</div>`;
+  },
+  mtk(L) {
+    const subs = L <= 1 ? [['hitung', 'Berhitung'], ['tambah', 'Tambah'], ['kurang', 'Kurang'], ['kali', 'Kali'], ['bagi', 'Bagi']]
+      : [['tambah', 'Tambah & Kurang'], ['kali', 'Perkalian'], ['bagi', 'Pembagian'], ...(L >= 4 ? [['campur', 'Operasi Campuran'], ['pecahan', 'Pecahan']] : []), ...(L >= 5 ? [['kuadrat', 'Kuadrat & Akar'], ['kpk', 'KPK & FPB'], ['negatif', 'Bilangan Negatif']] : [])];
+    const sub = view.sub || subs[0][0]; let h = '';
+    const e = '🍎';
+    if (sub === 'hitung') { FC = Array.from({ length: 20 }, (_, i) => ({ f: `<div class="big-em" style="font-size:${i < 10 ? 40 : 26}px;line-height:1.3">${'⭐'.repeat(i + 1)}</div>`, b: `<div class="big-tx" style="font-size:80px">${i + 1}</div>`, say: String(i + 1) }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Angka 1 sampai 20</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="ex">${Array.from({ length: 20 }, (_, i) => `<button class="ex-row" data-say="${i + 1}" style="width:100%"><b style="font-family:var(--display);font-size:28px;min-width:44px;text-align:center">${i + 1}</b><span style="font-size:18px;letter-spacing:1px">${'⭐'.repeat(i + 1)}</span></button>`).join('')}</div></div>`; }
+    if (sub === 'tambah' && L <= 1) h = `<div class="lcard"><h3>Tambah artinya digabung</h3><div class="ex">${[[2, 1], [3, 2], [4, 1], [2, 2], [3, 3]].map(([a, b]) => `<div class="ex-row"><span style="font-size:22px">${e.repeat(a)} + ${e.repeat(b)}</span><b style="font-family:var(--display);font-size:22px">${a} + ${b} = ${a + b}</b></div>`).join('')}</div></div>`;
+    if (sub === 'kurang' && L <= 1) h = `<div class="lcard"><h3>Kurang artinya diambil</h3><div class="ex">${[[5, 2], [4, 1], [6, 3], [3, 2]].map(([a, b]) => `<div class="ex-row"><span style="font-size:22px">${e.repeat(a - b)}<span style="opacity:.25">${e.repeat(b)}</span></span><b style="font-family:var(--display);font-size:22px">${a} − ${b} = ${a - b}</b></div>`).join('')}</div></div>`;
+    if (sub === 'kali' && L <= 1) h = `<div class="lcard"><h3>Kali artinya kelompok yang sama</h3><div class="ex">${[[2, 3], [3, 2], [2, 2]].map(([g, n]) => `<div class="ex-row"><span style="font-size:22px">${Array.from({ length: g }, () => '🍓'.repeat(n)).join(' &nbsp;')}</span><b style="font-family:var(--display);font-size:20px">${g} × ${n} = ${g * n}</b></div>`).join('')}</div><div class="tip">2 × 3 artinya ada <b>2 kelompok</b>, setiap kelompok isinya <b>3</b>.</div></div>`;
+    if (sub === 'bagi' && L <= 1) h = `<div class="lcard"><h3>Bagi artinya dibagi rata</h3><div class="ex">${[[6, 2], [4, 2], [6, 3]].map(([a, k]) => `<div class="ex-row"><span style="font-size:22px">${'🍪'.repeat(a)}</span><b style="font-family:var(--display);font-size:18px">${a} ÷ ${k} = ${a / k}</b></div>`).join('')}</div><div class="tip">6 kue dibagi rata untuk 2 anak, setiap anak dapat <b>3</b>.</div></div>`;
+    if (sub === 'tambah' && L >= 2) h = `<div class="lcard"><h3>Penjumlahan dan pengurangan bersusun</h3><p>Susun angkanya lurus dari kanan: satuan di bawah satuan, puluhan di bawah puluhan. Kerjakan dari kanan.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap"><div class="calc">  ${L >= 3 ? '478' : '47'}<br>+ ${L >= 3 ? '356' : '28'}<hr>${L >= 3 ? 834 : 75}</div><div class="calc">${L >= 3 ? '702' : '63'}<br>− ${L >= 3 ? '245' : '27'}<hr>${L >= 3 ? 457 : 36}</div></div>
+      <div class="tip"><b>Menyimpan:</b> kalau hasil satuan lebih dari 9, tulis satuannya, lalu simpan 1 ke kolom puluhan.<br><b>Meminjam:</b> kalau angka atas lebih kecil, pinjam 1 dari kolom sebelah kiri.</div></div>`;
+    if (sub === 'kali' && L >= 2) { const t = view.times || 2; FC = Array.from({ length: 10 }, (_, i) => ({ f: `<div class="big-tx">${t} × ${i + 1}</div>`, b: `<div class="big-tx" style="font-size:64px">${t * (i + 1)}</div>` }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Tabel perkalian</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><p>Pilih angkanya, lalu hafalkan pelan-pelan.</p><div class="times" style="margin-top:12px">${Array.from({ length: 10 }, (_, i) => `<button data-times="${i + 1}" aria-pressed="${t === i + 1}">${i + 1}</button>`).join('')}</div>
+      <div class="ttable">${Array.from({ length: 10 }, (_, i) => `<div>${t} × ${i + 1} = <b>${t * (i + 1)}</b></div>`).join('')}</div>${L >= 3 ? `<div class="tip"><b>Perkalian bersusun:</b> 23 × 4 → 3 × 4 = 12 (tulis 2, simpan 1), lalu 2 × 4 = 8, tambah 1 = 9. Hasilnya 92.</div>` : ''}</div>`; }
+    if (sub === 'bagi' && L >= 2) h = `<div class="lcard"><h3>Pembagian adalah kebalikan perkalian</h3><div class="ex">${[[3, 4], [6, 7], [8, 5], [9, 9]].map(([a, b]) => `<div class="ex-row"><b style="font-family:var(--display);font-size:20px;min-width:110px">${a} × ${b} = ${a * b}</b><span>maka ${a * b} ÷ ${b} = ${a} dan ${a * b} ÷ ${a} = ${b}</span></div>`).join('')}</div>
+      ${L >= 3 ? `<div class="tip"><b>Pembagian bersusun:</b> 84 ÷ 4 → 8 ÷ 4 = 2, lalu 4 ÷ 4 = 1. Hasilnya 21.<br>${L >= 4 ? '<b>Membagi dengan 2 angka:</b> 336 ÷ 16 → 33 ÷ 16 = 2 sisa 1, turunkan 6 jadi 16, 16 ÷ 16 = 1. Hasilnya 21.' : ''}</div>` : ''}</div>`;
+    if (sub === 'campur') h = `<div class="lcard"><h3>Urutan operasi hitung</h3><div class="ex"><div class="ex-row"><b>1</b><span>Kerjakan yang di dalam kurung ( ) dulu</span></div><div class="ex-row"><b>2</b><span>Lalu kali (×) dan bagi (÷), dari kiri</span></div><div class="ex-row"><b>3</b><span>Terakhir tambah (+) dan kurang (−), dari kiri</span></div></div>
+      <div class="tip">5 + 3 × 4 = 5 + 12 = <b>17</b> (bukan 32)<br>(5 + 3) × 4 = 8 × 4 = <b>32</b></div></div>`;
+    if (sub === 'pecahan') h = `<div class="lcard"><h3>Pecahan</h3><p>Angka atas namanya pembilang, angka bawah namanya penyebut. Kalau penyebutnya sama, cukup jumlahkan pembilangnya.</p><div class="tip" style="font-size:22px;font-family:var(--display)">${fracHtml(1, 5)} + ${fracHtml(2, 5)} = ${fracHtml(3, 5)} &nbsp;&nbsp; ${fracHtml(5, 8)} − ${fracHtml(2, 8)} = ${fracHtml(3, 8)}</div></div>`;
+    if (sub === 'kuadrat') { FC = Array.from({ length: 20 }, (_, i) => ({ f: `<div class="big-tx">${i + 1}²</div>`, b: `<div class="big-tx" style="font-size:64px">${(i + 1) ** 2}</div>` }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Bilangan kuadrat</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><p>n² artinya n × n. Akar kuadrat adalah kebalikannya: √49 = 7 karena 7 × 7 = 49.</p><div class="ttable">${Array.from({ length: 20 }, (_, i) => `<div>${i + 1}² = <b>${(i + 1) ** 2}</b></div>`).join('')}</div></div>`; }
+    if (sub === 'kpk') h = `<div class="lcard"><h3>KPK dan FPB</h3><p><b>KPK</b> adalah kelipatan bersama yang paling kecil. <b>FPB</b> adalah faktor bersama yang paling besar.</p>
+      <div class="tip">Kelipatan 4: 4, 8, <b>12</b>, 16, 20, 24…<br>Kelipatan 6: 6, <b>12</b>, 18, 24…<br>Maka KPK 4 dan 6 = <b>12</b>.</div><div class="tip">Faktor 12: 1, 2, 3, 4, <b>6</b>, 12<br>Faktor 18: 1, 2, 3, <b>6</b>, 9, 18<br>Maka FPB 12 dan 18 = <b>6</b>.</div></div>`;
+    if (sub === 'negatif') h = `<div class="lcard"><h3>Bilangan negatif</h3><p>Bilangan di bawah nol. Bayangkan garis bilangan: ke kanan bertambah, ke kiri berkurang.</p><div class="tip" style="font-family:var(--display);font-size:20px">−3 · −2 · −1 · 0 · 1 · 2 · 3</div><div class="tip">5 − 8 = <b>−3</b> &nbsp; −4 + 6 = <b>2</b> &nbsp; −2 − 5 = <b>−7</b></div></div>`;
+    return chips(subs, sub) + `<div class="learn">${h}</div>`;
+  },
+  warna(L) {
+    const subs = [['nama', 'Nama Warna'], ['benda', 'Benda & Warna'], ...(L >= 2 ? [['campur', 'Campuran'], ['pengetahuan', 'Pelangi & Lainnya']] : []), ...(L >= 4 ? [['arab', 'Bahasa Arab']] : []), ...(L >= 5 ? [['muannats', 'Mudzakkar & Muannats']] : [])];
+    const sub = view.sub || 'nama'; let h = '';
+    if (sub === 'nama') { const cs = L <= 1 ? BASIC.map(id => COLOR[id]) : ALL_COLORS; FC = cs.map(c => ({ f: `<div style="width:150px;height:150px;border-radius:30px;background:${c.hex};border:2px solid #fff3"></div>`, b: `<div class="big-tx">${c.name}</div>`, say: c.name }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Nama-nama warna</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="swgrid" style="margin-top:12px">${cs.map(c => `<button class="sw" data-say="${c.name}"><i style="background:${c.hex}"></i><b>${c.name}</b></button>`).join('')}</div></div>`; }
+    if (sub === 'benda') h = `<div class="lcard"><h3>Benda dan warnanya</h3><div class="wgrid" style="margin-top:12px">${ALL_OBJ.map(o => `<div class="wcard"><span class="em">${o[0]}</span><span class="id">${esc(o[1])}</span><span style="display:flex;justify-content:center;gap:6px;align-items:center;font-size:13px;font-weight:800"><i style="width:16px;height:16px;border-radius:5px;background:${COLOR[o[2]].hex};display:inline-block;border:1px solid #0002"></i>${COLOR[o[2]].name}</span></div>`).join('')}</div></div>`;
+    if (sub === 'campur') h = `<div class="lcard"><h3>Mencampur warna</h3><div class="ex">${ALL_MIX.map(x => `<div class="ex-row"><span style="display:flex;align-items:center;gap:6px;font-size:20px;font-weight:900">${`<i style="width:28px;height:28px;border-radius:8px;background:${COLOR[x[0]].hex};display:inline-block;border:1px solid #0002"></i>`}+${`<i style="width:28px;height:28px;border-radius:8px;background:${COLOR[x[1]].hex};display:inline-block;border:1px solid #0002"></i>`}=${`<i style="width:28px;height:28px;border-radius:8px;background:${COLOR[x[2]].hex};display:inline-block;border:1px solid #0002"></i>`}</span><span>${COLOR[x[0]].name} + ${COLOR[x[1]].name} = ${COLOR[x[2]].name}</span></div>`).join('')}</div>
+      <div class="tip"><b>Warna dasar (primer):</b> merah, kuning, biru. Dari tiga warna ini kita bisa membuat banyak warna lain.</div></div>`;
+    if (sub === 'pengetahuan') h = `<div class="lcard"><h3>Warna pelangi</h3><div style="display:flex;border-radius:14px;overflow:hidden;margin-top:10px">${['#E53935', '#FB8C00', '#FDD835', '#43A047', '#1E6FE0', '#3F3FB5', '#8E24AA'].map(c => `<i style="flex:1;height:34px;background:${c}"></i>`).join('')}</div><div class="tip">Merah, jingga, kuning, hijau, biru, nila, ungu. Disingkat <b>MeJiKuHiBiNiU</b>.</div></div>
+      <div class="lcard"><h3>Lampu lalu lintas</h3><div class="ex"><div class="ex-row"><i style="width:26px;height:26px;border-radius:50%;background:#E53935;display:inline-block"></i><span>Merah: berhenti</span></div><div class="ex-row"><i style="width:26px;height:26px;border-radius:50%;background:#FDD835;display:inline-block"></i><span>Kuning: hati-hati</span></div><div class="ex-row"><i style="width:26px;height:26px;border-radius:50%;background:#43A047;display:inline-block"></i><span>Hijau: boleh jalan</span></div></div></div>
+      <div class="lcard"><h3>Tahukah kamu?</h3><div class="ex">${COLOR_FACTS.slice(0, 15).filter((_, i) => [0, 9, 10, 11, 12].includes(i)).map(f => `<div class="ex-row"><span>${esc(f[0])} <b>${esc(f[1])}</b></span></div>`).join('')}</div></div>`;
+    if (sub === 'arab') { FC = COLORS.map(c => ({ f: `<div style="width:150px;height:150px;border-radius:30px;background:${c.hex};border:2px solid #fff3"></div>`, b: `<div><div class="big-ar">${c.ar}</div><div class="sm">${c.name}</div></div>`, say: c.ar, lang: 'ar-SA' }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Warna dalam bahasa Arab <span class="ar">الْأَلْوَانُ</span></h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="swgrid" style="margin-top:12px">${COLORS.map(c => `<button class="sw" data-say="${c.ar}" data-lang="ar-SA"><i style="background:${c.hex}"></i><b>${c.name}</b><span class="ar">${c.ar}</span></button>`).join('')}</div></div>
+      <div class="lcard"><h3>Tanya jawab warna</h3><div class="ex">${COLOR_AR_Q.map(q => `<div class="ex-row"><span class="ar" style="font-size:22px;min-width:0">${q[0]}</span><span>${q[1]} → <span class="ar" style="font-size:20px">${q[2]}</span></span></div>`).join('')}</div></div>`; }
+    if (sub === 'muannats') h = `<div class="lcard"><h3>Warna ikut jenis bendanya</h3><p>Kalau bendanya muannats, warnanya juga muannats.</p><div class="ex">${COLORS.filter(c => c.arF).map(c => `<div class="ex-row"><span class="ar">${c.ar}</span><span class="ar">${c.arF}</span><span>${c.name}</span></div>`).join('')}</div>
+      <div class="ex" style="margin-top:12px"><div class="ex-row"><span class="ar">الْقَلَمُ أَحْمَرُ</span><span>Pena itu merah</span></div><div class="ex-row"><span class="ar">السَّيَّارَةُ حَمْرَاءُ</span><span>Mobil itu merah</span></div></div></div>`;
+    return chips(subs, sub) + `<div class="learn">${h}</div>`;
+  },
+  muf(L) {
+    const themes = [...new Set(ALL_MUF.filter(w => w[3] <= L).map(w => w[2]))];
+    const extra = L >= 4 ? [['__jamak', 'Jamak'], ['__lawan', 'Lawan Kata']] : [];
+    const extra5 = L >= 5 ? [['__muh', 'Percakapan'], ['__kal', 'Kalimat']] : [];
+    const curTheme = [...new Set(ALL_MUF.filter(w => w[3] === L).map(w => w[2]))][0] || themes[0];
+    const subs = [['__kamus', '📘 Kamus Santri'], ...(L === 1 ? [['__angka', 'Angka']] : []), ...themes.map(t => [t, t]), ...extra, ...extra5];
+    const sub = view.sub || (L >= 5 ? '__muh' : curTheme);
+    let h = '';
+    if (sub === '__kamus') h = bookCard('kamus');
+    else if (sub === '__angka') { FC = ANGKA.map(a => ({ f: `<div class="big-tx" style="font-size:80px">${a[3]}</div>`, b: `<div><div class="big-ar">${a[0]}</div><div class="sm">${a[1]}</div></div>`, say: a[0], lang: 'ar-SA' }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Angka 1–10</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="wgrid" style="margin-top:12px">${ANGKA.map(a => `<button class="wcard" data-say="${a[0]}" data-lang="ar-SA"><span class="em" style="font-family:var(--display);font-weight:800">${a[3]}</span><span class="ar">${a[0]}</span><span class="lt">${a[1]}</span></button>`).join('')}</div></div>`; }
+    else if (sub === '__jamak') { FC = ALL_JAMAK.map(j => ({ f: `<div><div class="big-ar">${j[0]}</div><div class="sm">${j[2]} (satu)</div></div>`, b: `<div><div class="big-ar">${j[1]}</div><div class="sm">jamaknya</div></div>` }));
+      h = `<div class="lcard"><div class="learn-h"><div><h3>Mufrad dan jamak</h3><div class="count-note">${ALL_JAMAK.length} kata</div></div><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="ex">${ALL_JAMAK.map(j => `<div class="ex-row"><span class="ar">${j[0]}</span><span class="ar">${j[1]}</span><span>${j[2]}</span></div>`).join('')}</div></div>`; }
+    else if (sub === '__lawan') { FC = ALL_LAWAN.map(p => ({ f: `<div class="big-ar">${p[0]}</div>`, b: `<div><div class="big-ar">${p[1]}</div><div class="sm">lawan katanya</div></div>` }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Lawan kata</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="ex">${ALL_LAWAN.map(p => `<div class="ex-row"><span class="ar">${p[0]}</span><span>⇄</span><span class="ar">${p[1]}</span></div>`).join('')}</div></div>`; }
+    else if (sub === '__muh') { const groups = [...new Set(ALL_MUH.map(m => m[3]))]; FC = ALL_MUH.map(m => ({ f: `<div class="big-ar" style="font-size:34px">${m[0]}</div>`, b: `<div><div class="big-tx" style="font-size:24px">${esc(m[1])}</div>${m[2] ? `<div class="big-ar" style="font-size:28px;margin-top:8px">${m[2]}</div>` : ''}</div>`, say: m[0], lang: 'ar-SA' }));
+      h = `<div class="lcard"><div class="learn-h"><div><h3>Percakapan sehari-hari</h3><div class="count-note">${ALL_MUH.length} ungkapan, dari tema Buku Saku Santri</div></div><button class="fc-btn" data-fc>🃏 Kartu</button></div></div>` + groups.map(g => `<div class="lcard"><h3>${esc(g)}</h3><div class="ex">${ALL_MUH.filter(m => m[3] === g).map(m => `<div class="ex-row" style="flex-wrap:wrap"><span class="ar" style="font-size:23px;min-width:0">${m[0]}</span><span>${esc(m[1])}${m[2] ? ` · jawab: <span class="ar" style="font-size:20px">${m[2]}</span>` : ''}</span></div>`).join('')}</div></div>`).join(''); }
+    else if (sub === '__kal') { FC = KALIMAT_AR.map(k => ({ f: `<div class="big-ar" style="font-size:34px">${k[0]}</div>`, b: `<div class="big-tx" style="font-size:26px">${esc(k[1])}</div>`, say: k[0], lang: 'ar-SA' }));
+      h = `<div class="lcard"><div class="learn-h"><h3>Kalimat sederhana</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="ex">${KALIMAT_AR.map(k => `<div class="ex-row"><span class="ar" style="font-size:23px;min-width:0">${k[0]}</span><span>${esc(k[1])}</span></div>`).join('')}</div></div>`; }
+    else { const list = ALL_MUF.filter(w => w[2] === sub);
+      FC = list.map(w => ({ f: w[4] ? `<div><div class="big-em">${w[4]}</div><div class="big-ar" style="font-size:38px">${w[0]}</div></div>` : `<div class="big-ar">${w[0]}</div>`, b: `<div><div class="big-tx" style="font-size:30px">${esc(w[1])}</div>${w[5] ? `<div class="sm">${w[5]}</div>` : ''}</div>`, say: w[0], lang: 'ar-SA' }));
+      h = `<div class="lcard"><div class="learn-h"><div><h3>${esc(sub)}</h3><div class="count-note">${list.length} kosakata · total ${ALL_MUF.length} kosakata di aplikasi</div></div><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="wgrid" style="margin-top:12px">${list.map(w => `<button class="wcard" ${canSpeak ? `data-say="${esc(w[0])}" data-lang="ar-SA"` : ''}>${w[4] ? `<span class="em">${w[4]}</span>` : ''}<span class="ar">${w[0]}</span>${w[5] ? `<span class="lt">${w[5]}</span>` : ''}<span class="id">${esc(w[1])}</span></button>`).join('')}</div></div>`; }
+    return chips(subs, sub) + `<div class="learn">${h}</div>`;
+  },
+  nahwu(L) {
+    if (L <= 2) {
+      const cards = HARAKAT_LEARN[L];
+      let hij = '';
+      if (L === 1) { FC = HURUF_HIJAIYAH.map(h => ({ f: `<div class="big-ar" style="font-size:90px">${h[0]}</div>`, b: `<div class="big-tx">${h[0] === 'ا' ? 'alif' : h[1]}</div>` }));
+        hij = `<div class="lcard"><div class="learn-h"><h3>Huruf hijaiyah</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div><div class="alpha" style="margin-top:12px;direction:rtl">${HURUF_HIJAIYAH.map(h => `<button><span class="ar" style="font-family:var(--arab);font-size:30px;line-height:1.3;display:block">${h[0]}</span><small>${h[0] === 'ا' ? 'alif' : h[1]}</small></button>`).join('')}</div></div>`; }
+      return `<div class="learn">${bookCard('nahwu', null, true)}${hij}${cards.map(c => `<div class="lcard"><h3>${c.t} <span class="ar">${c.ar}</span></h3><p>${c.b}</p><div class="ex">${c.ex.map(e => `<div class="ex-row"><span class="ar">${e[0]}</span><span>${e[1]}</span></div>`).join('')}</div></div>`).join('')}
+        <p class="lv-note">Untuk TK sampai kelas 2 cukup belajar harakat dulu. Nahwu mulai kelas 4 (level 3).</p></div>`;
+    }
+    const babs = babsOf(L), sub = view.sub || String(babs[0].no), bab = babs.find(b => String(b.no) === sub) || babs[0];
+    return chips(babs.map(b => [String(b.no), 'Bab ' + b.no]), String(bab.no)) + `<div class="learn">
+      <div class="lcard" style="background:var(--ink);color:#fff;border:0"><h3 style="color:#fff">Bab ${bab.no} · ${bab.judul} <span class="ar" style="color:var(--sun)">${bab.ar}</span></h3>
+        <button class="book-link" data-book="nahwu" data-page="${NAHWU_PAGE[bab.no]}">📘 Baca Bab ${bab.no} di buku (hlm. ${NAHWU_PAGE[bab.no]})</button></div>
+      ${bab.learn.map(c => `<div class="lcard"><h3>${c.t}</h3><p>${c.b}</p>${c.ex.length ? `<div class="ex">${c.ex.map(e => `<div class="ex-row"><span class="ar" style="font-size:${e[0].length > 18 ? 21 : 26}px">${e[0]}</span><span>${e[1]}</span></div>`).join('')}</div>` : ''}</div>`).join('')}
+      <p class="lv-note">Diringkas dari buku <i>Asyik Belajar Nahwu &amp; Sharaf</i> karya Ukkaasyah Abdurrahman. Latihannya ada di tab Main, Tantangan ${babs.indexOf(bab) + 1}.</p></div>`;
+  },
+  abn(L) {
+    const sub = view.sub || '1', bab = NAHWU_BAB.find(b => String(b.no) === sub) || NAHWU_BAB[0];
+    const kelas = bab.lv === 3 ? 'kelas 4' : bab.lv === 4 ? 'kelas 5' : 'kelas 6';
+    return chips(NAHWU_BAB.map(b => [String(b.no), 'Bab ' + b.no]), String(bab.no)) + `<div class="learn">
+      ${bookCard('nahwu', NAHWU_PAGE[bab.no], true)}
+      <div class="lcard" style="background:#C2410C;color:#fff;border:0"><h3 style="color:#fff">Bab ${bab.no} · ${bab.judul} <span class="ar" style="color:#FFE6A3">${bab.ar}</span></h3>
+        <p style="color:#FFE9DC;margin-top:4px">Materi ${kelas}. Baca materinya di sini atau langsung di buku, lalu main di tab 🎮 Main, Bab ${bab.no}.</p>
+        <button class="book-link" data-book="nahwu" data-page="${NAHWU_PAGE[bab.no]}">📘 Baca Bab ${bab.no} di buku (hlm. ${NAHWU_PAGE[bab.no]})</button></div>
+      ${bab.learn.map(c => `<div class="lcard"><h3>${c.t}</h3><p>${c.b}</p>${c.ex.length ? `<div class="ex">${c.ex.map(e => `<div class="ex-row"><span class="ar" style="font-size:${e[0].length > 18 ? 21 : 26}px">${e[0]}</span><span>${e[1]}</span></div>`).join('')}</div>` : ''}</div>`).join('')}
+      <p class="lv-note">Diringkas dari buku <i>Asyik Belajar Nahwu &amp; Sharaf</i> karya Ukkaasyah Abdurrahman.</p></div>`;
+  },
+  saku(L) {
+    const sub = view.sub || 'buku';
+    const subs = [['buku', '📘 Kamus'], ...SAKU.map((x, i) => [String(i), x.e + ' ' + x.judul.replace(/^Di /, '')])];
+    if (sub === 'buku') return chips(subs, sub) + `<div class="learn">${bookCard('kamus')}<p class="lv-note">Untuk latihan, pilih salah satu tempat di atas atau langsung buka tab 🎮 Main.</p></div>`;
+    const x = SAKU[+sub];
+    FC = [...x.ung, ...x.kos].map(u => ({ f: `<div class="big-ar" style="font-size:${u[0].length > 26 ? 30 : 40}px">${u[0]}</div>`, b: `<div class="big-tx" style="font-size:26px">${esc(u[1])}</div>`, say: u[0], lang: 'ar-SA' }));
+    return chips(subs, sub) + `<div class="learn">
+      <div class="lcard" style="background:#0F4C81;color:#fff;border:0"><div class="learn-h"><h3 style="color:#fff">${x.e} ${esc(x.judul)}</h3><button class="fc-btn" data-fc>🃏 Kartu</button></div>
+        <div class="ar" style="font-size:26px;color:#FFE6A3;margin-top:4px">${x.ar}</div>
+        <button class="book-link" data-book="kamus" data-page="${x.hal}">📘 Buka di buku (hlm. ${x.hal})</button></div>
+      <div class="lcard"><h3>Ungkapan <span class="ar">عِبَارَاتٌ</span></h3><div class="ex">${x.ung.map(u => `<button class="ex-row" style="width:100%;flex-wrap:wrap;text-align:right" ${canSpeak ? `data-say="${esc(u[0])}" data-lang="ar-SA"` : ''}><span class="ar" style="font-size:23px;min-width:0;flex:1 1 100%">${u[0]}</span><span style="text-align:left;flex:1">${esc(u[1])}</span></button>`).join('')}</div></div>
+      <div class="lcard"><h3>Kosakata <span class="ar">مُفْرَدَاتٌ</span></h3><div class="wgrid" style="margin-top:12px">${x.kos.map(k => `<button class="wcard" ${canSpeak ? `data-say="${esc(k[0])}" data-lang="ar-SA"` : ''}><span class="ar" style="font-size:24px">${k[0]}</span><span class="id">${esc(k[1])}</span></button>`).join('')}</div></div></div>`;
+  },
+  quran(L) {
+    const pool = new Set(quranPool());
+    const item = s => { const x = SURAH_BY[s], has = AYAT[s] ? AYAT[s].length : 0; return `<button class="qitem" data-surah="${s}"><span class="qnum">${s}</span><span class="grow"><b>${x.latin} ${pool.has(s) ? '<span class="tgt">target</span>' : ''}</b><small>${x.arti} · ${x.ayat} ayat${QAUDIO[s] ? ' · 🔊 murottal' : ''}${has && has < x.ayat ? ` · teks ${has} ayat awal` : ''}</small></span><span class="ar">${x.ar}</span></button>`; };
+    const j30 = HAFALAN_ORDER.filter(s => s >= 78 || s === 1), j29 = HAFALAN_ORDER.filter(s => s >= 67 && s <= 77);
+    return `<div class="qlist"><div class="tip" style="margin:0">Semua surat bisa dibuka dan didengar. Tanda <span class="tgt">target</span> adalah surat yang masuk soal latihan ${esc(P().name)}; orang tua mengaturnya di ⚙️ Kontrol Orang Tua.<br><small>Murottal: ${QAUDIO_CREDIT}</small></div>
+      <div class="qsec">Al-Fatihah & Juz 30</div>${j30.map(item).join('')}
+      <div class="qsec">Juz 29</div>${j29.map(item).join('')}</div>`;
+  },
+  doa(L) {
+    const sub = view.sub || 'harian';
+    const list = sub === 'harian' ? ALL_DOA.filter(d => d.lvl <= Math.max(L, 2)) : sub === 'shalat' ? DZIKIR_SHALAT : DZIKIR_PP;
+    const player = sub === 'pp' ? `<div class="lcard listen"><h3>🎧 Dzikir petang lengkap</h3><p>Bacaan Alaa Aqel. Putar untuk menemani hafalan.</p><audio controls preload="none" src="audio/dzikir-petang.mp3"></audio></div>`
+      : `<div class="lcard listen"><h3>🎧 Hisnul Muslim lengkap</h3><p>Bacaan Hamad Ad-Duraihim (±76 menit), berurutan sesuai kitab: dzikir bangun tidur, berpakaian, kamar mandi, wudhu, keluar rumah, masjid, shalat, pagi petang, dan seterusnya.</p><audio controls preload="none" src="audio/hisnul-muslim.mp3"></audio></div>`;
+    return chips([['harian', 'Doa Harian'], ['shalat', 'Setelah Shalat'], ['pp', 'Pagi Petang']], sub) + `<div class="learn">${player}
+      ${list.map(d => `<div class="doa"><div class="doa-h"><b>${d.e ? d.e + ' ' : ''}${d.judul || (d.waktu ? 'Dibaca ' + d.waktu : '')}</b>${d.kali ? `<span class="kali">${d.kali}×</span>` : ''}</div><div class="ar">${d.ar}${d.noFill ? ' …' : ''}</div><p>${d.arti}</p></div>`).join('')}</div>`;
+  },
+  hafalan(L) {
+    if (!S.hafalan.length) return `<div class="empty">Belum ada hafalan. Orang tua bisa menambahkannya di ⚙️ Kontrol Orang Tua.</div>`;
+    const p = P();
+    return `<div class="learn">${S.hafalan.map(h => `<div class="doa"><div class="doa-h"><b>${esc(h.judul)}</b>${p.hafal[h.id] ? '<span class="kali">✓ Sudah hafal</span>' : h.contoh ? '<span class="tag">contoh</span>' : ''}</div>
+      <div class="${h.ar ? 'ar' : ''}" style="${h.ar ? '' : 'font-size:19px;font-weight:800;margin:10px 0 6px'}">${esc(h.teks)}</div><p>${esc(h.arti)}</p></div>`).join('')}</div>`;
+  }
+};
+function bindLearn(m) {
+  app.querySelectorAll('[data-say]').forEach(b => b.onclick = () => speak(b.dataset.say, b.dataset.lang || 'id-ID'));
+  app.querySelectorAll('[data-times]').forEach(b => b.onclick = () => { view.times = +b.dataset.times; render(); });
+  app.querySelectorAll('[data-sub]').forEach(b => b.onclick = () => { view.sub = b.dataset.sub; render(); });
+  app.querySelectorAll('[data-fc]').forEach(b => b.onclick = () => openFlash(FC, 0));
+  app.querySelectorAll('[data-surah]').forEach(b => b.onclick = () => openSurah(+b.dataset.surah));
+  bindBooks();
+}
+function openFlash(deck, i) {
+  if (!deck || !deck.length) return;
+  const c = deck[i];
+  openSheet(`<div class="fb list ok" style="text-align:center">
+    <div class="fc-wrap"><div class="fc" id="fc"><div class="front">${c.f}</div><div class="back">${c.b}</div></div></div>
+    <div class="fc-hint">Ketuk kartu untuk membalik${c.say && canSpeak ? ' · 🔊 untuk mendengar' : ''}</div>
+    <div class="fc-nav"><button class="btn ghost" id="fcPrev" ${i === 0 ? 'disabled style="opacity:.4"' : ''}>‹ Sebelum</button><span class="fc-count">${i + 1}/${deck.length}</span><button class="btn primary" id="fcNext">${i === deck.length - 1 ? 'Selesai' : 'Lanjut ›'}</button></div>
+    ${c.say && canSpeak ? `<button class="btn ghost" id="fcSay">🔊 Dengarkan</button>` : ''}
+  </div>`);
+  $('#fc').onclick = () => $('#fc').classList.toggle('flip');
+  $('#fcPrev').onclick = () => i > 0 && openFlash(deck, i - 1);
+  $('#fcNext').onclick = () => i < deck.length - 1 ? openFlash(deck, i + 1) : closeSheet();
+  const sb = $('#fcSay'); if (sb) sb.onclick = () => speak(c.say, c.lang || 'id-ID');
+}
+function openSurah(s) {
+  const x = SURAH_BY[s], a = AYAT[s] || [], qa = QAUDIO[s];
+  openSheet(`<div class="fb list ok" style="text-align:center">
+    <div class="fb-t" style="color:var(--ink)">${x.latin}</div><div class="ar" style="font-size:28px">${x.ar}</div>
+    <div class="fb-s">Surat ke-${s} · ${x.arti} · ${x.ayat} ayat · Juz ${x.juz}</div>
+    ${qa ? `<button class="big-play wide" id="playAll"><span class="pi">▶</span><span>Putar seluruh surat</span></button>` : '<div class="mushaf-note">Belum ada murottal untuk surat ini.</div>'}
+    ${a.length ? `<div class="mushaf">${a.map((t, i) => `<span class="ayah ${ayClip(s, i) ? 'can' : ''}" data-ay="${i}">${t} <span class="an">﴿${arDigits(i + 1)}﴾</span></span>`).join(' ')}</div>${a.some((_, i) => ayClip(s, i)) ? '<div class="fc-hint">Ketuk ayat yang bergaris untuk mendengar per ayat</div>' : ''}` : ''}
+    ${a.length < x.ayat ? `<div class="mushaf-note">Teks di aplikasi baru ${a.length} ayat awal. Lanjutkan dengan mushaf sambil mendengar murottal.</div>` : ''}
+    <button class="btn primary" id="closeS">Tutup</button></div>`);
+  const pa = $('#playAll'); if (pa) pa.onclick = () => audBtn === pa ? stopClip() : playClip(surahClip(s), pa);
+  sheet.querySelectorAll('.ayah.can').forEach(el => el.onclick = () => playClip(ayClip(s, +el.dataset.ay), el));
+  $('#closeS').onclick = () => { stopClip(); closeSheet(); };
+}
+function closeSheet() { sheet.className = ''; sheet.innerHTML = ''; }
+sheet.addEventListener('click', e => { if (e.target === sheet && view.name !== 'play') { stopClip(); closeSheet(); } });
+
+
+/* ---------- Perpustakaan ---------- */
+function bookCard(id, page, compact) {
+  const b = BUKU[id];
+  return `<div class="book-card" style="--bk:${b.warna}">
+    <img src="${b.dir}cover.webp" alt="Sampul ${esc(b.judul)}" class="book-cover ${b.w > b.h ? 'land' : ''}" loading="lazy">
+    <div class="grow"><div class="bk-k">${esc(b.oleh || 'Buku karya Ukkaasyah Abdurrahman')}</div><b>${esc(b.judul)}</b><small>${esc(b.sub)} · ${b.pages} halaman</small>
+      <button class="book-open" data-book="${id}" data-page="${page || 1}">📖 Buka buku</button></div></div>
+    ${compact ? '' : `<div class="lcard"><h3>Langsung ke bagian</h3><div class="toc">${b.toc.map(t => `<button data-book="${id}" data-page="${t[1]}"><span>${esc(t[0])}</span><small>${t[1]}</small></button>`).join('')}</div></div>`}`;
+}
+function renderLibrary() {
+  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1>Perpustakaan</h1><div class="ar">الْمَكْتَبَةُ</div></div></div></header>
+    <div class="learn">${[['bahasa', 'Bahasa Arab & Tajwid', '#2C347A'], ['fikih', 'Fikih', '#1F5135']].map(k => `<h3 class="lib-h" style="--c:${k[2]}">${k[1]}</h3>` + Object.keys(BUKU).filter(id => BUKU[id].kat === k[0]).map(id => bookCard(id, 1, true)).join('')).join('')}<p class="lv-note">Ketuk 📖 lalu pilih bagian dari deretan judul di atas halaman. Buku Saku Santri dan Nahwu juga bisa dibuka dari tab Belajar.</p></div>`;
+  $('#back').onclick = () => go({ name: 'home' });
+  bindBooks();
+}
+function bindBooks() { app.querySelectorAll('[data-book]').forEach(b => b.onclick = () => { const from = { ...view }; go({ name: 'book', book: b.dataset.book, page: +b.dataset.page, from }); }); }
+// Halaman buku digabung per beberapa halaman dalam satu gambar (strip) agar jumlah file tetap sedikit.
+function bookStrips(b) {
+  const c = b.chunk || 1, n = Math.ceil(b.pages / c);
+  return Array.from({ length: n }, (_, k) => {
+    const first = k * c + 1, cnt = Math.min(c, b.pages - k * c);
+    const marks = Array.from({ length: cnt }, (_, j) => `<span class="pg-mark" id="pg-${first + j}" style="top:${(j * 100 / cnt).toFixed(4)}%"><i>${first + j}</i></span>`).join('');
+    return `<figure class="strip"><img src="${b.dir}p${k + 1}.webp" width="${b.w}" height="${b.h * cnt}" loading="lazy" alt="Halaman ${first}–${first + cnt - 1}">${marks}</figure>`;
+  }).join('');
+}
+function renderBook() {
+  const b = BUKU[view.book], pg = view.page || 1;
+  app.innerHTML = `<header class="band slim" style="--c:${b.warna}"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1 style="font-size:22px">${esc(b.judul)}</h1><div class="ar" style="font-size:17px">${b.ar}</div></div></div></header>
+    <div class="chips sticky">${b.toc.map(t => `<button class="chip-b" data-jump="${t[1]}">${esc(t[0])}</button>`).join('')}</div>
+    <div class="pages">${bookStrips(b)}</div>`;
+  $('#back').onclick = () => go(view.from && view.from.name !== 'book' ? view.from : { name: 'home' });
+  app.querySelectorAll('[data-jump]').forEach(c => c.onclick = () => { const el = $('#pg-' + c.dataset.jump); if (el) el.scrollIntoView({ block: 'start' }); });
+  requestAnimationFrame(() => { const el = $('#pg-' + pg); if (el && pg > 1) el.scrollIntoView({ block: 'start' }); });
+}
+
+
+/* ---------- Tentang ---------- */
+function renderAbout() {
+  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1>Tentang Aplikasi</h1><div class="ar">عَنِ التَّطْبِيقِ</div></div></div></header>
+  <div class="learn">
+    <div class="about-hero">
+      <div class="ab-logo"><span class="ar">بُسْتَانُ</span><span class="ar">الْعِلْمِ</span></div>
+      <h2>Kebun Ilmu</h2>
+      <p>Aplikasi belajar sambil bermain untuk anak TK sampai kelas 6: Al-Qur'an, doa dan dzikir, membaca, matematika, warna, bahasa Arab, serta nahwu dan sharaf.</p>
+    </div>
+    <div class="lcard maker">
+      <div class="mk-k">Pembuat aplikasi</div>
+      <div class="mk-name">Ukkaasyah Abdurrahman</div>
+      <div class="mk-role">Pengajar di Pondok Pesantren Luqmanul Hakim Marelan</div>
+      <div class="ar mk-ar">عُكَّاشَةُ عَبْدُ الرَّحْمٰنِ</div>
+    </div>
+    <div class="lcard"><h3>Buku karya pembuat</h3><div class="ex">
+      <button class="ex-row" data-book="kamus" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📘</b><span><b>Buku Saku Santri</b> · Kamus Mufradat &amp; Muhadatsah</span></button>
+      <button class="ex-row" data-book="nahwu" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📙</b><span><b>Asyik Belajar Nahwu &amp; Sharaf</b> · Panduan santri SD kelas 4–6</span></button>
+      <button class="ex-row" data-book="sharaf" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📒</b><span><b>Matn Ash-Sharf Ash-Shaghir</b> · 'ardh musyajjar</span></button>
+      <button class="ex-row" data-book="jazariyyah" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📗</b><span><b>Syarah Matan Al-Jazariyyah</b> · ilmu tajwid</span></button>
+      <button class="ex-row" data-book="fikih" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📕</b><span><b>Fikih Anak</b> · dari kandungan hingga baligh</span></button>
+      <button class="ex-row" data-book="istihadhah" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📕</b><span><b>Istihadhah dalam Haid dan Nifas</b></span></button>
+      <button class="ex-row" data-book="qawaid" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📗</b><span><b>Mulakhkhash Al-Qawa'id Al-Fiqhiyyah</b> · 46 kaidah</span></button></div></div>
+    <div class="lcard"><h3>Suara bacaan</h3><div class="ex">
+      <div class="ex-row"><b style="min-width:30px">📖</b><span>Murottal Juz 29, Juz 30, dan Al-Fatihah: <b>Muhammad Thaha Al-Junaid</b></span></div>
+      <div class="ex-row"><b style="min-width:30px">🤲</b><span>Hisnul Muslim: <b>Hamad Ad-Duraihim</b></span></div>
+      <div class="ex-row"><b style="min-width:30px">🌇</b><span>Dzikir petang: <b>Alaa Aqel</b></span></div></div></div>
+    <div class="lcard" style="text-align:center"><div class="ar" style="font-size:30px">رَبِّ زِدْنِي عِلْمًا</div><p>Semoga Allah menjadikan aplikasi ini bermanfaat bagi anak-anak kita.</p></div>
+  </div>`;
+  $('#back').onclick = () => go({ name: 'home' });
+  bindBooks();
+}
+
+/* ---------- Game ---------- */
+let G = null;
+function buildSession(modId, L, t, n) {
+  const m = MOD[modId], qs = [], keys = new Set();
+  const custom = shuffle(S.custom.filter(c => c.mod === modId && (+c.level === 0 || +c.level === L)));
+  let ci = 0, tries = 0;
+  while (qs.length < n && tries++ < n * 15) {
+    if (custom.length && ci < custom.length && chance(.4)) {
+      const c = custom[ci++];
+      qs.push(mc({ key: 'c' + c.id, label: 'Soal dari ayah/ibu', qtext: c.q, answer: c.a, pool: c.wrong, n: c.wrong.length + 1, safe: true }));
+      continue;
+    }
+    let q; try { q = m.gen(L, t); } catch (e) { console.warn(e); q = null; }
+    if (!q) { if (tries > n * 3) break; continue; }
+    if (keys.has(q.key) && tries < n * 10) continue;
+    keys.add(q.key); qs.push(q);
+  }
+  return qs;
+}
+function startGame(modId, t) {
+  const L = P().level, qs = buildSession(modId, L, t, S.count);
+  if (!qs.length) { toast('Belum ada soal untuk modul ini.'); return; }
+  G = { mod: modId, L, t, qs, i: 0, res: [], cups: 0, streak: 0, fill: [] };
+  go({ name: 'play' });
+}
+const optLabel = (q, o) => q.kind === 'swatch' ? '' : q.safe ? esc(o) : o;
+function answerText(q) {
+  if (q.type === 'tf') return { html: (q.ans ? 'Benar' : 'Salah') + (q.reveal ? ` · ${esc(q.reveal)}` : ''), ar: false };
+  if (q.type === 'fill') return { html: q.word, ar: false };
+  const o = q.opts[q.ans];
+  if (q.kind === 'swatch') return { html: `<i class="swc" style="background:${COLOR[o].hex}"></i>${COLOR[o].name}`, ar: false };
+  return { html: q.safe ? esc(o) : o, ar: q.kind === 'ar' };
+}
+function renderPlay() {
+  const q = G.qs[G.i];
+  const segs = G.qs.map((_, i) => `<i class="${i < G.i ? (G.res[i] ? 'ok' : 'no') : i === G.i ? 'now' : ''}"></i>`).join('');
+  let prompt = '';
+  if (q.emoji) prompt += `<div class="qemoji">${q.emoji}</div>`;
+  if (q.emojiRow) prompt += `<div class="qemoji row">${q.emojiRow}</div>`;
+  if (q.swatch) prompt += `<div class="swatch-big" style="background:${q.swatch}"></div>`;
+  if (q.mix) prompt += `<div class="mix"><i style="background:${q.mix[0]}"></i>+<i style="background:${q.mix[1]}"></i>=<span>?</span></div>`;
+  if (q.audio) prompt += `<button class="big-play" id="qPlay" aria-label="Putar bacaan"><span class="pi">▶</span><span>Dengarkan</span></button>`;
+  if (q.ar && !q.hideText) prompt += `<div class="qar ${q.long ? 'long' : ''}">${q.ar}</div>`;
+  if (q.sub) prompt += `<div class="qsub">${esc(q.sub)}</div>`;
+  if (q.big && q.type !== 'fill') prompt += `<div class="qbig">${esc(q.big)}</div>`;
+  if (q.qtext) prompt += `<div class="qtext">${esc(q.qtext)}</div>`;
+  if (q.html) prompt += q.html;
+  if (q.type === 'fill') prompt += `<div class="boxes ${q.word.length > 6 ? 'box-small' : ''}" id="boxes"></div>`;
+  const sp = canSpeak && (q.speak || q.speakAr) ? `<button class="speak" id="speakBtn" aria-label="Dengarkan">🔊</button>` : '';
+  let ans = '';
+  if (q.type === 'mc') {
+    const longAr = q.kind === 'ar' && q.opts.some(o => o.length > 22);
+    const plainLong = !['ar', 'emo', 'big', 'letter', 'swatch'].includes(q.kind) && q.opts.some(o => String(o).length > 16);
+    const hasClips = q.clips && q.opts.some(o => q.clips[o]);
+    const btn = (o, i) => `<button class="opt ${q.kind || ''} ${longAr ? 'long' : ''}" data-i="${i}" ${q.kind === 'swatch' ? `style="background:${COLOR[o].hex}" aria-label="${COLOR[o].name}"` : ''}>${optLabel(q, o)}</button>`;
+    ans = hasClips
+      ? `<div class="answers one">${q.opts.map((o, i) => `<div class="opt-row">${q.clips[o] ? `<button class="opt-play" data-play="${i}" aria-label="Dengarkan pilihan ${i + 1}">▶</button>` : '<span class="opt-play off"></span>'}${btn(o, i)}</div>`).join('')}</div><p class="play-hint">Tekan ▶ untuk mendengar, lalu pilih jawabannya.</p>`
+      : `<div class="answers ${longAr || plainLong ? 'one' : ''}">${q.opts.map(btn).join('')}</div>`;
+  } else if (q.type === 'tf') ans = `<div class="tf"><button class="tfb yes" data-tf="1"><span>✓</span>Benar</button><button class="tfb nope" data-tf="0"><span>✕</span>Salah</button></div>`;
+  else ans = `<div class="pool" id="pool"></div><button class="undo" id="undo">↺ Hapus huruf terakhir</button>`;
+  app.innerHTML = `<div class="play">
+    <div class="playbar"><button class="x" id="quit" aria-label="Keluar">✕</button><div class="prog">${segs}</div><div class="pcups">🏆 ${G.cups}</div></div>
+    <div class="qcard">${sp}<div class="qlabel">${esc(q.label || '')}</div>${prompt}</div>${ans}</div>`;
+  $('#quit').onclick = () => go({ name: 'mod', mod: G.mod, tab: 'main' });
+  const spb = $('#speakBtn'); if (spb) spb.onclick = () => q.speakAr ? speak(q.speakAr, 'ar-SA') : speak(q.speak, 'id-ID');
+  const qp = $('#qPlay'); if (qp) { qp.onclick = () => playClip(q.audio, qp); playClip(q.audio, qp); }
+  app.querySelectorAll('[data-play]').forEach(b => b.onclick = e => { e.stopPropagation(); playClip(q.clips[q.opts[+b.dataset.play]], b); });
+  if (q.type === 'mc') app.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    const i = +b.dataset.i, ok = i === q.ans;
+    app.querySelectorAll('.opt').forEach(x => x.disabled = true);
+    b.classList.add(ok ? 'right' : 'wrong'); if (!ok) app.querySelector(`.opt[data-i="${q.ans}"]`).classList.add('right');
+    judge(ok);
+  });
+  if (q.type === 'tf') app.querySelectorAll('.tfb').forEach(b => b.onclick = () => {
+    const ok = (b.dataset.tf === '1') === q.ans;
+    app.querySelectorAll('.tfb').forEach(x => { x.disabled = true; if (x !== b) x.classList.add('dim'); });
+    judge(ok);
+  });
+  if (q.type === 'fill') { G.fill = []; drawFill(q); $('#undo').onclick = () => { G.fill.pop(); drawFill(q); }; }
+}
+function drawFill(q) {
+  const filled = {}; q.blanks.forEach((bi, k) => { if (G.fill[k] != null) filled[bi] = q.pool[G.fill[k]]; });
+  $('#boxes').innerHTML = [...q.word].map((c, i) => q.blanks.includes(i) ? `<span class="box blank-b ${filled[i] ? 'filled' : ''}" data-b="${i}">${filled[i] || ''}</span>` : `<span class="box">${c}</span>`).join('');
+  $('#pool').innerHTML = q.pool.map((c, i) => `<button class="tile" data-p="${i}" ${G.fill.includes(i) ? 'disabled' : ''}>${c}</button>`).join('');
+  $('#pool').querySelectorAll('.tile').forEach(b => b.onclick = () => {
+    G.fill.push(+b.dataset.p);
+    if (G.fill.length === q.blanks.length) {
+      drawFill(q);
+      const ok = q.blanks.every((bi, k) => q.pool[G.fill[k]] === q.word[bi]);
+      $('#boxes').querySelectorAll('[data-b]').forEach((el, k) => el.classList.add(q.pool[G.fill[k]] === q.word[q.blanks[k]] ? 'okb' : 'nob'));
+      $('#pool').querySelectorAll('.tile').forEach(t => t.disabled = true); $('#undo').style.visibility = 'hidden';
+      judge(ok);
+    } else drawFill(q);
+  });
+}
+// Pujian dibedakan untuk anak laki-laki (L) dan perempuan (P)
+const PRAISE_L = [['بَارَكَ اللَّهُ فِيكَ', 'Barakallahu fiik!'], ['مُمْتَازٌ', 'Mumtaz! Luar biasa'], ['مَا شَاءَ اللَّهُ', 'MasyaAllah, benar!'], ['أَحْسَنْتَ', 'Ahsanta! Bagus sekali'], ['جَيِّدٌ جِدًّا', 'Jayyid jiddan! Bagus sekali'], ['أَنْتَ ذَكِيٌّ', 'Anta dzakiyy! Pintar sekali']];
+const PRAISE_P = [['بَارَكَ اللَّهُ فِيكِ', 'Barakallahu fiiki!'], ['مُمْتَازَةٌ', 'Mumtazah! Luar biasa'], ['مَا شَاءَ اللَّهُ', 'MasyaAllah, benar!'], ['أَحْسَنْتِ', 'Ahsanti! Bagus sekali'], ['جَيِّدٌ جِدًّا', 'Jayyid jiddan! Bagus sekali'], ['أَنْتِ ذَكِيَّةٌ', 'Anti dzakiyyah! Pintar sekali']];
+const praiseFor = p => isGirl(p) ? PRAISE_P : PRAISE_L;
+const fiik = p => isGirl(p) ? 'Barakallahu fiiki' : 'Barakallahu fiik';
+function confetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.createElement('div'); box.className = 'confetti';
+  const cols = ['#FFB81F', '#2B7BEF', '#FF6150', '#6F55F2', '#EC4B8C', '#FF8A2A'];
+  for (let i = 0; i < 34; i++) { const c = document.createElement('i'); c.style.left = rnd(100) + '%'; c.style.background = pick(cols); c.style.animationDelay = (Math.random() * .25) + 's'; c.style.setProperty('--dx', (rnd(160) - 80) + 'px'); c.style.setProperty('--rot', rnd(720) + 'deg'); box.appendChild(c); }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 1800);
+}
+function judge(ok) {
+  stopClip();
+  const q = G.qs[G.i], p = P();
+  G.res[G.i] = ok; blip(ok);
+  p.stats[G.mod] = p.stats[G.mod] || { b: 0, s: 0 };
+  if (ok) { G.cups++; G.streak++; p.cups++; p.stats[G.mod].b++; } else { G.streak = 0; p.stats[G.mod].s++; }
+  save();
+  const pc = $('.pcups'); if (pc) pc.textContent = '🏆 ' + G.cups;
+  const a = answerText(q);
+  if (ok) {
+    const streak = G.streak > 0 && G.streak % 3 === 0;
+    const pr = pick(praiseFor(p)); confetti(); sayPraise(pr[0]);
+    openSheet(`<div class="fb ok"><div class="fb-icons"><span>👍</span><span>🏆</span>${streak ? '<span>⭐</span>' : ''}</div>
+      <div class="fb-ar">${pr[0]}</div><div class="fb-t">${pr[1]}</div><div class="fb-s">${streak ? G.streak + ' benar berturut-turut! · ' : ''}+1 piala</div>
+      ${q.explain ? `<div class="fb-s" style="margin-top:8px">${esc(q.explain)}</div>` : ''}
+      <button class="btn primary" id="next">Lanjut ›</button></div>`);
+    G.timer = setTimeout(next, q.explain ? 3400 : 2200);
+  } else {
+    openSheet(`<div class="fb no"><div class="fb-t">Belum tepat</div><div class="fb-s">Tidak apa-apa. Jawaban yang benar:</div>
+      <div class="fb-ans ${a.ar ? 'ar' : ''}">${a.html}</div>${q.explain ? `<div class="fb-s" style="margin-top:8px">${esc(q.explain)}</div>` : ''}
+      <button class="btn primary" id="next">Lanjut ›</button></div>`);
+  }
+  $('#next').onclick = next;
+}
+function next() { clearTimeout(G.timer); closeSheet(); G.i++; if (G.i >= G.qs.length) finish(); else renderPlay(); }
+function finish() {
+  const p = P(), right = G.res.filter(Boolean).length, n = G.qs.length, pct = right / n;
+  const stars = pct >= .9 ? 3 : pct >= .7 ? 2 : pct >= .5 ? 1 : 0;
+  const k = G.mod + G.L; p.prog[k] = p.prog[k] || [];
+  p.prog[k][G.t] = Math.max(p.prog[k][G.t] || 0, stars); save();
+  const msg = stars === 3 ? 'Sempurna! ' + fiik(p) : stars === 2 ? 'Bagus sekali!' : stars === 1 ? 'Sudah lumayan, terus latihan ya!' : 'Ayo coba sekali lagi, pasti bisa!';
+  const total = topicsOf(MOD[G.mod], G.L).length;
+  const hasNext = G.t < total - 1 && stars > 0;
+  view = { name: 'result' };
+  app.innerHTML = `<div class="result">
+    <div class="trophy">${stars ? '🏆' : '💪'}</div><h1>${msg}</h1>
+    <div class="stars" aria-label="${stars} bintang">${'<b>★</b>'.repeat(stars)}${'★'.repeat(3 - stars)}</div>
+    <div class="rstats"><div class="rstat"><b>${right}/${n}</b><span>jawaban benar</span></div><div class="rstat"><b>+${G.cups}</b><span>piala didapat</span></div></div>
+    ${hasNext ? `<button class="btn sun" id="nextT">Tantangan ${G.t + 2} ›</button>` : ''}
+    <button class="btn ${hasNext ? 'ghost' : 'primary'}" id="again">↺ Ulangi tantangan</button>
+    <button class="btn ghost" id="toMod">Kembali ke ${MOD[G.mod].title}</button></div>`;
+  if (hasNext) $('#nextT').onclick = () => startGame(G.mod, G.t + 1);
+  $('#again').onclick = () => startGame(G.mod, G.t);
+  $('#toMod').onclick = () => go({ name: 'mod', mod: G.mod, tab: 'main' });
+  window.scrollTo(0, 0);
+}
+function openSheet(html) { sheet.innerHTML = html; sheet.className = 'on'; }
+
+/* ---------- Parent ---------- */
+function renderPin() {
+  const b = view.buf;
+  app.innerHTML = `<div class="pin">
+    <button class="x" id="back" aria-label="Kembali" style="position:absolute;left:16px;top:calc(16px + env(safe-area-inset-top))">✕</button>
+    <h1>Kontrol Orang Tua</h1><p>Masukkan PIN 4 angka${S.pin === '1234' ? ' (PIN awal: 1234, segera ganti)' : ''}.</p>
+    <div class="pin-dots ${view.err ? 'err' : ''}">${[0, 1, 2, 3].map(i => `<i class="${i < b.length ? 'f' : ''}"></i>`).join('')}</div>
+    <div class="keypad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(k => k === '' ? '<span></span>' : `<button data-k="${k}">${k}</button>`).join('')}</div></div>`;
+  $('#back').onclick = () => go({ name: 'home' });
+  app.querySelectorAll('[data-k]').forEach(btn => btn.onclick = () => {
+    const k = btn.dataset.k; view.err = false;
+    if (k === '⌫') view.buf = view.buf.slice(0, -1); else if (view.buf.length < 4) view.buf += k;
+    if (view.buf.length === 4) { if (view.buf === S.pin) { go({ name: 'parent' }); return; } view.err = true; view.buf = ''; }
+    render();
+  });
+}
+function quranSelect(x) {
+  return `<select id="qu-${x.id}" aria-label="Hafalan Al-Qur'an ${esc(x.name)}"><option value="0" ${!x.quranUntil ? 'selected' : ''}>Bawaan: Al-Fatihah + seluruh Juz 30</option>${HAFALAN_ORDER.map((s, i) => `<option value="${s}" ${x.quranUntil === s ? 'selected' : ''}>${i + 1}. ${SURAH_BY[s].latin}${s === 78 ? ' (Juz 30 selesai)' : s === 67 ? ' (Juz 29 selesai)' : ''}</option>`).join('')}</select>`;
+}
+function renderParent() {
+  const p = P();
+  const modOpts = MODS.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
+  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1>Kontrol Orang Tua</h1><div class="ar">لِلْوَالِدَيْنِ</div></div></div></header>
+  <div style="height:16px"></div>
+  <section class="panel"><h2>Anak</h2><p class="hint">Setiap anak punya level, piala, progres, dan target hafalan Al-Qur'an sendiri.</p>
+    ${S.profiles.map(x => `<div class="row" style="display:block"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><input type="text" class="grow" id="nm-${x.id}" value="${esc(x.name)}" aria-label="Nama anak" style="flex:1;min-width:120px">
+      <select id="lv-${x.id}" aria-label="Level" style="width:auto">${LEVELS.map(l => `<option value="${l.n}" ${l.n === x.level ? 'selected' : ''}>Lv ${l.n} · ${l.kelas}</option>`).join('')}</select>
+      <span style="font-weight:900">🏆 ${x.cups}</span>${S.profiles.length > 1 ? `<button class="sbtn danger" data-del="${x.id}">Hapus</button>` : ''}</div>
+      <div class="parent-q"><span>👤 Usia & jenis kelamin:</span><span style="display:flex;gap:8px;flex-wrap:wrap"><select id="us-${x.id}" aria-label="Usia" style="width:auto"><option value="0">Usia?</option>${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(u => `<option value="${u}" ${+x.usia === u ? 'selected' : ''}>${u} tahun</option>`).join('')}</select><select id="jk-${x.id}" aria-label="Jenis kelamin" style="width:auto"><option value="L" ${!isGirl(x) ? 'selected' : ''}>👦 Laki-laki</option><option value="P" ${isGirl(x) ? 'selected' : ''}>👧 Perempuan</option></select></span></div>
+      <div class="parent-q"><span>📖 Hafalan Al-Qur'an sampai:</span>${quranSelect(x)}</div></div>`).join('')}
+    <div class="row" style="display:block"><button class="sbtn" id="addKid">+ Tambah anak</button>
+      <div class="praise-note" style="margin-top:10px"><b style="color:var(--ink)">Pujian saat jawaban benar</b><div><span>👦 Laki-laki</span><span class="ar" dir="rtl">أَحْسَنْتَ · مُمْتَازٌ · بَارَكَ اللَّهُ فِيكَ</span></div><div><span>👧 Perempuan</span><span class="ar" dir="rtl">أَحْسَنْتِ · مُمْتَازَةٌ · بَارَكَ اللَّهُ فِيكِ</span></div></div></div>
+    <p class="hint" style="margin-top:8px">Urutan hafalan: Al-Fatihah, lalu dari An-Nas mundur sampai Al-Mulk. Contoh: anak kelas 6 yang hafalannya baru sampai Asy-Syams, pilih “Asy-Syams”.</p>
+  </section>
+  <section class="panel"><h2>Hafalan doa & dzikir</h2><p class="hint">Centang bacaan yang sudah dihafal. Tantangan “Tes Hafalan” di modul Doa & Dzikir hanya akan menanyakan bacaan yang dicentang.</p>
+    <div class="row" style="border:0;padding-top:0"><span style="font-weight:800">Anak:</span><select id="dhKid" style="flex:1">${S.profiles.map(x => `<option value="${x.id}" ${x.id === p.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
+    ${[['doa', 'Doa harian'], ['shalat', 'Dzikir setelah shalat'], ['pp', 'Dzikir pagi petang']].map(([j, lab]) => { const items = DZ_ALL.filter(d => d.jenis === j); const nOn = items.filter(d => (p.doaHafal || {})[d.id]).length;
+      return `<details class="dh" ${j === 'doa' ? 'open' : ''}><summary><b>${lab}</b><span>${nOn}/${items.length} hafal</span></summary>
+        <div class="dh-act"><button class="sbtn light" data-dhall="${j}">Centang semua</button><button class="sbtn light" data-dhnone="${j}">Kosongkan</button></div>
+        ${items.map(d => `<label class="dh-item"><input type="checkbox" data-dh="${d.id}" ${(p.doaHafal || {})[d.id] ? 'checked' : ''}><span><b>${d.e || ''} ${esc(d.judul || '')}${d.kali ? ` · ${d.kali}×` : ''}</b><span class="ar">${d.ar.length > 70 ? d.ar.slice(0, 70) + '…' : d.ar}</span></span></label>`).join('')}</details>`; }).join('')}
+  </section>
+  <section class="panel"><h2>Pengaturan main</h2>
+    <div class="switch"><span>Soal per tantangan</span><div class="seg">${[5, 8, 10].map(n => `<button data-cnt="${n}" aria-pressed="${S.count === n}">${n}</button>`).join('')}</div></div>
+    <label class="switch" for="lockLv"><span>Kunci level (anak tidak bisa ganti)</span><input type="checkbox" id="lockLv" ${S.lockLevel ? 'checked' : ''}></label>
+    <label class="switch" for="snd"><span>Bunyi tanda benar/salah</span><input type="checkbox" id="snd" ${S.sound ? 'checked' : ''}></label>
+    <div class="switch"><span>Ganti PIN</span><span style="display:flex;gap:6px"><input type="password" id="newPin" inputmode="numeric" maxlength="4" placeholder="4 angka" style="width:100px"><button class="sbtn" id="savePin">Simpan</button></span></div>
+  </section>
+  <section class="panel"><h2>Modul yang tampil</h2>
+    ${MODS.map(m => `<label class="switch" for="hid-${m.id}"><span>${m.title}</span><input type="checkbox" id="hid-${m.id}" data-hid="${m.id}" ${S.hidden[m.id] ? '' : 'checked'}></label>`).join('')}
+  </section>
+  <section class="panel"><h2>Progres ${esc(p.name)}</h2>
+    <table class="ptable"><thead><tr><th>Modul</th><th style="text-align:right">Benar</th><th style="text-align:right">Salah</th><th style="text-align:right">Bintang</th></tr></thead><tbody>
+    ${MODS.map(m => { const s = p.stats[m.id] || { b: 0, s: 0 }; const st = LEVELS.reduce((a, l) => a + starsOf(p, m.id, l.n), 0); return `<tr><td>${m.title}</td><td class="n">${s.b}</td><td class="n">${s.s}</td><td class="n">⭐ ${st}</td></tr>`; }).join('')}
+    </tbody></table>
+    <button class="sbtn danger" id="resetKid" style="margin-top:12px">Reset progres ${esc(p.name)}</button>
+  </section>
+  <section class="panel"><h2>Hafalan tambahan</h2><p class="hint">Tambahkan hadits, matan, atau materi lain yang sedang dihafal. Game “lengkapi kata” dibuat otomatis dari teksnya.</p>
+    ${S.hafalan.map(h => `<div class="row"><div class="grow"><b>${esc(h.judul)}</b> ${h.contoh ? '<span class="tag">contoh</span>' : ''}<div style="font-size:13px;color:var(--ink-2)">${h.ar ? 'Teks Arab' : 'Teks Latin'}</div></div>
+      <label style="display:flex;gap:6px;align-items:center;font-weight:800;font-size:14px"><input type="checkbox" data-hafal="${h.id}" ${p.hafal[h.id] ? 'checked' : ''}> Hafal</label>
+      <button class="sbtn danger" data-delh="${h.id}">Hapus</button></div>`).join('')}
+    <form id="hForm" style="margin-top:12px">
+      <div class="field"><label for="hJudul">Judul</label><input type="text" id="hJudul" placeholder="mis. Hadits Arbain no. 1" required></div>
+      <label class="switch" for="hAr" style="border:0;padding-top:0"><span>Teks berbahasa Arab</span><input type="checkbox" id="hAr" checked></label>
+      <div class="field"><label for="hTeks">Teks hafalan</label><textarea id="hTeks" class="ar" dir="auto" required></textarea></div>
+      <div class="field"><label for="hArti">Arti / keterangan</label><input type="text" id="hArti"></div>
+      <button class="sbtn" type="submit">+ Simpan hafalan</button>
+    </form>
+  </section>
+  <section class="panel"><h2>Soal buatan sendiri</h2><p class="hint">Soal ini akan muncul di modul dan level yang dipilih.</p>
+    ${S.custom.map(c => `<div class="row"><div class="grow"><b>${esc(c.q)}</b><div style="font-size:13px;color:var(--ink-2)">${MOD[c.mod] ? MOD[c.mod].title : c.mod} · ${+c.level ? 'Level ' + c.level : 'Semua level'} · jawaban: ${esc(c.a)}</div></div><button class="sbtn danger" data-delc="${c.id}">Hapus</button></div>`).join('') || '<p class="hint">Belum ada soal.</p>'}
+    <form id="cForm" style="margin-top:12px">
+      <div class="row" style="border:0;padding-top:0"><select id="cMod" aria-label="Modul" style="flex:1">${modOpts}</select><select id="cLv" aria-label="Level" style="flex:1"><option value="0">Semua level</option>${LEVELS.map(l => `<option value="${l.n}">Level ${l.n}</option>`).join('')}</select></div>
+      <div class="field"><label for="cQ">Pertanyaan</label><input type="text" id="cQ" required></div>
+      <div class="field"><label for="cA">Jawaban benar</label><input type="text" id="cA" dir="auto" required></div>
+      <div class="field"><label for="cW1">Pilihan salah (isi 1–3)</label><input type="text" id="cW1" dir="auto" required><input type="text" id="cW2" dir="auto"><input type="text" id="cW3" dir="auto"></div>
+      <button class="sbtn" type="submit">+ Simpan soal</button>
+    </form>
+  </section>`;
+  $('#back').onclick = () => { S.profiles.forEach(x => { const n = $('#nm-' + x.id); if (n && n.value.trim()) x.name = n.value.trim(); }); save(); go({ name: 'home' }); };
+  S.profiles.forEach(x => {
+    $('#nm-' + x.id).onchange = e => { x.name = e.target.value.trim() || x.name; save(); toast('Nama disimpan'); };
+    $('#lv-' + x.id).onchange = e => { x.level = +e.target.value; save(); render(); toast('Level disimpan'); };
+    $('#qu-' + x.id).onchange = e => { x.quranUntil = +e.target.value; save(); toast('Target hafalan disimpan'); };
+    $('#us-' + x.id).onchange = e => { x.usia = +e.target.value; save(); toast('Usia disimpan'); };
+    $('#jk-' + x.id).onchange = e => { x.jk = e.target.value; save(); render(); toast('Jenis kelamin disimpan'); };
+  });
+  app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    if (b.dataset.sure) { S.profiles = S.profiles.filter(x => x.id !== b.dataset.del); if (!S.profiles.find(x => x.id === S.cur)) S.cur = S.profiles[0].id; save(); render(); }
+    else { b.dataset.sure = 1; b.textContent = 'Yakin hapus?'; }
+  });
+  $('#addKid').onclick = () => go({ name: 'setup', add: true });
+  app.querySelectorAll('[data-cnt]').forEach(b => b.onclick = () => { S.count = +b.dataset.cnt; save(); render(); });
+  $('#dhKid').onchange = e => { S.cur = e.target.value; save(); render(); };
+  p.doaHafal = p.doaHafal || {};
+  app.querySelectorAll('[data-dh]').forEach(c => c.onchange = () => { p.doaHafal[c.dataset.dh] = c.checked; save(); const det = c.closest('details'); const all = det.querySelectorAll('[data-dh]'); det.querySelector('summary span').textContent = [...all].filter(x => x.checked).length + '/' + all.length + ' hafal'; });
+  app.querySelectorAll('[data-dhall],[data-dhnone]').forEach(b => b.onclick = () => { const j = b.dataset.dhall || b.dataset.dhnone, on = !!b.dataset.dhall; DZ_ALL.filter(d => d.jenis === j).forEach(d => { p.doaHafal[d.id] = on; }); save(); render(); });
+  $('#lockLv').onchange = e => { S.lockLevel = e.target.checked; save(); };
+  $('#snd').onchange = e => { S.sound = e.target.checked; save(); };
+  $('#savePin').onclick = () => { const v = $('#newPin').value; if (/^\d{4}$/.test(v)) { S.pin = v; save(); $('#newPin').value = ''; toast('PIN baru disimpan'); } else toast('PIN harus 4 angka'); };
+  app.querySelectorAll('[data-hid]').forEach(c => c.onchange = () => { S.hidden[c.dataset.hid] = !c.checked; save(); });
+  $('#resetKid').onclick = e => { const b = e.target; if (b.dataset.sure) { Object.assign(p, { cups: 0, prog: {}, stats: {}, hafal: {} }); save(); render(); toast('Progres direset'); } else { b.dataset.sure = 1; b.textContent = 'Yakin reset?'; } };
+  app.querySelectorAll('[data-hafal]').forEach(c => c.onchange = () => { p.hafal[c.dataset.hafal] = c.checked; save(); });
+  app.querySelectorAll('[data-delh]').forEach(b => b.onclick = () => { if (b.dataset.sure) { S.hafalan = S.hafalan.filter(h => h.id !== b.dataset.delh); save(); render(); } else { b.dataset.sure = 1; b.textContent = 'Yakin?'; } });
+  app.querySelectorAll('[data-delc]').forEach(b => b.onclick = () => { S.custom = S.custom.filter(c => c.id !== b.dataset.delc); save(); render(); });
+  $('#hAr').onchange = e => { $('#hTeks').classList.toggle('ar', e.target.checked); };
+  $('#hForm').onsubmit = e => { e.preventDefault(); S.hafalan.push({ id: 'h' + Date.now().toString(36), judul: $('#hJudul').value.trim(), ar: $('#hAr').checked, teks: $('#hTeks').value.trim().replace(/\s+/g, ' '), arti: $('#hArti').value.trim() }); save(); render(); toast('Hafalan disimpan'); };
+  $('#cForm').onsubmit = e => { e.preventDefault(); const wrong = ['#cW1', '#cW2', '#cW3'].map(s => $(s).value.trim()).filter(Boolean);
+    S.custom.push({ id: 'c' + Date.now().toString(36), mod: $('#cMod').value, level: +$('#cLv').value, q: $('#cQ').value.trim(), a: $('#cA').value.trim(), wrong }); save(); render(); toast('Soal disimpan'); };
+}
+
+function render() {
+  if (view.name === 'home') renderHome();
+  else if (view.name === 'setup') renderSetup();
+  else if (view.name === 'mod') renderMod();
+  else if (view.name === 'play') renderPlay();
+  else if (view.name === 'pin') renderPin();
+  else if (view.name === 'parent') renderParent();
+  else if (view.name === 'book') renderBook();
+  else if (view.name === 'library') renderLibrary();
+  else if (view.name === 'about') renderAbout();
+}
+render();
+
+</script>
+<script>if ('serviceWorker' in navigator && location.protocol === 'https:') { try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {} }</script>
+</body>
+</html>
