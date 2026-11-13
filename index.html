@@ -1140,7 +1140,7 @@ const step = (n, ic, html) => `<li class="ist"><span class="ist-n">${n}</span><s
 function installSteps(kind) {
   if (kind === 'ios') return `<ol class="isteps">
     ${IN_APP ? step(1, '🧭', 'Kalau link ini terbuka di dalam WhatsApp atau Instagram, buka dulu di <b>Safari</b> (ketuk menu, lalu <b>Buka di Safari</b>).') : ''}
-    ${step(IN_APP ? 2 : 1, SVG_SHARE, `Ketuk tombol <b>Bagikan</b> di Safari${IS_IPAD ? ' (kanan atas layar)' : ' (bawah layar)'}.`)}
+    ${step(IN_APP ? 2 : 1, SVG_SHARE, 'Ketuk tombol <b>Bagikan</b> di Safari (iPhone: bawah layar, iPad: kanan atas).')}
     ${step(IN_APP ? 3 : 2, SVG_PLUS, 'Geser ke bawah, pilih <b>Tambahkan ke Layar Utama</b>.')}
     ${step(IN_APP ? 4 : 3, '✅', 'Ketuk <b>Tambah</b>. Ikon Kebun Ilmu muncul di layar utama.')}</ol>`;
   if (kind === 'android') return `<ol class="isteps">
@@ -1153,21 +1153,20 @@ function installSteps(kind) {
     ${step(2, '✅', 'Klik <b>Instal</b>. Kebun Ilmu terbuka di jendela sendiri.')}</ol>`;
 }
 function renderInstall() {
-  const kind = IS_IOS ? 'ios' : IS_ANDROID ? 'android' : 'pc';
-  const label = { ios: IS_IPAD ? 'iPad' : 'iPhone', android: 'HP Android', pc: 'komputer' }[kind];
-  const others = ['ios', 'android', 'pc'].filter(k => k !== kind);
-  const nm = { ios: 'iPhone / iPad (Safari)', android: 'Android (Chrome)', pc: 'Komputer (Chrome / Edge)' };
+  // Urutan tetap: HP Android (Chrome) dulu, lalu iPhone/iPad, lalu komputer
+  const nm = { android: 'HP Android (Chrome)', ios: 'iPhone / iPad (Safari)', pc: 'Komputer / laptop (Chrome / Edge)' };
   app.innerHTML = `<header class="top setup-top">
     ${view.fromHome ? '<button class="back" id="back" style="margin-bottom:12px"><b aria-hidden="true">‹</b> Kembali</button>' : ''}
     <div class="inst-hero"><img src="icons/icon-192.png" alt="" width="72" height="72" onerror="this.style.display='none'"><div><div class="brand-name">Kebun Ilmu</div><div class="ar" style="font-size:20px;opacity:.85">بُسْتَانُ الْعِلْمِ</div></div></div>
-    <h1 class="setup-h">Pasang Kebun Ilmu di ${label}</h1>
+    <h1 class="setup-h">Pasang Kebun Ilmu di HP</h1>
     <p class="setup-p">Supaya terbuka seperti aplikasi: ada ikonnya di layar utama, tampil penuh tanpa bilah browser, dan tetap bisa dipakai saat sinyal lemah. Gratis, tanpa daftar akun.</p>
   </header>
   <div class="setup">
     ${installEvt ? `<button class="btn primary" id="doInstall">📲 Pasang sekarang</button><p class="hint" style="text-align:center;margin:-6px 0 0">Atau ikuti langkah di bawah.</p>` : ''}
-    <div class="lcard"><h3>Langkah di ${label}</h3>${installSteps(kind)}</div>
-    ${IS_IOS ? '<p class="inst-note">Penting di iPhone/iPad: isi nama anak <b>setelah</b> membuka Kebun Ilmu dari ikon di layar utama, karena data di Safari dan di ikon tersimpan terpisah.</p>' : ''}
-    <details class="inst-more"><summary>Pakai perangkat lain?</summary>${others.map(k => `<div class="lcard"><h3>${nm[k]}</h3>${installSteps(k)}</div>`).join('')}</details>
+    <div class="lcard"><h3>${nm.android}</h3>${installSteps('android')}</div>
+    <details class="inst-more" ${IS_IOS ? 'open' : ''}><summary>Pakai perangkat lain? (iPhone, iPad, komputer)</summary>
+      <div class="lcard"><h3>${nm.ios}</h3>${installSteps('ios')}<p class="inst-note" style="margin-top:10px">Di iPhone/iPad, isi nama anak <b>setelah</b> membuka Kebun Ilmu dari ikon di layar utama, karena data di Safari dan di ikon tersimpan terpisah.</p></div>
+      <div class="lcard"><h3>${nm.pc}</h3>${installSteps('pc')}</div></details>
     <button class="btn ${installEvt ? 'ghost' : 'primary'}" id="skipInstall">${view.fromHome ? 'Selesai' : 'Nanti saja, langsung main ›'}</button>
   </div>`;
   if ($('#back')) $('#back').onclick = () => go({ name: 'home' });
