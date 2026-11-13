@@ -493,6 +493,15 @@ details.dh summary span { font-weight: 900; color: var(--ink-2); font-size: 13px
 .praise-note { display: grid; gap: 4px; width: 100%; font-size: 13px; color: var(--ink-2); font-weight: 700; }
 .praise-note div { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .praise-note .ar { font-size: 17px; color: var(--ink); }
+
+/* v7 dukungan */
+.dukung { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); background: #FFF6DE; border: 2px solid #FFD677; border-radius: 22px; padding: 14px 16px; }
+.dukung .dk-ic { font-size: 30px; line-height: 1; }
+.dukung .dk-t { flex: 1; display: grid; gap: 2px; }
+.dukung b { font-family: var(--display); font-size: 19px; }
+.dukung small { color: var(--ink-2); font-weight: 700; font-size: 13px; line-height: 1.35; }
+.dukung .dk-go { font-size: 28px; font-weight: 800; color: #B7791F; }
+.dukung.sm { margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -1116,6 +1125,7 @@ function renderHome() {
       <button class="mod wide lib" id="libBtn" style="--c:#FFFFFF;--cd:#DCE1F2"><div class="glyph">📚</div><div class="mod-body"><h3>Perpustakaan</h3><div class="meta">${Object.keys(BUKU).length} buku: bahasa Arab, nahwu sharaf, tajwid, dan fikih</div></div></button>
     </div>
   </section>
+  <section class="section">${dukungCard()}</section>
   <footer class="home-foot"><button id="aboutFoot">Dibuat oleh <b>Ukkaasyah Abdurrahman</b><br><span>Pengajar di Pondok Pesantren Luqmanul Hakim Marelan</span></button></footer>`;
   app.querySelectorAll('.lv').forEach(b => b.onclick = () => { p.level = +b.dataset.l; save(); render(); });
   app.querySelectorAll('.mod[data-m]').forEach(b => b.onclick = () => go({ name: 'mod', mod: b.dataset.m, tab: 'main' }));
@@ -1130,6 +1140,11 @@ function renderHome() {
     const pl = sheet.querySelector('.plist'); const add = document.createElement('button'); add.className = 'padd'; add.textContent = '+ Tambah anak'; add.onclick = () => go({ name: 'setup', add: true }); pl.appendChild(add);
   };
 }
+
+/* ---------- Dukungan seikhlasnya ---------- */
+const DUKUNG_URL = 'https://lynk.id/ukkaasyah';
+const dukungCard = (small) => `<a class="dukung ${small ? 'sm' : ''}" href="${DUKUNG_URL}" target="_blank" rel="noopener">
+  <span class="dk-ic">💛</span><span class="dk-t"><b>Dukung Kebun Ilmu</b><small>Gratis untuk semua anak. Dukungan seikhlasnya membantu aplikasi ini terus berkembang.</small></span><span class="dk-go">›</span></a>`;
 
 /* ---------- Layar penuh (untuk demo / tampil seperti aplikasi) ---------- */
 const fsOK = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
@@ -1473,6 +1488,7 @@ function renderAbout() {
       <button class="ex-row" data-book="fikih" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📕</b><span><b>Fikih Anak</b> · dari kandungan hingga baligh</span></button>
       <button class="ex-row" data-book="istihadhah" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📕</b><span><b>Istihadhah dalam Haid dan Nifas</b></span></button>
       <button class="ex-row" data-book="qawaid" data-page="1" style="width:100%;text-align:left"><b style="min-width:30px">📗</b><span><b>Mulakhkhash Al-Qawa'id Al-Fiqhiyyah</b> · 46 kaidah</span></button></div></div>
+    ${dukungCard()}
     <div class="lcard"><h3>Suara bacaan</h3><div class="ex">
       <div class="ex-row"><b style="min-width:30px">📖</b><span>Murottal Juz 29, Juz 30, dan Al-Fatihah: <b>Muhammad Thaha Al-Junaid</b></span></div>
       <div class="ex-row"><b style="min-width:30px">🤲</b><span>Hisnul Muslim: <b>Hamad Ad-Duraihim</b></span></div>
@@ -1679,6 +1695,7 @@ function renderParent() {
         <div class="dh-act"><button class="sbtn light" data-dhall="${j}">Centang semua</button><button class="sbtn light" data-dhnone="${j}">Kosongkan</button></div>
         ${items.map(d => `<label class="dh-item"><input type="checkbox" data-dh="${d.id}" ${(p.doaHafal || {})[d.id] ? 'checked' : ''}><span><b>${d.e || ''} ${esc(d.judul || '')}${d.kali ? ` · ${d.kali}×` : ''}</b><span class="ar">${d.ar.length > 70 ? d.ar.slice(0, 70) + '…' : d.ar}</span></span></label>`).join('')}</details>`; }).join('')}
   </section>
+  <section class="panel"><h2>Dukung Kebun Ilmu</h2><p class="hint">Kebun Ilmu gratis untuk semua. Bagi yang ingin ikut menyokong pengembangannya, dukungan seikhlasnya bisa disalurkan lewat Lynk.id.</p>${dukungCard(true)}</section>
   <section class="panel"><h2>Pengaturan main</h2>
     <div class="switch"><span>Soal per tantangan</span><div class="seg">${[5, 8, 10].map(n => `<button data-cnt="${n}" aria-pressed="${S.count === n}">${n}</button>`).join('')}</div></div>
     <label class="switch" for="lockLv"><span>Kunci level (anak tidak bisa ganti)</span><input type="checkbox" id="lockLv" ${S.lockLevel ? 'checked' : ''}></label>
