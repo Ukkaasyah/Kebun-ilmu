@@ -506,6 +506,16 @@ details.dh summary span { font-weight: 900; color: var(--ink-2); font-size: 13px
 .dukung small { color: var(--ink-2); font-weight: 700; font-size: 13px; line-height: 1.35; }
 .dukung .dk-go { font-size: 28px; font-weight: 800; color: #B7791F; }
 .dukung.sm { margin-top: 6px; }
+
+/* v8 tombol kembali yang jelas */
+.band-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+button.back { width: auto; height: 44px; padding: 0 18px 0 12px; border-radius: 99px; background: #fff; color: var(--ink); font-family: var(--body); font-size: 17px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 0 rgba(0,0,0,.18); }
+button.back b { font-size: 26px; line-height: 1; margin-top: -3px; }
+.setup-top button.back { background: rgba(255,255,255,.95); }
+.x.quit { width: auto; padding: 0 14px 0 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 15px; height: 42px; border-radius: 99px; border: 2px solid var(--line); }
+.x.quit b { font-size: 16px; }
+.jk-grid button { font-size: 19px; padding: 18px 8px; }
+.pin button.back { background: var(--card); border: 2px solid var(--line); box-shadow: none; }
 </style>
 </head>
 <body>
@@ -1108,7 +1118,7 @@ function renderHome() {
       <span style="display:flex;gap:8px">${fsOK ? `<button class="icon-btn" id="fsBtn" aria-label="Layar penuh">${document.fullscreenElement ? '🗗' : '⛶'}</button>` : ''}<button class="icon-btn" id="aboutBtn" aria-label="Tentang aplikasi">ℹ️</button><button class="icon-btn" id="parentBtn" aria-label="Kontrol orang tua">⚙️</button></span>
     </div>
     <div class="hello">
-      <div><small>Assalamu'alaikum,</small><button class="who" id="whoBtn" aria-label="Ganti anak">${isGirl(p) ? '👧' : '👦'} ${esc(p.name)} ${S.profiles.length > 1 ? '<span class="chev">▾</span>' : ''}</button></div>
+      <div><small>Assalamu'alaikum,</small><button class="who" id="whoBtn" aria-label="Ganti anak">${esc(p.name)} ${S.profiles.length > 1 ? '<span class="chev">▾</span>' : ''}</button></div>
       <div class="cups" aria-label="Jumlah piala">🏆 ${p.cups}</div>
     </div>
   </header>
@@ -1139,7 +1149,7 @@ function renderHome() {
   $('#aboutBtn').onclick = $('#aboutFoot').onclick = () => go({ name: 'about' });
   $('#whoBtn').onclick = () => {
     if (S.profiles.length < 2) { go({ name: 'setup', add: true }); return; }
-    openSheet(`<div class="fb list ok"><div class="fb-t" style="color:var(--ink)">Siapa yang main?</div><div class="plist">${S.profiles.map(x => `<button data-id="${x.id}" aria-current="${x.id === S.cur}"><span>${isGirl(x) ? '👧' : '👦'} ${esc(x.name)}</span><span>🏆 ${x.cups} · Lv ${x.level}</span></button>`).join('')}</div></div>`);
+    openSheet(`<div class="fb list ok"><div class="fb-t" style="color:var(--ink)">Siapa yang main?</div><div class="plist">${S.profiles.map(x => `<button data-id="${x.id}" aria-current="${x.id === S.cur}"><span>${esc(x.name)}</span><span>🏆 ${x.cups} · Lv ${x.level}</span></button>`).join('')}</div></div>`);
     sheet.querySelectorAll('[data-id]').forEach(b => b.onclick = () => { S.cur = b.dataset.id; save(); go({ name: 'home' }); });
     const pl = sheet.querySelector('.plist'); const add = document.createElement('button'); add.className = 'padd'; add.textContent = '+ Tambah anak'; add.onclick = () => go({ name: 'setup', add: true }); pl.appendChild(add);
   };
@@ -1176,8 +1186,8 @@ function renderSetup() {
     <div class="field"><label>Usia</label><div class="age-grid">${[4, 5, 6, 7, 8, 9, 10, 11, 12].map(u => `<button type="button" data-u="${u}" aria-pressed="${v.usia === u}">${u}<small>th</small></button>`).join('')}</div>
       ${v.usia ? `<p class="hint">Level ${levelFromAge(v.usia)} · ${LEVELS[levelFromAge(v.usia) - 1].kelas}</p>` : ''}</div>
     <div class="field"><label>Jenis kelamin</label><div class="jk-grid">
-      <button type="button" data-jk="L" aria-pressed="${v.jk === 'L'}"><span>👦</span>Laki-laki<small class="ar">أَحْسَنْتَ</small></button>
-      <button type="button" data-jk="P" aria-pressed="${v.jk === 'P'}"><span>👧</span>Perempuan<small class="ar">أَحْسَنْتِ</small></button></div></div>
+      <button type="button" data-jk="L" aria-pressed="${v.jk === 'L'}">Laki-laki<small class="ar">أَحْسَنْتَ</small></button>
+      <button type="button" data-jk="P" aria-pressed="${v.jk === 'P'}">Perempuan<small class="ar">أَحْسَنْتِ</small></button></div></div>
     <p class="setup-err" id="sErr" role="alert"></p>
     <button class="btn primary" type="submit">${first ? 'Mulai belajar ›' : 'Simpan'}</button>
   </form>`;
@@ -1202,7 +1212,7 @@ function band(m) {
   if (m.id === 'quran') { const pool = quranPool(); const last = SURAH_BY[pool[pool.length - 1]]; extra = `<span class="chip" style="margin-left:6px">Hafalan: ${pool.length} surat, sampai ${last.latin}</span>`; }
   if (m.id === 'nahwu' && L >= 3) extra = `<span class="chip" style="margin-left:6px">${L === 3 ? 'Materi kelas 4' : L === 4 ? 'Materi kelas 5' : 'Materi kelas 6'}</span>`;
   return `<header class="band ${m.dark ? 'dark' : ''}" style="--c:${m.c}">
-    <div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button>
+    <div class="band-row"><button class="back" id="back"><b aria-hidden="true">‹</b> Kembali</button>
       <div><h1>${m.title}</h1><div class="ar">${m.ar}</div></div></div>
     <span class="chip">Level ${L} · ${LEVELS[L - 1].kelas}</span>${extra}
   </header>`;
@@ -1443,7 +1453,7 @@ function bookCard(id, page, compact) {
     ${compact ? '' : `<div class="lcard"><h3>Langsung ke bagian</h3><div class="toc">${b.toc.map(t => `<button data-book="${id}" data-page="${t[1]}"><span>${esc(t[0])}</span><small>${t[1]}</small></button>`).join('')}</div></div>`}`;
 }
 function renderLibrary() {
-  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1>Perpustakaan</h1><div class="ar">الْمَكْتَبَةُ</div></div></div></header>
+  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back"><b aria-hidden="true">‹</b> Kembali</button><div><h1>Perpustakaan</h1><div class="ar">الْمَكْتَبَةُ</div></div></div></header>
     <div class="learn">${[['bahasa', 'Bahasa Arab & Tajwid', '#2C347A'], ['fikih', 'Fikih', '#1F5135']].map(k => `<h3 class="lib-h" style="--c:${k[2]}">${k[1]}</h3>` + Object.keys(BUKU).filter(id => BUKU[id].kat === k[0]).map(id => bookCard(id, 1, true)).join('')).join('')}<p class="lv-note">Ketuk 📖 lalu pilih bagian dari deretan judul di atas halaman. Buku Saku Santri dan Nahwu juga bisa dibuka dari tab Belajar.</p></div>`;
   $('#back').onclick = () => go({ name: 'home' });
   bindBooks();
@@ -1460,7 +1470,7 @@ function bookStrips(b) {
 }
 function renderBook() {
   const b = BUKU[view.book], pg = view.page || 1;
-  app.innerHTML = `<header class="band slim" style="--c:${b.warna}"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1 style="font-size:22px">${esc(b.judul)}</h1><div class="ar" style="font-size:17px">${b.ar}</div></div></div></header>
+  app.innerHTML = `<header class="band slim" style="--c:${b.warna}"><div class="band-row"><button class="back" id="back"><b aria-hidden="true">‹</b> Kembali</button><div><h1 style="font-size:22px">${esc(b.judul)}</h1><div class="ar" style="font-size:17px">${b.ar}</div></div></div></header>
     <div class="chips sticky">${b.toc.map(t => `<button class="chip-b" data-jump="${t[1]}">${esc(t[0])}</button>`).join('')}</div>
     <div class="pages">${bookStrips(b)}</div>`;
   $('#back').onclick = () => go(view.from && view.from.name !== 'book' ? view.from : { name: 'home' });
@@ -1471,7 +1481,7 @@ function renderBook() {
 
 /* ---------- Tentang ---------- */
 function renderAbout() {
-  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1>Tentang Aplikasi</h1><div class="ar">عَنِ التَّطْبِيقِ</div></div></div></header>
+  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back"><b aria-hidden="true">‹</b> Kembali</button><div><h1>Tentang Aplikasi</h1><div class="ar">عَنِ التَّطْبِيقِ</div></div></div></header>
   <div class="learn">
     <div class="about-hero">
       <div class="ab-logo"><span class="ar">بُسْتَانُ</span><span class="ar">الْعِلْمِ</span></div>
@@ -1564,7 +1574,7 @@ function renderPlay() {
   } else if (q.type === 'tf') ans = `<div class="tf"><button class="tfb yes" data-tf="1"><span>✓</span>Benar</button><button class="tfb nope" data-tf="0"><span>✕</span>Salah</button></div>`;
   else ans = `<div class="pool" id="pool"></div><button class="undo" id="undo">↺ Hapus huruf terakhir</button>`;
   app.innerHTML = `<div class="play">
-    <div class="playbar"><button class="x" id="quit" aria-label="Keluar">✕</button><div class="prog">${segs}</div><div class="pcups">🏆 ${G.cups}</div></div>
+    <div class="playbar"><button class="x quit" id="quit"><b aria-hidden="true">✕</b> Keluar</button><div class="prog">${segs}</div><div class="pcups">🏆 ${G.cups}</div></div>
     <div class="qcard">${sp}<div class="qlabel">${esc(q.label || '')}</div>${prompt}</div>${ans}</div>`;
   $('#quit').onclick = () => go({ name: 'mod', mod: G.mod, tab: 'main' });
   const spb = $('#speakBtn'); if (spb) spb.onclick = () => q.speakAr ? speak(q.speakAr, 'ar-SA') : speak(q.speak, 'id-ID');
@@ -1662,7 +1672,7 @@ function openSheet(html) { sheet.innerHTML = html; sheet.className = 'on'; }
 function renderPin() {
   const b = view.buf;
   app.innerHTML = `<div class="pin">
-    <button class="x" id="back" aria-label="Kembali" style="position:absolute;left:16px;top:calc(16px + env(safe-area-inset-top))">✕</button>
+    <div style="text-align:left;margin:-10px 0 18px"><button class="back pinback" id="back"><b aria-hidden="true">‹</b> Kembali</button></div>
     <h1>Kontrol Orang Tua</h1><p>Masukkan PIN 4 angka${S.pin === '1234' ? ' (PIN awal: 1234, segera ganti)' : ''}.</p>
     <div class="pin-dots ${view.err ? 'err' : ''}">${[0, 1, 2, 3].map(i => `<i class="${i < b.length ? 'f' : ''}"></i>`).join('')}</div>
     <div class="keypad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(k => k === '' ? '<span></span>' : `<button data-k="${k}">${k}</button>`).join('')}</div></div>`;
@@ -1680,16 +1690,16 @@ function quranSelect(x) {
 function renderParent() {
   const p = P();
   const modOpts = MODS.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
-  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back" aria-label="Kembali">‹</button><div><h1>Kontrol Orang Tua</h1><div class="ar">لِلْوَالِدَيْنِ</div></div></div></header>
+  app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back"><b aria-hidden="true">‹</b> Kembali</button><div><h1>Kontrol Orang Tua</h1><div class="ar">لِلْوَالِدَيْنِ</div></div></div></header>
   <div style="height:16px"></div>
   <section class="panel"><h2>Anak</h2><p class="hint">Setiap anak punya level, piala, progres, dan target hafalan Al-Qur'an sendiri.</p>
     ${S.profiles.map(x => `<div class="row" style="display:block"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><input type="text" class="grow" id="nm-${x.id}" value="${esc(x.name)}" aria-label="Nama anak" style="flex:1;min-width:120px">
       <select id="lv-${x.id}" aria-label="Level" style="width:auto">${LEVELS.map(l => `<option value="${l.n}" ${l.n === x.level ? 'selected' : ''}>Lv ${l.n} · ${l.kelas}</option>`).join('')}</select>
       <span style="font-weight:900">🏆 ${x.cups}</span>${S.profiles.length > 1 ? `<button class="sbtn danger" data-del="${x.id}">Hapus</button>` : ''}</div>
-      <div class="parent-q"><span>👤 Usia & jenis kelamin:</span><span style="display:flex;gap:8px;flex-wrap:wrap"><select id="us-${x.id}" aria-label="Usia" style="width:auto"><option value="0">Usia?</option>${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(u => `<option value="${u}" ${+x.usia === u ? 'selected' : ''}>${u} tahun</option>`).join('')}</select><select id="jk-${x.id}" aria-label="Jenis kelamin" style="width:auto"><option value="L" ${!isGirl(x) ? 'selected' : ''}>👦 Laki-laki</option><option value="P" ${isGirl(x) ? 'selected' : ''}>👧 Perempuan</option></select></span></div>
+      <div class="parent-q"><span>Usia & jenis kelamin:</span><span style="display:flex;gap:8px;flex-wrap:wrap"><select id="us-${x.id}" aria-label="Usia" style="width:auto"><option value="0">Usia?</option>${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(u => `<option value="${u}" ${+x.usia === u ? 'selected' : ''}>${u} tahun</option>`).join('')}</select><select id="jk-${x.id}" aria-label="Jenis kelamin" style="width:auto"><option value="L" ${!isGirl(x) ? 'selected' : ''}>Laki-laki</option><option value="P" ${isGirl(x) ? 'selected' : ''}>Perempuan</option></select></span></div>
       <div class="parent-q"><span>📖 Hafalan Al-Qur'an sampai:</span>${quranSelect(x)}</div></div>`).join('')}
     <div class="row" style="display:block"><button class="sbtn" id="addKid">+ Tambah anak</button>
-      <div class="praise-note" style="margin-top:10px"><b style="color:var(--ink)">Pujian saat jawaban benar</b><div><span>👦 Laki-laki</span><span class="ar" dir="rtl">أَحْسَنْتَ · مُمْتَازٌ · بَارَكَ اللَّهُ فِيكَ</span></div><div><span>👧 Perempuan</span><span class="ar" dir="rtl">أَحْسَنْتِ · مُمْتَازَةٌ · بَارَكَ اللَّهُ فِيكِ</span></div></div></div>
+      <div class="praise-note" style="margin-top:10px"><b style="color:var(--ink)">Pujian saat jawaban benar</b><div><span>Laki-laki</span><span class="ar" dir="rtl">أَحْسَنْتَ · مُمْتَازٌ · بَارَكَ اللَّهُ فِيكَ</span></div><div><span>Perempuan</span><span class="ar" dir="rtl">أَحْسَنْتِ · مُمْتَازَةٌ · بَارَكَ اللَّهُ فِيكِ</span></div></div></div>
     <p class="hint" style="margin-top:8px">Urutan hafalan: Al-Fatihah, lalu dari An-Nas mundur sampai Al-Mulk. Contoh: anak kelas 6 yang hafalannya baru sampai Asy-Syams, pilih “Asy-Syams”.</p>
   </section>
   <section class="panel"><h2>Hafalan doa & dzikir</h2><p class="hint">Centang bacaan yang sudah dihafal. Tantangan “Tes Hafalan” di modul Doa & Dzikir hanya akan menanyakan bacaan yang dicentang.</p>
