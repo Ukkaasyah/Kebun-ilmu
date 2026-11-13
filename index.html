@@ -1586,7 +1586,8 @@ function renderAbout() {
     <div class="lcard"><h3>Suara bacaan</h3><div class="ex">
       <div class="ex-row"><b style="min-width:30px">📖</b><span>Murottal Juz 29, Juz 30, dan Al-Fatihah: <b>Muhammad Thaha Al-Junaid</b></span></div>
       <div class="ex-row"><b style="min-width:30px">🤲</b><span>Hisnul Muslim: <b>Hamad Ad-Duraihim</b></span></div>
-      <div class="ex-row"><b style="min-width:30px">🌇</b><span>Dzikir petang: <b>Alaa Aqel</b></span></div></div></div>
+      <div class="ex-row"><b style="min-width:30px">🌇</b><span>Dzikir petang: <b>Alaa Aqel</b></span></div>
+      <div class="ex-row"><b style="min-width:30px">🎙️</b><span>Suara pujian: <b>Ukkaasyah Abdurrahman</b></span></div></div></div>
     <div class="lcard" style="text-align:center"><div class="ar" style="font-size:30px">رَبِّ زِدْنِي عِلْمًا</div><p>Semoga Allah menjadikan aplikasi ini bermanfaat bagi anak-anak kita.</p></div>
   </div>`;
   $('#back').onclick = () => go({ name: 'home' });
@@ -1616,6 +1617,7 @@ function startGame(modId, t) {
   const L = P().level, qs = buildSession(modId, L, t, S.count);
   if (!qs.length) { toast('Belum ada soal untuk modul ini.'); return; }
   G = { mod: modId, L, t, qs, i: 0, res: [], cups: 0, streak: 0, fill: [] };
+  preloadVoices();
   go({ name: 'play' });
 }
 const optLabel = (q, o) => q.kind === 'swatch' ? '' : q.safe ? esc(o) : o;
@@ -1689,8 +1691,20 @@ function drawFill(q) {
   });
 }
 // Pujian dibedakan untuk anak laki-laki (L) dan perempuan (P)
-const PRAISE_L = [['بَارَكَ اللَّهُ فِيكَ', 'Barakallahu fiik!'], ['مُمْتَازٌ', 'Mumtaz! Luar biasa'], ['مَا شَاءَ اللَّهُ', 'MasyaAllah, benar!'], ['أَحْسَنْتَ', 'Ahsanta! Bagus sekali'], ['جَيِّدٌ جِدًّا', 'Jayyid jiddan! Bagus sekali'], ['أَنْتَ ذَكِيٌّ', 'Anta dzakiyy! Pintar sekali']];
-const PRAISE_P = [['بَارَكَ اللَّهُ فِيكِ', 'Barakallahu fiiki!'], ['مُمْتَازَةٌ', 'Mumtazah! Luar biasa'], ['مَا شَاءَ اللَّهُ', 'MasyaAllah, benar!'], ['أَحْسَنْتِ', 'Ahsanti! Bagus sekali'], ['جَيِّدٌ جِدًّا', 'Jayyid jiddan! Bagus sekali'], ['أَنْتِ ذَكِيَّةٌ', 'Anti dzakiyyah! Pintar sekali']];
+// [teks Arab, teks Latin, rekaman suara Ustadz Ukkaasyah]
+const PRAISE_L = [['بَارَكَ اللَّهُ فِيكَ', 'Barakallahu fiik!', 'l-barakallah'], ['مُمْتَازٌ', 'Mumtaz! Luar biasa', 'l-mumtaz'], ['مَا شَاءَ اللَّهُ', 'MasyaAllah, benar!', 'masyaallah'], ['أَحْسَنْتَ', 'Ahsanta! Bagus sekali', 'l-ahsanta'], ['جَيِّدٌ جِدًّا', 'Jayyid jiddan! Bagus sekali', 'jayyid'], ['أَنْتَ ذَكِيٌّ', 'Anta dzakiyy! Pintar sekali', 'l-dzakiyy']];
+const PRAISE_P = [['بَارَكَ اللَّهُ فِيكِ', 'Barakallahu fiiki!', 'p-barakallah'], ['مُمْتَازَةٌ', 'Mumtazah! Luar biasa', 'p-mumtazah'], ['مَا شَاءَ اللَّهُ', 'MasyaAllah, benar!', 'masyaallah'], ['أَحْسَنْتِ', 'Ahsanti! Bagus sekali', 'p-ahsanti'], ['جَيِّدٌ جِدًّا', 'Jayyid jiddan! Bagus sekali', 'jayyid'], ['أَنْتِ ذَكِيَّةٌ', 'Anti dzakiyyah! Pintar sekali', 'p-dzakiyyah']];
+const VOICE = {};
+function playVoice(name, fallbackText) {
+  if (!S.sound) return;
+  try {
+    const au = VOICE[name] || (VOICE[name] = new Audio('audio/puji/' + name + '.mp3'));
+    au.currentTime = 0;
+    const r = au.play();
+    if (r && r.catch) r.catch(() => { if (fallbackText) sayPraise(fallbackText); });
+  } catch (e) { if (fallbackText) sayPraise(fallbackText); }
+}
+function preloadVoices() { [...PRAISE_L, ...PRAISE_P].forEach(p => { if (!VOICE[p[2]]) { const au = new Audio('audio/puji/' + p[2] + '.mp3'); au.preload = 'auto'; VOICE[p[2]] = au; } }); if (!VOICE['coba-lagi']) { VOICE['coba-lagi'] = new Audio('audio/puji/coba-lagi.mp3'); VOICE['coba-lagi'].preload = 'auto'; } }
 const praiseFor = p => isGirl(p) ? PRAISE_P : PRAISE_L;
 const fiik = p => isGirl(p) ? 'Barakallahu fiiki' : 'Barakallahu fiik';
 function confetti() {
@@ -1711,13 +1725,14 @@ function judge(ok) {
   const a = answerText(q);
   if (ok) {
     const streak = G.streak > 0 && G.streak % 3 === 0;
-    const pr = pick(praiseFor(p)); confetti(); sayPraise(pr[0]);
+    const pr = pick(praiseFor(p)); confetti(); playVoice(pr[2], pr[0]);
     openSheet(`<div class="fb ok"><div class="fb-icons"><span>👍</span><span>🏆</span>${streak ? '<span>⭐</span>' : ''}</div>
       <div class="fb-ar">${pr[0]}</div><div class="fb-t">${pr[1]}</div><div class="fb-s">${streak ? G.streak + ' benar berturut-turut! · ' : ''}+1 piala</div>
       ${q.explain ? `<div class="fb-s" style="margin-top:8px">${esc(q.explain)}</div>` : ''}
       <button class="btn primary" id="next">Lanjut ›</button></div>`);
     G.timer = setTimeout(next, q.explain ? 3400 : 2200);
   } else {
+    playVoice('coba-lagi');
     openSheet(`<div class="fb no"><div class="fb-t">Belum tepat</div><div class="fb-s">Tidak apa-apa. Jawaban yang benar:</div>
       <div class="fb-ans ${a.ar ? 'ar' : ''}">${a.html}</div>${q.explain ? `<div class="fb-s" style="margin-top:8px">${esc(q.explain)}</div>` : ''}
       <button class="btn primary" id="next">Lanjut ›</button></div>`);
