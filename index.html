@@ -589,6 +589,8 @@ button.back b { font-size: 26px; line-height: 1; margin-top: -3px; }
 .asal-card .dk-go { color: #2B7BEF; font-size: 28px; font-weight: 800; }
 .akun-link.dark { background: var(--ink); color: #fff; width: 100%; padding: 14px; font-size: 16px; }
 .asal-pilih { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #EAF2FF; border: 2px solid #B9D3FB; border-radius: 16px; padding: 10px 14px; font-size: 15px; }
+.santri-grid button { font-size: 15.5px; padding: 12px 8px; line-height: 1.25; }
+.santri-grid small { font-size: 12.5px; color: var(--ink-2); font-weight: 700; font-family: var(--body); }
 </style>
 </head>
 <body>
@@ -1311,6 +1313,7 @@ document.addEventListener('fullscreenchange', () => { const b = $('#fsBtn'); if 
 function renderSetup() {
   const v = view; v.usia = v.usia || 0; v.jk = v.jk || '';
   const first = !v.add;
+  if (Cloud.in() && v.santri === undefined) v.santri = S.akun.asal === 'pondok';
   app.innerHTML = `<header class="top setup-top">
     ${first ? '' : '<button class="back" id="back" style="margin-bottom:12px"><b aria-hidden="true">‹</b> Kembali</button>'}
     <div class="brand-name">Kebun Ilmu <span class="ar">بُسْتَانُ الْعِلْمِ</span></div>
@@ -1325,12 +1328,16 @@ function renderSetup() {
     <div class="field"><label>Jenis kelamin</label><div class="jk-grid">
       <button type="button" data-jk="L" aria-pressed="${v.jk === 'L'}">Laki-laki<small class="ar">أَحْسَنْتَ</small></button>
       <button type="button" data-jk="P" aria-pressed="${v.jk === 'P'}">Perempuan<small class="ar">أَحْسَنْتِ</small></button></div></div>
-    ${Cloud.in() && S.akun.asal === 'pondok' ? `<div class="field"><label for="sKode">Kode kelas ${first ? '' : 'untuk anak ini '}<span style="font-weight:600;color:var(--ink-2)">(wajib untuk santri Luqmanul Hakim)</span></label><p class="hint" style="margin:0 0 4px">Minta ke wali kelas anak ini. Kakak dan adik yang beda kelas memakai kode yang berbeda.</p><input type="text" id="sKode" maxlength="12" autocapitalize="characters" style="text-transform:uppercase" value="${esc(v.kode || '')}"></div>` : ''}
+    ${Cloud.in() ? `<div class="field"><label>Anak ini termasuk</label><div class="jk-grid santri-grid">
+      <button type="button" data-santri="1" aria-pressed="${!!v.santri}">🕌 Santri Luqmanul Hakim<small>pakai kode kelas</small></button>
+      <button type="button" data-santri="0" aria-pressed="${!v.santri}">🏠 Bukan santri<small>belajar tanpa kode</small></button></div></div>` : ''}
+    ${Cloud.in() && v.santri ? `<div class="field"><label for="sKode">Kode kelas ${first ? '' : 'untuk anak ini '}<span style="font-weight:600;color:var(--ink-2)">(wajib untuk santri Luqmanul Hakim)</span></label><p class="hint" style="margin:0 0 4px">Minta ke wali kelas anak ini. Kakak dan adik yang beda kelas memakai kode yang berbeda.</p><input type="text" id="sKode" maxlength="12" autocapitalize="characters" style="text-transform:uppercase" value="${esc(v.kode || '')}"></div>` : ''}
     <p class="setup-err" id="sErr" role="alert"></p>
     <button class="btn primary" type="submit">${first ? 'Mulai belajar ›' : 'Simpan'}</button>
     ${first && Cloud.in() && (Cloud.staff() || S.akun.viaGuru) ? '<button type="button" class="skip-link" id="skipKid">Lewati, saya wali kelas / pengelola ›</button>' : ''}
   </form>`;
   const keep = () => { v.nama = $('#sNama').value; if ($('#sKode')) v.kode = $('#sKode').value; };
+  app.querySelectorAll('[data-santri]').forEach(b => b.onclick = () => { keep(); v.santri = b.dataset.santri === '1'; v.kodeOk = false; render(); });
   if ($('#skipKid')) $('#skipKid').onclick = () => go(Cloud.staff() ? { name: 'pantau' } : { name: 'home' });
   if ($('#toLogin')) $('#toLogin').onclick = () => { keep(); go({ name: 'akun', mode: 'masuk', from: { name: 'setup' } }); };
   app.querySelectorAll('[data-u]').forEach(b => b.onclick = () => { keep(); v.usia = +b.dataset.u; render(); });
@@ -1339,7 +1346,7 @@ function renderSetup() {
   $('#setupF').onsubmit = e => {
     e.preventDefault(); keep();
     const nama = (v.nama || '').trim();
-    const pondok = Cloud.in() && S.akun.asal === 'pondok';
+    const pondok = Cloud.in() && !!v.santri;
     const err = !nama ? 'Tulis nama anak dulu.' : !v.usia ? 'Pilih usia anak.' : !v.jk ? 'Pilih laki-laki atau perempuan.' : pondok && !(v.kode || '').trim() ? 'Masukkan kode kelas dari wali kelas.' : '';
     if (err) { $('#sErr').textContent = err; return; }
     if (pondok && !v.kodeOk) {
@@ -1357,7 +1364,7 @@ function renderSetup() {
     if (Cloud.in()) {
       const btn = $('#setupF button[type=submit]'); btn.disabled = true; btn.textContent = 'Menyimpan…';
       (async () => {
-        try { await Cloud.createKid(p); if (kode) { const k = await Cloud.gabung(p, kode); toast(nama + ' masuk ' + k.nama); } else toast('Ahlan wa sahlan, ' + nama + '!'); go({ name: 'home' }); }
+        try { await Cloud.createKid(p); if (kode && pondok) { const k = await Cloud.gabung(p, kode); toast(nama + ' masuk ' + k.nama); if (S.akun.asal !== 'pondok') Cloud.setAsal('pondok'); } else toast('Ahlan wa sahlan, ' + nama + '!'); go({ name: 'home' }); }
         catch (err) { $('#sErr').textContent = errText(err) + (p.cid ? ' Anak sudah tersimpan; kode kelas bisa dimasukkan lagi di Kontrol Orang Tua.' : ''); btn.disabled = false; btn.textContent = 'Simpan'; if (p.cid) setTimeout(() => go({ name: 'home' }), 2500); }
       })();
       return;
@@ -2225,9 +2232,9 @@ function cloudParentHtml() {
   return `<section class="panel"><h2>Akun & kelas</h2>
     <div class="row" style="display:block"><b>${esc(S.akun.nama || S.akun.email)}</b>${!Cloud.staff() ? ` <span class="tag">${S.akun.asal === 'pondok' ? 'Santri Luqmanul Hakim' : 'Umum'}</span>` : ''}<div class="hint" style="margin:2px 0 0">${esc(S.akun.email || '')} · ${peran}${Cloud.status && Cloud.status !== 'ok' ? ' · <span style="color:#C62828">' + esc(Cloud.status) + '</span>' : (S.antre && S.antre.length ? ' · menunggu sinyal untuk mengirim ' + S.antre.length + ' hasil' : ' · tersimpan online')}</div></div>
     ${S.profiles.filter(p => !Cloud.isPlaceholder(p)).map(p => `<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>${esc(p.name)}</b>
-      ${p.kelas ? `<span class="tag">${esc(p.kelas.nama)}</span>` : `<span class="hint" style="margin:0">${S.akun.asal === 'pondok' ? 'Belum masuk kelas' : 'Pengguna umum'}</span>`}</div>
+      ${p.kelas ? `<span class="tag">${esc(p.kelas.nama)}</span>` : '<span class="hint" style="margin:0">Tanpa kelas (umum)</span>'}</div>
       ${S.akun.asal === 'pondok' || p.kelas ? `<div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="kd-${p.id}" placeholder="${p.kelas ? 'Ganti dengan kode kelas lain' : 'Kode kelas dari wali kelas'}" autocapitalize="characters" style="flex:1;text-transform:uppercase"><button class="sbtn" data-kode="${p.id}">${p.kelas ? 'Ganti' : 'Gabung'}</button></div>` : ''}</div>`).join('')}
-    ${!Cloud.staff() ? `<div class="row" style="border:0;padding-bottom:0"><span class="hint" style="margin:0">${S.akun.asal === 'pondok' ? 'Bukan santri Luqmanul Hakim?' : 'Ternyata santri Pondok Pesantren Luqmanul Hakim?'}</span><button class="linkbtn" id="ubahAsal" style="width:auto;padding:0">${S.akun.asal === 'pondok' ? 'Ubah ke Umum' : 'Ubah ke Santri'}</button></div>` : ''}
+    ${!Cloud.staff() ? '<p class="hint" style="margin:8px 0 0">Setiap anak bisa santri (pakai kode kelasnya sendiri) atau umum (tanpa kode).</p>' : ''}
     <div class="row" style="border:0;gap:8px;flex-wrap:wrap">${Cloud.staff() ? '<button class="sbtn" id="toPantau">📋 Pantau kelas</button>' : ''}<button class="sbtn light" id="syncNow">↻ Sinkronkan</button><button class="sbtn danger" id="logout">Keluar akun</button></div></section>`;
 }
 function bindCloudParent() {
