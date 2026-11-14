@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salin SQL Kebun Ilmu</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#1B2154;color:#fff;padding:24px 18px}
+h1{font-size:24px;margin:0 0 6px}p{opacity:.85;line-height:1.5;margin:0 0 16px}
+button{display:block;width:100%;padding:18px;border:0;border-radius:18px;background:#FFB81F;color:#1B2154;font-size:20px;font-weight:800}
+#st{margin-top:14px;font-weight:700;min-height:1.4em}
+textarea{width:100%;height:45vh;margin-top:16px;border-radius:14px;border:0;padding:10px;font:12px ui-monospace,Menlo,monospace;box-sizing:border-box}
+ol{line-height:1.6;padding-left:20px;opacity:.9}
+</style></head><body>
+<h1>Salin SQL Kebun Ilmu</h1>
+<p>Ketuk tombol kuning untuk menyalin <b>seluruh</b> isi SQL, lalu tempel di Supabase SQL Editor.</p>
+<button id="b">📋 Salin semua SQL</button>
+<div id="st"></div>
+<ol><li>Di Supabase SQL Editor, hapus dulu isi editor yang lama.</li><li>Ketuk lama di editor → <b>Tempel</b>.</li><li>Ketuk sekali di akhir teks (jangan ada teks yang tersorot), lalu <b>Run</b>.</li></ol>
+<textarea id="t" readonly>Memuat…</textarea>
+<script>
+const t=document.getElementById('t'),st=document.getElementById('st');
+fetch('kebun-ilmu.sql',{cache:'no-store'}).then(r=>r.text()).then(s=>{t.value=s;st.textContent='Siap disalin ('+s.split('\n').length+' baris).';});
+document.getElementById('b').onclick=async()=>{
+  try{await navigator.clipboard.writeText(t.value);st.textContent='✅ Tersalin '+t.value.split('\n').length+' baris. Sekarang tempel di Supabase.';}
+  catch(e){t.focus();t.select();t.setSelectionRange(0,t.value.length);try{document.execCommand('copy');st.textContent='✅ Tersalin. Sekarang tempel di Supabase.';}catch(e2){st.textContent='Tekan lama di kotak teks → Pilih Semua → Salin.';}}
+};
+</script></body></html>
