@@ -1219,6 +1219,8 @@ const installSeen = () => { try { return localStorage.getItem('kebun-ilmu-instal
 const showInstallFirst = CAN_INSTALL_PAGE && !IS_STANDALONE && !installSeen();
 
 let view = { name: showInstallFirst ? 'install' : FIRST_RUN ? 'setup' : 'home' };
+// Pengelola / wali kelas tanpa anak langsung masuk ke Pantau kelas
+if (view.name === 'home' && S.akun && ['guru', 'pemilik'].includes(S.akun.peran) && S.profiles.every(p => p.name === 'Ananda' && !p.usia && !p.cups)) view = { name: 'pantau' };
 function go(v) { stopClip(); view = v; sheet.className = ''; sheet.innerHTML = ''; render(); window.scrollTo(0, 0); }
 function glyphHtml(m) {
   if (m.glyph === 'dots') return `<div class="glyph"><div class="dots4"><i style="background:#E53935"></i><i style="background:#FDD835"></i><i style="background:#1E6FE0"></i><i style="background:#8E24AA"></i></div></div>`;
@@ -1849,7 +1851,7 @@ function renderParent() {
   <section class="panel"><h2>Anak</h2><p class="hint">Setiap anak punya level, piala, progres, dan target hafalan Al-Qur'an sendiri.</p>
     ${S.profiles.map(x => `<div class="row" style="display:block"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><input type="text" class="grow" id="nm-${x.id}" value="${esc(x.name)}" aria-label="Nama anak" style="flex:1;min-width:120px">
       <select id="lv-${x.id}" aria-label="Level" style="width:auto">${LEVELS.map(l => `<option value="${l.n}" ${l.n === x.level ? 'selected' : ''}>Lv ${l.n} · ${l.kelas}</option>`).join('')}</select>
-      <span style="font-weight:900">🏆 ${x.cups}</span>${S.profiles.length > 1 ? `<button class="sbtn danger" data-del="${x.id}">Hapus</button>` : ''}</div>
+      <span style="font-weight:900">🏆 ${x.cups}</span>${(S.profiles.length > 1 || Cloud.staff()) && !Cloud.isPlaceholder(x) ? `<button class="sbtn danger" data-del="${x.id}">Hapus</button>` : ''}</div>
       <div class="parent-q"><span>Usia & jenis kelamin:</span><span style="display:flex;gap:8px;flex-wrap:wrap"><select id="us-${x.id}" aria-label="Usia" style="width:auto"><option value="0">Usia?</option>${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(u => `<option value="${u}" ${+x.usia === u ? 'selected' : ''}>${u} tahun</option>`).join('')}</select><select id="jk-${x.id}" aria-label="Jenis kelamin" style="width:auto"><option value="L" ${!isGirl(x) ? 'selected' : ''}>Laki-laki</option><option value="P" ${isGirl(x) ? 'selected' : ''}>Perempuan</option></select></span></div>
       <div class="parent-q"><span>📖 Hafalan Al-Qur'an sampai:</span>${quranSelect(x)}</div></div>`).join('')}
     <div class="row" style="display:block"><button class="sbtn" id="addKid">+ Tambah anak</button>
@@ -1909,9 +1911,14 @@ function renderParent() {
     $('#us-' + x.id).onchange = e => { x.usia = +e.target.value; save(); toast('Usia disimpan'); };
     $('#jk-' + x.id).onchange = e => { x.jk = e.target.value; save(); render(); toast('Jenis kelamin disimpan'); };
   });
-  app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
-    if (b.dataset.sure) { S.profiles = S.profiles.filter(x => x.id !== b.dataset.del); if (!S.profiles.find(x => x.id === S.cur)) S.cur = S.profiles[0].id; save(); render(); }
-    else { b.dataset.sure = 1; b.textContent = 'Yakin hapus?'; }
+  app.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!b.dataset.sure) { b.dataset.sure = 1; b.textContent = 'Yakin hapus?'; return; }
+    const x = S.profiles.find(p => p.id === b.dataset.del); if (!x) return;
+    if (x.cid && Cloud.in()) { b.disabled = true; b.textContent = 'Menghapus…'; try { await Cloud.http('DELETE', '/rest/v1/anak?id=eq.' + x.cid, undefined, { prefer: 'return=minimal' }); } catch (e) { toast(errText(e)); b.disabled = false; b.textContent = 'Hapus'; return; } }
+    S.profiles = S.profiles.filter(p => p.id !== x.id);
+    if (!S.profiles.length) S.profiles = [freshProfile('Ananda')];
+    if (!S.profiles.find(p => p.id === S.cur)) S.cur = S.profiles[0].id;
+    save(); toast(x.name + ' dihapus'); render();
   });
   $('#addKid').onclick = () => go({ name: 'setup', add: true });
   app.querySelectorAll('[data-cnt]').forEach(b => b.onclick = () => { S.count = +b.dataset.cnt; save(); render(); });
