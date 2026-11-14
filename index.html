@@ -1325,7 +1325,7 @@ function renderSetup() {
     <div class="field"><label>Jenis kelamin</label><div class="jk-grid">
       <button type="button" data-jk="L" aria-pressed="${v.jk === 'L'}">Laki-laki<small class="ar">أَحْسَنْتَ</small></button>
       <button type="button" data-jk="P" aria-pressed="${v.jk === 'P'}">Perempuan<small class="ar">أَحْسَنْتِ</small></button></div></div>
-    ${Cloud.in() && S.akun.asal === 'pondok' ? `<div class="field"><label for="sKode">Kode kelas dari wali kelas <span style="font-weight:600;color:var(--ink-2)">(wajib untuk santri Luqmanul Hakim)</span></label><input type="text" id="sKode" maxlength="12" autocapitalize="characters" style="text-transform:uppercase" value="${esc(v.kode || '')}"></div>` : ''}
+    ${Cloud.in() && S.akun.asal === 'pondok' ? `<div class="field"><label for="sKode">Kode kelas ${first ? '' : 'untuk anak ini '}<span style="font-weight:600;color:var(--ink-2)">(wajib untuk santri Luqmanul Hakim)</span></label><p class="hint" style="margin:0 0 4px">Minta ke wali kelas anak ini. Kakak dan adik yang beda kelas memakai kode yang berbeda.</p><input type="text" id="sKode" maxlength="12" autocapitalize="characters" style="text-transform:uppercase" value="${esc(v.kode || '')}"></div>` : ''}
     <p class="setup-err" id="sErr" role="alert"></p>
     <button class="btn primary" type="submit">${first ? 'Mulai belajar ›' : 'Simpan'}</button>
     ${first && Cloud.in() && (Cloud.staff() || S.akun.viaGuru) ? '<button type="button" class="skip-link" id="skipKid">Lewati, saya wali kelas / pengelola ›</button>' : ''}
