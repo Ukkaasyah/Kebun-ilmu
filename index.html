@@ -578,6 +578,17 @@ button.back b { font-size: 26px; line-height: 1; margin-top: -3px; }
 #kForm select { min-width: 110px; flex: 1; }
 #kForm input { min-width: 150px; }
 .skip-link { display: block; margin: 4px auto 0; background: none; color: var(--ink-2); font-weight: 800; font-size: 14px; padding: 8px; }
+
+/* v11 selamat datang & jenis pengguna */
+.mulai-q { font-family: var(--display); font-size: 20px; margin: 4px 2px 0; }
+.asal-card { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; background: var(--card); border: 2px solid var(--line); border-radius: 22px; padding: 16px; color: var(--ink); }
+.asal-card .ac-ic { font-size: 34px; }
+.asal-card .ac-t { flex: 1; display: grid; gap: 3px; }
+.asal-card b { font-family: var(--display); font-size: 18.5px; line-height: 1.2; }
+.asal-card small { color: var(--ink-2); font-weight: 700; font-size: 13.5px; line-height: 1.35; }
+.asal-card .dk-go { color: #2B7BEF; font-size: 28px; font-weight: 800; }
+.akun-link.dark { background: var(--ink); color: #fff; width: 100%; padding: 14px; font-size: 16px; }
+.asal-pilih { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #EAF2FF; border: 2px solid #B9D3FB; border-radius: 16px; padding: 10px 14px; font-size: 15px; }
 </style>
 </head>
 <body>
@@ -1212,13 +1223,14 @@ function renderInstall() {
   </div>`;
   if ($('#back')) $('#back').onclick = () => go({ name: 'home' });
   if ($('#doInstall')) $('#doInstall').onclick = async () => { try { installEvt.prompt(); const r = await installEvt.userChoice; installEvt = null; if (r && r.outcome === 'accepted') toast('Sedang dipasang…'); render(); } catch (e) { render(); } };
-  $('#skipInstall').onclick = () => { try { localStorage.setItem('kebun-ilmu-install-seen', '1'); } catch (e) {} go({ name: view.fromHome ? 'home' : (needsSetup() ? 'setup' : 'home') }); };
+  $('#skipInstall').onclick = () => { try { localStorage.setItem('kebun-ilmu-install-seen', '1'); } catch (e) {} go({ name: view.fromHome ? 'home' : (needsSetup() ? (CLOUD_ON && !(S.akun && S.akun.at) ? 'mulai' : 'setup') : 'home') }); };
 }
+const CLOUD_ON = !!(window.CLOUD && window.CLOUD.url && window.CLOUD.key);
 const needsSetup = () => S.profiles.length === 1 && S.profiles[0].name === 'Ananda' && !S.profiles[0].usia;
 const installSeen = () => { try { return localStorage.getItem('kebun-ilmu-install-seen') === '1'; } catch (e) { return true; } };
 const showInstallFirst = CAN_INSTALL_PAGE && !IS_STANDALONE && !installSeen();
 
-let view = { name: showInstallFirst ? 'install' : FIRST_RUN ? 'setup' : 'home' };
+let view = { name: showInstallFirst ? 'install' : FIRST_RUN ? (CLOUD_ON ? 'mulai' : 'setup') : 'home' };
 // Pengelola / wali kelas tanpa anak langsung masuk ke Pantau kelas
 if (view.name === 'home' && S.akun && ['guru', 'pemilik'].includes(S.akun.peran) && S.profiles.every(p => p.name === 'Ananda' && !p.usia && !p.cups)) view = { name: 'pantau' };
 function go(v) { stopClip(); view = v; sheet.className = ''; sheet.innerHTML = ''; render(); window.scrollTo(0, 0); }
@@ -1300,7 +1312,7 @@ function renderSetup() {
   const v = view; v.usia = v.usia || 0; v.jk = v.jk || '';
   const first = !v.add;
   app.innerHTML = `<header class="top setup-top">
-    ${first ? '' : '<button class="back" id="back" aria-label="Kembali" style="margin-bottom:10px">‹</button>'}
+    ${first ? '' : '<button class="back" id="back" style="margin-bottom:12px"><b aria-hidden="true">‹</b> Kembali</button>'}
     <div class="brand-name">Kebun Ilmu <span class="ar">بُسْتَانُ الْعِلْمِ</span></div>
     <h1 class="setup-h">${first ? 'Assalamu\'alaikum! Kenalan dulu, yuk' : 'Tambah anak'}</h1>
     <p class="setup-p">Isi nama, usia, dan jenis kelamin anak. Level soal disesuaikan dari usianya, dan bisa diubah kapan saja.</p>
@@ -1313,10 +1325,10 @@ function renderSetup() {
     <div class="field"><label>Jenis kelamin</label><div class="jk-grid">
       <button type="button" data-jk="L" aria-pressed="${v.jk === 'L'}">Laki-laki<small class="ar">أَحْسَنْتَ</small></button>
       <button type="button" data-jk="P" aria-pressed="${v.jk === 'P'}">Perempuan<small class="ar">أَحْسَنْتِ</small></button></div></div>
-    ${Cloud.in() ? `<div class="field"><label for="sKode">Kode kelas dari wali kelas <span style="font-weight:600;color:var(--ink-2)">(boleh dikosongkan)</span></label><input type="text" id="sKode" maxlength="12" autocapitalize="characters" style="text-transform:uppercase" value="${esc(v.kode || '')}"></div>` : ''}
+    ${Cloud.in() && S.akun.asal === 'pondok' ? `<div class="field"><label for="sKode">Kode kelas dari wali kelas <span style="font-weight:600;color:var(--ink-2)">(wajib untuk santri Luqmanul Hakim)</span></label><input type="text" id="sKode" maxlength="12" autocapitalize="characters" style="text-transform:uppercase" value="${esc(v.kode || '')}"></div>` : ''}
     <p class="setup-err" id="sErr" role="alert"></p>
     <button class="btn primary" type="submit">${first ? 'Mulai belajar ›' : 'Simpan'}</button>
-    ${first && Cloud.in() ? '<button type="button" class="skip-link" id="skipKid">Lewati, saya wali kelas / pengelola ›</button>' : ''}
+    ${first && Cloud.in() && (Cloud.staff() || S.akun.viaGuru) ? '<button type="button" class="skip-link" id="skipKid">Lewati, saya wali kelas / pengelola ›</button>' : ''}
   </form>`;
   const keep = () => { v.nama = $('#sNama').value; if ($('#sKode')) v.kode = $('#sKode').value; };
   if ($('#skipKid')) $('#skipKid').onclick = () => go(Cloud.staff() ? { name: 'pantau' } : { name: 'home' });
@@ -1327,8 +1339,17 @@ function renderSetup() {
   $('#setupF').onsubmit = e => {
     e.preventDefault(); keep();
     const nama = (v.nama || '').trim();
-    const err = !nama ? 'Tulis nama anak dulu.' : !v.usia ? 'Pilih usia anak.' : !v.jk ? 'Pilih laki-laki atau perempuan.' : '';
+    const pondok = Cloud.in() && S.akun.asal === 'pondok';
+    const err = !nama ? 'Tulis nama anak dulu.' : !v.usia ? 'Pilih usia anak.' : !v.jk ? 'Pilih laki-laki atau perempuan.' : pondok && !(v.kode || '').trim() ? 'Masukkan kode kelas dari wali kelas.' : '';
     if (err) { $('#sErr').textContent = err; return; }
+    if (pondok && !v.kodeOk) {
+      const btn0 = $('#setupF button[type=submit]'); btn0.disabled = true; btn0.textContent = 'Memeriksa kode…';
+      Cloud.rpc('cek_kode', { p_kode: v.kode.trim() }).then(k => {
+        if (!k) { $('#sErr').textContent = 'Kode kelas tidak ditemukan. Periksa lagi ke wali kelas.'; btn0.disabled = false; btn0.textContent = 'Simpan'; return; }
+        v.kodeOk = true; $('#setupF').requestSubmit ? $('#setupF').requestSubmit() : $('#setupF').onsubmit(e);
+      }).catch(er => { if (/could not find|does not exist|404|PGRST202/i.test(er.message)) { v.kodeOk = true; $('#setupF').onsubmit(e); } else { $('#sErr').textContent = errText(er); btn0.disabled = false; btn0.textContent = 'Simpan'; } });
+      return;
+    }
     const p = freshProfile(nama, v.usia, v.jk);
     if (first) { S.profiles = S.profiles.filter(x => x.cid && !Cloud.isPlaceholder(x)); S.profiles.push(p); } else S.profiles.push(p);
     S.cur = p.id; save(false);
@@ -1946,6 +1967,7 @@ function render() {
   else if (view.name === 'setup') renderSetup();
   else if (view.name === 'install') renderInstall();
   else if (view.name === 'akun') renderAkun();
+  else if (view.name === 'mulai') renderMulai();
   else if (view.name === 'pantau') renderPantau();
   else if (view.name === 'kelasku') renderKelasku();
   else if (view.name === 'kelola') renderKelola();
@@ -2011,10 +2033,10 @@ const Cloud = {
     S.akun = Object.assign(S.akun || {}, { at: js.access_token, rt: js.refresh_token, exp: Math.floor(Date.now() / 1000) + (js.expires_in || 3600), uid: js.user.id, email: js.user.email });
     save(false);
   },
-  async daftar(nama, email, pass) {
-    const js = await Cloud.http('POST', '/auth/v1/signup', { email, password: pass, data: { nama } }, { noAuth: true });
+  async daftar(nama, email, pass, asal) {
+    const js = await Cloud.http('POST', '/auth/v1/signup', { email, password: pass, data: { nama, asal: asal || 'umum' } }, { noAuth: true });
     if (!js || !js.access_token) throw new Error('Pendaftaran berhasil. Buka email Anda untuk konfirmasi, lalu masuk.');
-    Cloud.setSess(js); await Cloud.afterLogin();
+    Cloud.setSess(js); S.akun.asal = asal || 'umum'; await Cloud.afterLogin();
   },
   async masuk(email, pass) {
     const js = await Cloud.http('POST', '/auth/v1/token?grant_type=password', { email, password: pass }, { noAuth: true });
@@ -2029,9 +2051,10 @@ const Cloud = {
     S.akun = null; S.profiles.forEach(p => { delete p.cid; delete p.kelas; delete p._h; }); S.antre = []; save(false);
   },
   async afterLogin() {
-    const rows = await Cloud.http('GET', '/rest/v1/profil?select=id,email,nama,peran&id=eq.' + S.akun.uid);
+    const rows = await Cloud.http('GET', '/rest/v1/profil?select=*&id=eq.' + S.akun.uid);
     const me = rows && rows[0];
-    if (me) Object.assign(S.akun, { nama: me.nama, peran: me.peran, email: me.email });
+    if (me) Object.assign(S.akun, { nama: me.nama, peran: me.peran, email: me.email, asal: me.asal || S.akun.asal || 'umum' });
+    if (['guru', 'pemilik'].includes(S.akun.peran)) S.akun.asal = 'pondok';
     save(false);
     await Cloud.pull();
   },
@@ -2106,8 +2129,29 @@ const Cloud = {
     return p.kelas;
   },
   rpc: (fn, args) => Cloud.http('POST', '/rest/v1/rpc/' + fn, args || {}),
+  async setAsal(asal) { S.akun.asal = asal; save(false); try { await Cloud.http('PATCH', '/rest/v1/profil?id=eq.' + S.akun.uid, { asal }, { prefer: 'return=minimal' }); } catch (e) {} },
 };
 window.addEventListener('online', () => Cloud.flush());
+
+/* ---------- Tampilan: Selamat datang (pilih jenis pengguna) ---------- */
+const ASAL_NAMA = { pondok: 'Santri Pondok Pesantren Luqmanul Hakim', umum: 'Umum (bukan santri Luqmanul Hakim)' };
+function renderMulai() {
+  app.innerHTML = `<header class="top setup-top">
+    <div class="inst-hero"><img src="icons/icon-192.png" alt="" width="64" height="64" onerror="this.style.display='none'"><div><div class="brand-name">Kebun Ilmu</div><div class="ar" style="font-size:20px;opacity:.85">بُسْتَانُ الْعِلْمِ</div></div></div>
+    <h1 class="setup-h">Assalamu'alaikum, selamat datang!</h1>
+    <p class="setup-p">Belajar Al-Qur'an, doa, membaca, berhitung, dan bahasa Arab untuk anak TK sampai kelas 6. Daftar dulu dengan email orang tua supaya progres anak tersimpan aman.</p>
+  </header>
+  <div class="setup">
+    <h2 class="mulai-q">Anak Anda termasuk…</h2>
+    <button class="asal-card" data-asal="pondok"><span class="ac-ic">🕌</span><span class="ac-t"><b>Santri Pondok Pesantren Luqmanul Hakim</b><small>Masuk ke kelas dengan kode dari wali kelas, supaya progres bisa dipantau ustadz.</small></span><span class="dk-go">›</span></button>
+    <button class="asal-card" data-asal="umum"><span class="ac-ic">🏠</span><span class="ac-t"><b>Umum</b><small>Bukan santri Luqmanul Hakim. Langsung belajar tanpa kode kelas.</small></span><span class="dk-go">›</span></button>
+    <button class="akun-link dark" id="mMasuk">Sudah punya akun? <b>Masuk</b></button>
+    <button class="skip-link" id="mGuru">Saya ustadz / wali kelas ›</button>
+  </div>`;
+  app.querySelectorAll('[data-asal]').forEach(b => b.onclick = () => go({ name: 'akun', mode: 'daftar', asal: b.dataset.asal, from: { name: 'mulai' } }));
+  $('#mMasuk').onclick = () => go({ name: 'akun', mode: 'masuk', from: { name: 'mulai' } });
+  $('#mGuru').onclick = () => go({ name: 'akun', mode: 'masuk', guru: true, asal: 'pondok', from: { name: 'mulai' } });
+}
 
 /* ---------- Tampilan: Akun (masuk / daftar / lupa) ---------- */
 function renderAkun() {
@@ -2117,8 +2161,10 @@ function renderAkun() {
   app.innerHTML = `<header class="band" style="--c:#1B2154"><div class="band-row"><button class="back" id="back"><b aria-hidden="true">‹</b> Kembali</button><div><h1>${t}</h1><div class="ar">الْحِسَابُ</div></div></div></header>
   <div class="setup">
     ${['masuk', 'daftar'].includes(v.mode) ? `<div class="seg wide" role="tablist"><button data-mode="masuk" aria-pressed="${v.mode === 'masuk'}">Masuk</button><button data-mode="daftar" aria-pressed="${v.mode === 'daftar'}">Daftar baru</button></div>` : ''}
-    ${v.mode === 'daftar' ? '<p class="hint">Satu akun untuk satu keluarga. Setelah daftar, tambahkan anak-anak dan masukkan kode kelas dari wali kelas. Wali kelas yang diundang juga mendaftar di sini dengan email undangannya.</p>' : ''}
-    ${v.mode === 'masuk' ? '<p class="hint">Masuk supaya progres anak tersimpan online dan bisa dipantau wali kelas. Untuk wali kelas dan pengelola, masuk di sini juga.</p>' : ''}
+    ${v.mode === 'daftar' && !v.guru ? `<div class="asal-pilih"><span>${v.asal === 'pondok' ? '🕌' : '🏠'} <b>${ASAL_NAMA[v.asal || 'umum']}</b></span><button type="button" class="linkbtn" id="gantiAsal" style="width:auto;padding:0">Ubah</button></div>
+      <p class="hint">Satu akun untuk satu keluarga. ${v.asal === 'pondok' ? 'Setelah daftar, tambahkan anak dan masukkan <b>kode kelas</b> dari wali kelas.' : 'Setelah daftar, tambahkan anak dan langsung belajar.'}</p>` : ''}
+    ${v.guru ? '<p class="hint">Untuk ustadz/wali kelas: gunakan <b>email yang didaftarkan pengelola</b>. Belum punya akun? Pilih <b>Daftar baru</b> dengan email itu.</p>' : ''}
+    ${v.mode === 'masuk' && !v.guru ? '<p class="hint">Masuk dengan email yang sudah didaftarkan. Progres anak akan dimuat dari akun.</p>' : ''}
     <form id="akunF" autocomplete="on">
       ${v.mode === 'daftar' ? '<div class="field"><label for="aNama">Nama Anda</label><input type="text" id="aNama" autocomplete="name" placeholder="mis. Abu Abdullah" required></div>' : ''}
       ${v.mode !== 'baru' ? '<div class="field"><label for="aEmail">Email</label><input type="email" id="aEmail" autocomplete="email" inputmode="email" placeholder="nama@gmail.com" required></div>' : ''}
@@ -2131,6 +2177,7 @@ function renderAkun() {
   </div>`;
   $('#back').onclick = () => go(back);
   app.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { view.mode = b.dataset.mode; render(); });
+  if ($('#gantiAsal')) $('#gantiAsal').onclick = () => go({ name: 'mulai' });
   if ($('#toLupa')) $('#toLupa').onclick = () => { view.mode = 'lupa'; render(); };
   if ($('#toMasuk')) $('#toMasuk').onclick = () => { view.mode = 'masuk'; render(); };
   $('#akunF').onsubmit = async e => {
@@ -2139,11 +2186,13 @@ function renderAkun() {
     try {
       const email = $('#aEmail') ? $('#aEmail').value.trim().toLowerCase() : '', pass = $('#aPass') ? $('#aPass').value : '';
       if (v.mode === 'masuk') { await Cloud.masuk(email, pass); toast('Ahlan, ' + (S.akun.nama || 'selamat datang') + '!'); }
-      else if (v.mode === 'daftar') { await Cloud.daftar($('#aNama').value.trim(), email, pass); toast('Akun dibuat. Barakallahu fiik!'); }
+      else if (v.mode === 'daftar') { await Cloud.daftar($('#aNama').value.trim(), email, pass, v.guru ? 'pondok' : (v.asal || 'umum')); toast('Akun dibuat. Barakallahu fiik!'); }
       else if (v.mode === 'lupa') { await Cloud.lupa(email); er.style.color = 'var(--ink)'; er.textContent = 'Tautan untuk mengatur ulang kata sandi sudah dikirim ke email Anda.'; btn.disabled = false; btn.textContent = old; return; }
       else if (v.mode === 'baru') { await Cloud.gantiSandi(pass); toast('Kata sandi baru tersimpan'); }
       const needKid = S.profiles.length === 1 && Cloud.isPlaceholder(S.profiles[0]);
-      go(Cloud.staff() ? { name: 'pantau' } : needKid ? { name: 'setup' } : back.name === 'setup' ? { name: 'home' } : back);
+      if (v.guru) { S.akun.viaGuru = true; save(false); }
+      if (v.guru && !Cloud.staff()) { toast('Email ini belum terdaftar sebagai wali kelas. Hubungi pengelola.'); }
+      go(Cloud.staff() && needKid ? { name: 'pantau' } : needKid ? { name: 'setup' } : ['setup', 'mulai'].includes(back.name) ? { name: 'home' } : back);
     } catch (err) { er.style.color = ''; er.textContent = errText(err); btn.disabled = false; btn.textContent = old; }
   };
 }
@@ -2174,10 +2223,11 @@ function cloudParentHtml() {
     <div class="row" style="border:0;gap:8px;flex-wrap:wrap"><button class="sbtn" data-akun="masuk">Masuk</button><button class="sbtn light" data-akun="daftar">Daftar akun baru</button></div></section>`;
   const peran = { pemilik: 'Pengelola', guru: 'Wali kelas', ortu: 'Orang tua' }[S.akun.peran] || 'Orang tua';
   return `<section class="panel"><h2>Akun & kelas</h2>
-    <div class="row" style="display:block"><b>${esc(S.akun.nama || S.akun.email)}</b><div class="hint" style="margin:2px 0 0">${esc(S.akun.email || '')} · ${peran}${Cloud.status && Cloud.status !== 'ok' ? ' · <span style="color:#C62828">' + esc(Cloud.status) + '</span>' : (S.antre && S.antre.length ? ' · menunggu sinyal untuk mengirim ' + S.antre.length + ' hasil' : ' · tersimpan online')}</div></div>
+    <div class="row" style="display:block"><b>${esc(S.akun.nama || S.akun.email)}</b>${!Cloud.staff() ? ` <span class="tag">${S.akun.asal === 'pondok' ? 'Santri Luqmanul Hakim' : 'Umum'}</span>` : ''}<div class="hint" style="margin:2px 0 0">${esc(S.akun.email || '')} · ${peran}${Cloud.status && Cloud.status !== 'ok' ? ' · <span style="color:#C62828">' + esc(Cloud.status) + '</span>' : (S.antre && S.antre.length ? ' · menunggu sinyal untuk mengirim ' + S.antre.length + ' hasil' : ' · tersimpan online')}</div></div>
     ${S.profiles.filter(p => !Cloud.isPlaceholder(p)).map(p => `<div class="row" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>${esc(p.name)}</b>
-      ${p.kelas ? `<span class="tag">${esc(p.kelas.nama)}</span>` : '<span class="hint" style="margin:0">Belum masuk kelas</span>'}</div>
-      <div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="kd-${p.id}" placeholder="${p.kelas ? 'Ganti dengan kode kelas lain' : 'Kode kelas dari wali kelas'}" autocapitalize="characters" style="flex:1;text-transform:uppercase"><button class="sbtn" data-kode="${p.id}">${p.kelas ? 'Ganti' : 'Gabung'}</button></div></div>`).join('')}
+      ${p.kelas ? `<span class="tag">${esc(p.kelas.nama)}</span>` : `<span class="hint" style="margin:0">${S.akun.asal === 'pondok' ? 'Belum masuk kelas' : 'Pengguna umum'}</span>`}</div>
+      ${S.akun.asal === 'pondok' || p.kelas ? `<div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="kd-${p.id}" placeholder="${p.kelas ? 'Ganti dengan kode kelas lain' : 'Kode kelas dari wali kelas'}" autocapitalize="characters" style="flex:1;text-transform:uppercase"><button class="sbtn" data-kode="${p.id}">${p.kelas ? 'Ganti' : 'Gabung'}</button></div>` : ''}</div>`).join('')}
+    ${!Cloud.staff() ? `<div class="row" style="border:0;padding-bottom:0"><span class="hint" style="margin:0">${S.akun.asal === 'pondok' ? 'Bukan santri Luqmanul Hakim?' : 'Ternyata santri Pondok Pesantren Luqmanul Hakim?'}</span><button class="linkbtn" id="ubahAsal" style="width:auto;padding:0">${S.akun.asal === 'pondok' ? 'Ubah ke Umum' : 'Ubah ke Santri'}</button></div>` : ''}
     <div class="row" style="border:0;gap:8px;flex-wrap:wrap">${Cloud.staff() ? '<button class="sbtn" id="toPantau">📋 Pantau kelas</button>' : ''}<button class="sbtn light" id="syncNow">↻ Sinkronkan</button><button class="sbtn danger" id="logout">Keluar akun</button></div></section>`;
 }
 function bindCloudParent() {
@@ -2190,6 +2240,7 @@ function bindCloudParent() {
     catch (e) { toast(errText(e)); b.disabled = false; b.textContent = 'Gabung'; }
   });
   if ($('#toPantau')) $('#toPantau').onclick = () => go({ name: 'pantau' });
+  if ($('#ubahAsal')) $('#ubahAsal').onclick = async () => { await Cloud.setAsal(S.akun.asal === 'pondok' ? 'umum' : 'pondok'); toast('Jenis akun diubah'); render(); };
   if ($('#syncNow')) $('#syncNow').onclick = async () => { $('#syncNow').textContent = 'Menyinkronkan…'; try { await Cloud.pull(); toast('Tersinkron'); } catch (e) { toast(errText(e)); } render(); };
   if ($('#logout')) $('#logout').onclick = async () => { const b = $('#logout'); if (!b.dataset.sure) { b.dataset.sure = 1; b.textContent = 'Yakin keluar?'; return; } await Cloud.keluar(); toast('Sudah keluar dari akun'); render(); };
 }
@@ -2220,6 +2271,7 @@ async function renderPantau() {
   const total = rows.reduce((a, r) => a + (+r.jumlah_murid || 0), 0), aktif = rows.reduce((a, r) => a + (+r.aktif_hari_ini || 0), 0);
   app.querySelector('.learn').innerHTML = `
     <div class="stat-row"><div class="stat"><b>${rows.length}</b><span>kelas</span></div><div class="stat"><b>${total}</b><span>murid</span></div><div class="stat"><b>${aktif}</b><span>latihan hari ini</span></div></div>
+    ${owner ? '<div id="umumBox"></div>' : ''}
     ${owner ? '<div class="row" style="border:0;gap:8px;flex-wrap:wrap;padding:0"><button class="sbtn" id="kelola">⚙️ Kelola kelas & wali kelas</button><button class="sbtn light" id="csv">⬇️ Unduh rekap (Excel/CSV)</button></div>' : ''}
     ${rows.length ? rows.map(r => `<button class="kelas-card" data-k="${r.kelas_id}">
       <div><b>${esc(r.nama)}</b><small>${JENJANG[r.jenjang] || ''}${r.wali ? ' · ' + esc(r.wali) : owner ? ' · <i>belum ada wali kelas</i>' : ''}</small></div>
@@ -2227,6 +2279,8 @@ async function renderPantau() {
       : `<div class="empty">${owner ? 'Belum ada kelas. Buat kelas lewat tombol Kelola.' : 'Anda belum ditugaskan ke kelas mana pun. Hubungi pengelola.'}</div>`}`;
   app.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { const r = rows.find(x => x.kelas_id === b.dataset.k); go({ name: 'kelasku', kelas: r }); });
   if ($('#kelola')) $('#kelola').onclick = () => go({ name: 'kelola' });
+  if (owner) Cloud.rpc('ringkasan_umum').then(u => { const el = $('#umumBox'); if (!el || !u) return;
+    el.innerHTML = `<div class="lcard" style="padding:12px 14px"><b>Seluruh pengguna</b><div class="stat-row" style="margin-top:8px"><div class="stat"><b>${u.keluarga_pondok}</b><span>keluarga santri Luqmanul Hakim</span></div><div class="stat"><b>${u.keluarga_umum}</b><span>keluarga umum</span></div><div class="stat"><b>${u.anak_umum}</b><span>anak umum · ${u.aktif_umum} latihan hari ini</span></div></div></div>`; }).catch(() => {});
   if ($('#csv')) $('#csv').onclick = () => unduhRekap(rows);
 }
 
@@ -2343,7 +2397,7 @@ async function renderKelola() {
 }
 
 /* Mulai: perbarui data bila sudah masuk */
-if (Cloud.in()) Cloud.afterLogin().then(() => { if (['home', 'parent'].includes(view.name)) render(); }).catch(() => {});
+if (Cloud.in()) Cloud.afterLogin().then(() => { if (view.name === 'home' && Cloud.staff() && S.profiles.every(Cloud.isPlaceholder)) go({ name: 'pantau' }); else if (['home', 'parent'].includes(view.name)) render(); }).catch(() => {});
 window.__cloudSchedule = () => Cloud.schedule();
 
 

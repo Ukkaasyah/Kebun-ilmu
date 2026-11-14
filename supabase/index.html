@@ -17,7 +17,8 @@ ol{line-height:1.6;padding-left:20px;opacity:.9}
 <textarea id="t" readonly>Memuat…</textarea>
 <script>
 const t=document.getElementById('t'),st=document.getElementById('st');
-fetch('kebun-ilmu.sql',{cache:'no-store'}).then(r=>r.text()).then(s=>{t.value=s;st.textContent='Siap disalin ('+s.split('\n').length+' baris).';});
+const F=(new URLSearchParams(location.search).get('f')||'kebun-ilmu.sql').replace(/[^\w.-]/g,'');document.querySelector('h1').textContent='Salin SQL: '+F;
+fetch(F,{cache:'no-store'}).then(r=>r.text()).then(s=>{t.value=s;st.textContent='Siap disalin ('+s.split('\n').length+' baris).';});
 document.getElementById('b').onclick=async()=>{
   try{await navigator.clipboard.writeText(t.value);st.textContent='✅ Tersalin '+t.value.split('\n').length+' baris. Sekarang tempel di Supabase.';}
   catch(e){t.focus();t.select();t.setSelectionRange(0,t.value.length);try{document.execCommand('copy');st.textContent='✅ Tersalin. Sekarang tempel di Supabase.';}catch(e2){st.textContent='Tekan lama di kotak teks → Pilih Semua → Salin.';}}
